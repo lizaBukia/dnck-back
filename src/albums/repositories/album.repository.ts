@@ -49,7 +49,7 @@ export class AlbumsRepository {
     return albumsUpdate;
   }
 
-  delete(id: number): AlbumInterface[] {
+  remove(id: number): AlbumInterface[] {
     const album: FindOneAlbumInterface = this.findOne(id);
     return this.albums.splice(album.index, 1);
   }

@@ -30,6 +30,6 @@ export class AlbumService {
   }
 
   remove(id: number): AlbumInterface[] {
-    return this.albumsRepository.delete(id);
+    return this.albumsRepository.remove(id);
   }
 }
