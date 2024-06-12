@@ -5,7 +5,7 @@ import {
   AlbumInterface,
   FindOneAlbumInterface,
 } from './interfaces/album.interface';
-import { AlbumsRepository } from './repositories/album.repository';
+import { AlbumsRepository } from './repositories/albums.repository';
 
 @Injectable()
 export class AlbumService {
