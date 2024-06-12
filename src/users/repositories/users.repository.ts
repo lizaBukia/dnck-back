@@ -34,15 +34,15 @@ export class UsersRepository {
   }
 
   update(id: number, data: UpdateUsersDto): UserInterface {
-    const users: FindOneUserInterface = this.findOne(id);
-    const usersUpdate: UserInterface = {
-      id: users.id,
-      lastName: data.lastName || users.lastName,
-      firstName: data.firstName || users.firstName,
-      birthYear: data.birthYear || users.birthYear,
+    const user: FindOneUserInterface = this.findOne(id);
+    const updatedUser: UserInterface = {
+      id: user.id,
+      lastName: data.lastName || user.lastName,
+      firstName: data.firstName || user.firstName,
+      birthYear: data.birthYear || user.birthYear,
     };
-    this.users[users.index] = usersUpdate;
-    return usersUpdate;
+    this.users[user.index] = updatedUser;
+    return updatedUser;
   }
 
   delete(id: number): UserInterface[] {
