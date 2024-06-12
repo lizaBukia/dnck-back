@@ -1,12 +1,12 @@
 import { IsNumber, IsString } from 'class-validator';
 
-export class CreateUsersDto {
+export class CreateUsersDto{
   @IsString()
   firstName!: string;
 
   @IsString()
-  lastName: string;
+  lastName!: string;
 
   @IsNumber()
-  birthYear: number;
+  birthYear!: number;
 }
