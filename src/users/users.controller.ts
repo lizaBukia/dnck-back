@@ -13,7 +13,7 @@ import { UserInterface } from './interfaces/user.interface';
 import { UsersService } from './users.service';
 
 @Controller('users')
-export class UsersController{
+export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
