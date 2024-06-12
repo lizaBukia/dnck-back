@@ -1,4 +1,4 @@
-export interface AuthorInteface {
+export interface AuthorInterface {
   id: number;
   firstName: string;
   lastName: string;

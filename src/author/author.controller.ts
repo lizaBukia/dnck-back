@@ -1,15 +1,15 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { AuthService } from './author.service';
 import { CreateAuthhorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
-import { AuthorInteface } from './interfaces/author.interface';
+import { AuthorInterface } from './interfaces/author.interface';
 import { FindOneAuthorInterface } from './interfaces/find-one-author.interface';
 
 @Controller('author')
 export class AuthorController {
   constructor(private authService: AuthService) {}
   @Post()
-  create(@Body() createAuthorDto: CreateAuthhorDto): AuthorInteface {
+  create(@Body() createAuthorDto: CreateAuthhorDto): AuthorInterface {
     return this.authService.create(createAuthorDto);
   }
   @Get(':id')
@@ -17,18 +17,20 @@ export class AuthorController {
     return this.authService.findOne(id);
   }
   @Get()
-  getAll(): AuthorInteface[] {
+  getAll(): AuthorInterface[] {
     return this.authService.getAll();
   }
-  //   @Delete('id')
-  //   delete(@Param('id') id: number): AuthorInteface {
-  //     return this.authService.(id);
-  //   }
+
   @Post(':id')
   update(
     @Param('id') id: number,
     @Body() updateAuthorDto: UpdateAuthorDto,
-  ): AuthorInteface {
+  ): AuthorInterface {
     return this.authService.update(id, updateAuthorDto);
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: number): AuthorInterface[] {
+    return this.authService.remove(id);
   }
 }
