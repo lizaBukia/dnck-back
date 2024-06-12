@@ -8,4 +8,4 @@ import { AlbumsRepository } from './repositories/album.repository';
   controllers: [AlbumController],
   providers: [AlbumService, AlbumsRepository],
 })
-export class albumsModule {}
+export class AlbumsModule {}

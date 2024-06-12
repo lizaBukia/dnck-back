@@ -15,7 +15,6 @@ export class AlbumsRepository {
       id: (this.albums[this.albums.length - 1]?.id || 0) + 1,
       title: data.title,
       releaseDate: data.releaseDate,
-      musics: data.musics,
       artistName: data.artistName,
     };
     this.albums.push(newAlbum);
@@ -37,16 +36,15 @@ export class AlbumsRepository {
   }
 
   update(id: number, data: UpdateAlbumDto): AlbumInterface {
-    const albums: FindOneAlbumInterface = this.findOne(id);
-    const albumsUpdate: AlbumInterface = {
-      id: albums.id,
-      title: data.title || albums.title,
-      releaseDate: data.releaseDate || albums.releaseDate,
-      musics: data.musics || albums.musics,
-      artistName: data.artistName || albums.artistName,
+    const album: FindOneAlbumInterface = this.findOne(id);
+    const updatedAlbum: AlbumInterface = {
+      id: album.id,
+      title: data.title || album.title,
+      releaseDate: data.releaseDate || album.releaseDate,
+      artistName: data.artistName || album.artistName,
     };
-    this.albums[albums.index] = albumsUpdate;
-    return albumsUpdate;
+    this.albums[album.index] = updatedAlbum;
+    return updatedAlbum;
   }
 
   remove(id: number): AlbumInterface[] {

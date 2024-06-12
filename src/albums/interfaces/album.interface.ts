@@ -2,7 +2,6 @@ export interface AlbumInterface {
   id: number;
   title: string;
   releaseDate: string;
-  musics: string[];
   artistName: string;
 }
 
@@ -11,6 +10,5 @@ export interface FindOneAlbumInterface {
   id: number;
   title: string;
   releaseDate: string;
-  musics: string[];
   artistName: string;
 }
