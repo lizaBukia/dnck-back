@@ -28,6 +28,6 @@ export class UsersService {
   }
 
   remove(id: number): UserInterface[] {
-    return this.usersRepository.delete(id);
+    return this.usersRepository.remove(id);
   }
 }

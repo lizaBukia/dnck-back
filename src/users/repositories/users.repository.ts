@@ -45,7 +45,7 @@ export class UsersRepository {
     return updatedUser;
   }
 
-  delete(id: number): UserInterface[] {
+  remove(id: number): UserInterface[] {
     const user: FindOneUserInterface = this.findOne(id);
     return this.users.splice(user.index, 1);
   }
