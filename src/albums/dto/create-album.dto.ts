@@ -1,10 +1,10 @@
-import { IsString } from 'class-validator';
+import { IsDateString, IsString } from 'class-validator';
 
 export class CreateAlbumDto {
   @IsString()
   title!: string;
 
-  @IsString()
+  @IsDateString()
   releaseDate!: string;
 
   @IsString()

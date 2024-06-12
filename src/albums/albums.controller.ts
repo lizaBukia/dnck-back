@@ -7,14 +7,14 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { AlbumService } from './albums.service';
+import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { AlbumInterface } from './interfaces/album.interface';
 
 @Controller('albums')
-export class AlbumController {
-  constructor(private readonly albumService: AlbumService) {}
+export class AlbumsController {
+  constructor(private readonly albumService: AlbumsService) {}
 
   @Post()
   create(@Body() createAlbumDto: CreateAlbumDto): AlbumInterface {

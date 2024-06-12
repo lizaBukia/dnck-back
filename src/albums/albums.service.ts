@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import {
-  AlbumInterface,
-  FindOneAlbumInterface,
-} from './interfaces/album.interface';
+import { AlbumInterface } from './interfaces/album.interface';
+import { FindOneAlbumInterface } from './interfaces/find-one-album.interface';
 import { AlbumsRepository } from './repositories/albums.repository';
 
 @Injectable()
-export class AlbumService {
+export class AlbumsService {
   constructor(private readonly albumsRepository: AlbumsRepository) {}
 
   create(createAlbumDto: CreateAlbumDto): AlbumInterface {

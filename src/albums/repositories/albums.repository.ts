@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from '../dto/create-album.dto';
 import { UpdateAlbumDto } from '../dto/update-album.dto';
-import {
-  AlbumInterface,
-  FindOneAlbumInterface,
-} from '../interfaces/album.interface';
+import { AlbumInterface } from '../interfaces/album.interface';
+import { FindOneAlbumInterface } from '../interfaces/find-one-album.interface';
 
 @Injectable()
 export class AlbumsRepository {
@@ -27,7 +25,7 @@ export class AlbumsRepository {
 
   findOne(id: number): FindOneAlbumInterface {
     for (let i: number = 0; i < this.albums.length; i++) {
-      if (id == this.albums[i].id)
+      if (id === this.albums[i].id)
         return {
           ...this.albums[i],
           index: i,
