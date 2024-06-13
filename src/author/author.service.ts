@@ -3,29 +3,29 @@ import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { AuthorInterface } from './interfaces/author.interface';
 import { FindOneAuthorInterface } from './interfaces/find-one-author.interface';
-import { AuthorRepository } from './repository/author.repository';
+import { AuthorsRepository } from './repository/author.repository';
 
 @Injectable()
-export class AuthorService {
-  constructor(private authorRepository: AuthorRepository) {}
+export class AuthorsService {
+  constructor(private authorsRepository: AuthorsRepository) {}
 
   create(createAuthorDto: CreateAuthorDto): AuthorInterface {
-    return this.authorRepository.create(createAuthorDto);
+    return this.authorsRepository.create(createAuthorDto);
   }
 
   findAll(): AuthorInterface[] {
-    return this.authorRepository.findAll();
+    return this.authorsRepository.findAll();
   }
 
   findOne(id: number): FindOneAuthorInterface {
-    return this.authorRepository.findOne(id);
+    return this.authorsRepository.findOne(id);
   }
 
   update(id: number, updateAuthorDto: UpdateAuthorDto): AuthorInterface {
-    return this.authorRepository.update(id, updateAuthorDto);
+    return this.authorsRepository.update(id, updateAuthorDto);
   }
 
   remove(id: number): AuthorInterface[] {
-    return this.authorRepository.remove(id);
+    return this.authorsRepository.remove(id);
   }
 }

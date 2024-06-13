@@ -5,7 +5,7 @@ import { AuthorInterface } from '../interfaces/author.interface';
 import { FindOneAuthorInterface } from '../interfaces/find-one-author.interface';
 
 @Injectable()
-export class AuthorRepository {
+export class AuthorsRepository {
   private authors: AuthorInterface[] = [];
 
   create(createAuthorDto: CreateAuthorDto): AuthorInterface {

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AuthorController } from './author.controller';
-import { AuthorService } from './author.service';
-import { AuthorRepository } from './repository/author.repository';
+import { AuthorsController } from './author.controller';
+import { AuthorsService } from './author.service';
+import { AuthorsRepository } from './repository/author.repository';
 
 @Module({
-  providers: [AuthorService, AuthorRepository],
-  controllers: [AuthorController],
+  providers: [AuthorsService, AuthorsRepository],
+  controllers: [AuthorsController],
 })
-export class AuthorModule {}
+export class AuthorsModule {}
