@@ -1,24 +1,25 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { AuthService } from './author.service';
-import { CreateAuthhorDto } from './dto/create-author.dto';
+import { AuthorService } from './author.service';
+import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { AuthorInterface } from './interfaces/author.interface';
 import { FindOneAuthorInterface } from './interfaces/find-one-author.interface';
 
 @Controller('author')
 export class AuthorController {
-  constructor(private authService: AuthService) {}
+  constructor(private authorService: AuthorService) {}
+
   @Post()
-  create(@Body() createAuthorDto: CreateAuthhorDto): AuthorInterface {
-    return this.authService.create(createAuthorDto);
-  }
-  @Get(':id')
-  findOne(@Param('id') id: number): FindOneAuthorInterface {
-    return this.authService.findOne(id);
+  create(@Body() createAuthorDto: CreateAuthorDto): AuthorInterface {
+    return this.authorService.create(createAuthorDto);
   }
   @Get()
-  getAll(): AuthorInterface[] {
-    return this.authService.getAll();
+  findAll(): AuthorInterface[] {
+    return this.authorService.findAll();
+  }
+  @Get(':id')
+  findOne(@Param('id') id: string): FindOneAuthorInterface {
+    return this.authorService.findOne(Number(id));
   }
 
   @Post(':id')
@@ -26,11 +27,11 @@ export class AuthorController {
     @Param('id') id: number,
     @Body() updateAuthorDto: UpdateAuthorDto,
   ): AuthorInterface {
-    return this.authService.update(id, updateAuthorDto);
+    return this.authorService.update(Number(id), updateAuthorDto);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: number): AuthorInterface[] {
-    return this.authService.remove(id);
+  remove(@Param('id') id: string): AuthorInterface[] {
+    return this.authorService.remove(Number(id));
   }
 }

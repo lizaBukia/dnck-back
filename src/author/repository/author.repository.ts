@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAuthhorDto } from '../dto/create-author.dto';
+import { CreateAuthorDto } from '../dto/create-author.dto';
+import { UpdateAuthorDto } from '../dto/update-author.dto';
 import { AuthorInterface } from '../interfaces/author.interface';
 import { FindOneAuthorInterface } from '../interfaces/find-one-author.interface';
 
 @Injectable()
 export class AuthorRepository {
   private authors: AuthorInterface[] = [];
-  create(createAuthorDto: CreateAuthhorDto): AuthorInterface {
+
+  create(createAuthorDto: CreateAuthorDto): AuthorInterface {
     const newAuthor: AuthorInterface = {
       id: this.authors.length + 1,
       ...createAuthorDto,
@@ -15,9 +17,11 @@ export class AuthorRepository {
     return newAuthor;
   }
 
-  findOne(id: number): FindOneAuthorInterface {
-    console.log(id);
+  findAll(): AuthorInterface[] {
+    return this.authors;
+  }
 
+  findOne(id: number): FindOneAuthorInterface {
     for (let i: number = 0; i < this.authors.length; i++) {
       if (this.authors[i].id === id) {
         return { index: i, ...this.authors[i] };
@@ -26,19 +30,16 @@ export class AuthorRepository {
     return null;
   }
 
-  getAll(): AuthorInterface[] {
-    return this.authors;
-  }
-
-  update(id: number, authorInterface: AuthorInterface): AuthorInterface {
+  update(id: number, updateAuthorDto: UpdateAuthorDto): AuthorInterface {
     const find: AuthorInterface = this.findOne(id);
-    const { firstName, lastName, biography } = authorInterface;
+    const { firstName, lastName, biography } = updateAuthorDto;
     const updateAuthor: AuthorInterface = find;
     updateAuthor.firstName = firstName;
     updateAuthor.lastName = lastName;
     updateAuthor.biography = biography;
     return updateAuthor;
   }
+
   remove(id: number): AuthorInterface[] {
     const author: FindOneAuthorInterface = this.findOne(id);
     return this.authors.splice(author.index, 1);
