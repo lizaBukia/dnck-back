@@ -29,6 +29,8 @@ export class AuthorController {
     @Param('id') id: string,
     @Body() updateAuthorDto: UpdateAuthorDto,
   ): AuthorInterface {
+    console.log(id, updateAuthorDto);
+
     return this.authorService.update(Number(id), updateAuthorDto);
   }
 

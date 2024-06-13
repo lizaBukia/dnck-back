@@ -32,11 +32,11 @@ export class AuthorRepository {
 
   update(id: number, updateAuthorDto: UpdateAuthorDto): AuthorInterface {
     const updateAuthor: FindOneAuthorInterface = this.findOne(id);
-    const { firstName, lastName, biography } = updateAuthor;
+    const { firstName, lastName, biography } = updateAuthorDto;
     const newAuthor: AuthorInterface = {
-      firstName: firstName || updateAuthorDto.firstName,
-      lastName: lastName || updateAuthorDto.lastName,
-      biography: biography || updateAuthorDto.biography,
+      firstName: firstName || updateAuthor.firstName,
+      lastName: lastName || updateAuthor.lastName,
+      biography: biography || updateAuthor.biography,
       id: updateAuthor.id,
     };
     this.authors[updateAuthor.index] = newAuthor;
