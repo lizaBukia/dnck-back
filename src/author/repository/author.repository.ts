@@ -31,16 +31,16 @@ export class AuthorsRepository {
   }
 
   update(id: number, updateAuthorDto: UpdateAuthorDto): AuthorInterface {
-    const updateAuthor: FindOneAuthorInterface = this.findOne(id);
+    const author: FindOneAuthorInterface = this.findOne(id);
     const { firstName, lastName, biography } = updateAuthorDto;
-    const newAuthor: AuthorInterface = {
-      firstName: firstName || updateAuthor.firstName,
-      lastName: lastName || updateAuthor.lastName,
-      biography: biography || updateAuthor.biography,
-      id: updateAuthor.id,
+    const updatedAuthor: AuthorInterface = {
+      firstName: firstName || author.firstName,
+      lastName: lastName || author.lastName,
+      biography: biography || author.biography,
+      id: author.id,
     };
-    this.authors[updateAuthor.index] = newAuthor;
-    return newAuthor;
+    this.authors[author.index] = updatedAuthor;
+    return updatedAuthor;
   }
 
   remove(id: number): AuthorInterface[] {
