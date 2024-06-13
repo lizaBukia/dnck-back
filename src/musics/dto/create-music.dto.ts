@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class CreateMusicsDto {
+export class CreateMusicDto {
   @IsString()
   name!: string;
 

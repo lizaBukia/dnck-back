@@ -1,17 +1,24 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { CreateMusicDto } from './dto/create-music.dto';
+import { UpdateMusicDto } from './dto/update-music.dto';
+import { MusicInterface } from './interfaces/music.interface';
 import { MusicsService } from './musics.service';
-import { CreateMusicsDto } from './dto/create-musics.dto';
-import { MusicInterface } from './interfaces/musics.interface';
-import { UpdateMusicsDto } from './dto/update-musics.dto';
 
 @Controller('musics')
 export class MusicsController {
-  constructor(private readonly musicsService: MusicsService) {
-  }
+  constructor(private readonly musicsService: MusicsService) {}
 
   @Post()
-  creat(@Body() createMusicsDto: CreateMusicsDto): MusicInterface {
-    return this.musicsService.create(createMusicsDto);
+  creat(@Body() createMusicDto: CreateMusicDto): MusicInterface {
+    return this.musicsService.create(createMusicDto);
   }
 
   @Get()
@@ -27,9 +34,9 @@ export class MusicsController {
   @Put(':id')
   update(
     @Param('id') id: string,
-    @Body() updateMusicsDto: UpdateMusicsDto,
+    @Body() updateMusicDto: UpdateMusicDto,
   ): MusicInterface {
-    return this.musicsService.update(Number(id), updateMusicsDto);
+    return this.musicsService.update(Number(id), updateMusicDto);
   }
 
   @Delete(':id')

@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMusicsDto } from './dto/create-musics.dto';
-import { UpdateMusicsDto } from './dto/update-musics.dto';
+import { CreateMusicDto } from './dto/create-music.dto';
+import { UpdateMusicDto } from './dto/update-music.dto';
 import { FindOneMusicInterface } from './interfaces/find-one-musics.interface';
-import { MusicInterface } from './interfaces/musics.interface';
+import { MusicInterface } from './interfaces/music.interface';
 import { MusicsRepository } from './repositories/musics.repository';
 
 @Injectable()
 export class MusicsService {
-  constructor(private readonly musicsRepository: MusicsRepository) {}
+  constructor(private readonly musicsRepository: MusicsRepository) {
+  }
 
-  create(createMusicsDto: CreateMusicsDto): MusicInterface {
-    return this.musicsRepository.create(createMusicsDto);
+  create(createMusicDto: CreateMusicDto): MusicInterface {
+    return this.musicsRepository.create(createMusicDto);
   }
 
   findAll(): MusicInterface[] {
@@ -23,8 +24,8 @@ export class MusicsService {
     return music;
   }
 
-  update(id: number, updateMusicsDto: UpdateMusicsDto): MusicInterface {
-    return this.musicsRepository.update(id, updateMusicsDto);
+  update(id: number, updateMusicDto: UpdateMusicDto): MusicInterface {
+    return this.musicsRepository.update(id, updateMusicDto);
   }
 
   remove(id: number): MusicInterface[] {

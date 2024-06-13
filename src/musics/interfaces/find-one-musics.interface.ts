@@ -1,5 +1,5 @@
-import { MusicInterface } from './musics.interface';
+import { MusicInterface } from './music.interface';
 
-export interface FindOneMusicInterface extends MusicInterface{
+export interface FindOneMusicInterface extends MusicInterface {
   index: number;
 }
