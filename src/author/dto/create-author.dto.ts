@@ -1,9 +1,9 @@
 import { IsString } from 'class-validator';
 export class CreateAuthorDto {
   @IsString()
-  firstName: string;
+  firstName!: string;
   @IsString()
-  lastName: string;
+  lastName!: string;
   @IsString()
-  biography: string;
+  biography!: string;
 }

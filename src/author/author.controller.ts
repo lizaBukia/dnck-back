@@ -13,10 +13,12 @@ export class AuthorController {
   create(@Body() createAuthorDto: CreateAuthorDto): AuthorInterface {
     return this.authorService.create(createAuthorDto);
   }
+
   @Get()
   findAll(): AuthorInterface[] {
     return this.authorService.findAll();
   }
+
   @Get(':id')
   findOne(@Param('id') id: string): FindOneAuthorInterface {
     return this.authorService.findOne(Number(id));
@@ -24,7 +26,7 @@ export class AuthorController {
 
   @Post(':id')
   update(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() updateAuthorDto: UpdateAuthorDto,
   ): AuthorInterface {
     return this.authorService.update(Number(id), updateAuthorDto);

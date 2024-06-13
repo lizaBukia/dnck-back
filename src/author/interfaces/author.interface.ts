@@ -1,6 +1,6 @@
 export interface AuthorInterface {
-  id: number;
-  firstName: string;
-  lastName: string;
-  biography: string;
+  id?: number;
+  firstName?: string;
+  lastName?: string;
+  biography?: string;
 }

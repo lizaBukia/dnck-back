@@ -31,13 +31,15 @@ export class AuthorRepository {
   }
 
   update(id: number, updateAuthorDto: UpdateAuthorDto): AuthorInterface {
-    const find: AuthorInterface = this.findOne(id);
+    const updateAuthor: FindOneAuthorInterface = this.findOne(id);
     const { firstName, lastName, biography } = updateAuthorDto;
-    const updateAuthor: AuthorInterface = find;
-    updateAuthor.firstName = firstName;
-    updateAuthor.lastName = lastName;
-    updateAuthor.biography = biography;
-    return updateAuthor;
+    const newAuthor: AuthorInterface = {
+      firstName: firstName || updateAuthorDto.firstName,
+      lastName: lastName || updateAuthorDto.lastName,
+      biography: biography || updateAuthorDto.biography,
+    };
+    this.authors[updateAuthor.index] = newAuthor;
+    return newAuthor;
   }
 
   remove(id: number): AuthorInterface[] {
