@@ -1,0 +1,50 @@
+import { Injectable } from '@nestjs/common';
+import { CreateMusicsDto } from '../dto/create-musics.dto';
+import { UpdateMusicsDto } from '../dto/update-musics.dto';
+import { FindOneMusicInterface } from '../interfaces/find-one-musics.interface';
+import { MusicInterface } from '../interfaces/musics.interface';
+
+@Injectable()
+export class MusicsRepository {
+  private musics: MusicInterface[] = [];
+
+  create(data: CreateMusicsDto): MusicInterface {
+    const newMusic: MusicInterface = {
+      id: (this.musics[this.musics.length - 1]?.id || 0) + 1,
+      name: data.name,
+      url: data.url,
+    };
+    this.musics.push(newMusic);
+    return newMusic;
+  }
+
+  findAll(): MusicInterface[] {
+    return this.musics;
+  }
+
+  findOne(id: number): FindOneMusicInterface {
+    for (let i: number = 0; i < this.musics.length; i++) {
+      if (id === this.musics[i].id)
+        return {
+          ...this.musics[i],
+          index: i,
+        };
+    }
+  }
+
+  update(id: number, data: UpdateMusicsDto): MusicInterface {
+    const music: FindOneMusicInterface = this.findOne(id);
+    const updateMusic: MusicInterface = {
+      id: music.id,
+      name: data.name || data.name,
+      url: data.url || data.url,
+    };
+    this.musics[music.index] = updateMusic;
+    return updateMusic;
+  }
+
+  remove(id: number): MusicInterface[] {
+    const music: FindOneMusicInterface = this.findOne(id);
+    return this.musics.splice(music.index, 1);
+  }
+}
