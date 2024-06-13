@@ -1,9 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { AuthorsService } from './author.service';
+import { AuthorsService } from './authors.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { AuthorInterface } from './interfaces/author.interface';
-import { FindOneAuthorInterface } from './interfaces/find-one-author.interface';
 
 @Controller('author')
 export class AuthorsController {
@@ -20,7 +19,7 @@ export class AuthorsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): FindOneAuthorInterface {
+  findOne(@Param('id') id: string): AuthorInterface {
     return this.authorsService.findOne(Number(id));
   }
 

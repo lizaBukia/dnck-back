@@ -3,7 +3,7 @@ import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { AuthorInterface } from './interfaces/author.interface';
 import { FindOneAuthorInterface } from './interfaces/find-one-author.interface';
-import { AuthorsRepository } from './repository/author.repository';
+import { AuthorsRepository } from './repository/authors.repository';
 
 @Injectable()
 export class AuthorsService {
@@ -17,8 +17,10 @@ export class AuthorsService {
     return this.authorsRepository.findAll();
   }
 
-  findOne(id: number): FindOneAuthorInterface {
-    return this.authorsRepository.findOne(id);
+  findOne(id: number): AuthorInterface {
+    const author: FindOneAuthorInterface = this.authorsRepository.findOne(id);
+    delete author.index;
+    return author;
   }
 
   update(id: number, updateAuthorDto: UpdateAuthorDto): AuthorInterface {
