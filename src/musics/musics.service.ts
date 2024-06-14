@@ -7,8 +7,7 @@ import { MusicsRepository } from './repositories/musics.repository';
 
 @Injectable()
 export class MusicsService {
-  constructor(private readonly musicsRepository: MusicsRepository) {
-  }
+  constructor(private readonly musicsRepository: MusicsRepository) {}
 
   create(createMusicDto: CreateMusicDto): MusicInterface {
     return this.musicsRepository.create(createMusicDto);
