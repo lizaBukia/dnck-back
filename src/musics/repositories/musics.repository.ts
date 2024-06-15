@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMusicDto } from '../dto/create-music.dto';
 import { UpdateMusicDto } from '../dto/update-music.dto';
-import { FindOneMusicInterface } from '../interfaces/find-one-musics.interface';
+import { FindOneMusicInterface } from '../interfaces/find-one-music.interface';
 import { MusicInterface } from '../interfaces/music.interface';
 
 @Injectable()
@@ -36,8 +36,8 @@ export class MusicsRepository {
     const music: FindOneMusicInterface = this.findOne(id);
     const updatedMusic: MusicInterface = {
       id: music.id,
-      name: data.name || data.name,
-      url: data.url || data.url,
+      name: data.name || music.name,
+      url: data.url || music.url,
     };
     this.musics[music.index] = updatedMusic;
     return updatedMusic;

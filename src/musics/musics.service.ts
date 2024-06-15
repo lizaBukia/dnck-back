@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMusicDto } from './dto/create-music.dto';
 import { UpdateMusicDto } from './dto/update-music.dto';
-import { FindOneMusicInterface } from './interfaces/find-one-musics.interface';
+import { FindOneMusicInterface } from './interfaces/find-one-music.interface';
 import { MusicInterface } from './interfaces/music.interface';
 import { MusicsRepository } from './repositories/musics.repository';
 
