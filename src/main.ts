@@ -12,6 +12,7 @@ async function bootstrap(): Promise<void> {
     }),
   );
 
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
 }
 bootstrap();
