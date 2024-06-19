@@ -6,7 +6,14 @@ import { UserInterface } from '../interfaces/user.interface';
 
 @Injectable()
 export class UsersRepository {
-  private users: UserInterface[] = [];
+  private users: UserInterface[] = [
+    {
+      id: 1,
+      firstName: 'davita',
+      lastName: 'JACKSON',
+      birthYear: 2021,
+    },
+  ];
 
   create(data: CreateUsersDto): UserInterface {
     const newUser: UserInterface = {

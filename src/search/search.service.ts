@@ -5,7 +5,8 @@ import { AuthorInterface } from 'src/author/interfaces/author.interface';
 import { AuthorsRepository } from 'src/author/repository/authors.repository';
 import { UserInterface } from 'src/users/interfaces/user.interface';
 import { UsersRepository } from 'src/users/repositories/users.repository';
-import { SearchType } from './search.interface';
+import { SearchDto } from './dto/search.dto';
+import { SearchResultInterface } from './interfaces/search.interface';
 
 @Injectable()
 export class SearchService {
@@ -14,42 +15,49 @@ export class SearchService {
     private usersRepository: UsersRepository,
     private authorsRepository: AuthorsRepository,
   ) {}
-  find(search: string): SearchType {
-    search = search.toLowerCase();
-    const searching: SearchType = {
+
+  findAll(searchDto: SearchDto): SearchResultInterface {
+    const loweredSearch: string = searchDto.search.toLowerCase();
+    const searching: SearchResultInterface = {
       albums: [],
       users: [],
       authors: [],
     };
+
     const allAuthors: AuthorInterface[] = this.authorsRepository.findAll();
-    for (let i: number = 0; i < allAuthors.length; i++) {
+    for (const author of allAuthors) {
       if (
-        allAuthors[i].firstName.toLowerCase().includes(search) ||
-        allAuthors[i].lastName.toLowerCase().includes(search)
+        this.matchesSearch(author.firstName, loweredSearch) ||
+        this.matchesSearch(author.lastName, loweredSearch)
       ) {
-        searching.authors.push(allAuthors[i]);
+        searching.authors.push(author);
       }
     }
 
     const users: UserInterface[] = this.usersRepository.findAll();
-    for (let i: number = 0; i < users.length; i++) {
+    for (const user of users) {
       if (
-        users[i].firstName.toLowerCase().includes(search) ||
-        users[i].lastName.toLowerCase().includes(search)
+        this.matchesSearch(user.firstName, loweredSearch) ||
+        this.matchesSearch(user.lastName, loweredSearch)
       ) {
-        searching.users.push(users[i]);
+        searching.users.push(user);
       }
     }
 
     const albums: AlbumInterface[] = this.albumsRepository.findAll();
-    for (let i: number = 0; i < albums.length; i++) {
+    for (const album of albums) {
       if (
-        albums[i].title.toLowerCase().includes(search) ||
-        albums[i].artistName.toLowerCase().includes(search)
+        this.matchesSearch(album.title, loweredSearch) ||
+        this.matchesSearch(album.artistName, loweredSearch)
       ) {
-        searching.albums.push(albums[i]);
+        searching.albums.push(album);
       }
     }
+
     return searching;
+  }
+
+  private matchesSearch(value: string, search: string): boolean {
+    return value.toLowerCase().includes(search);
   }
 }

@@ -6,7 +6,14 @@ import { FindOneAlbumInterface } from '../interfaces/find-one-album.interface';
 
 @Injectable()
 export class AlbumsRepository {
-  private albums: AlbumInterface[] = [];
+  private albums: AlbumInterface[] = [
+    {
+      title: 'marshall mathers lp',
+      id: 1,
+      releaseDate: '2020-21021',
+      artistName: 'michael jacKson',
+    },
+  ];
 
   create(data: CreateAlbumDto): AlbumInterface {
     const newAlbum: AlbumInterface = {

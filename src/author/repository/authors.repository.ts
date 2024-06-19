@@ -6,7 +6,14 @@ import { FindOneAuthorInterface } from '../interfaces/find-one-author.interface'
 
 @Injectable()
 export class AuthorsRepository {
-  private authors: AuthorInterface[] = [];
+  private authors: AuthorInterface[] = [
+    {
+      id: 1,
+      firstName: 'Jackson',
+      lastName: 'michael',
+      biography: 'daibada cxovrobs',
+    },
+  ];
 
   create(createAuthorDto: CreateAuthorDto): AuthorInterface {
     const newAuthor: AuthorInterface = {
