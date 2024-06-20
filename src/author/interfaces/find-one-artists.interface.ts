@@ -1,5 +1,5 @@
-import { AuthorInterface } from './artists.interface';
+import { ArtistInterface } from './artists.interface';
 
-export interface FindOneAuthorInterface extends AuthorInterface {
+export interface FindOneArtistInterface extends ArtistInterface {
   index: number;
 }
