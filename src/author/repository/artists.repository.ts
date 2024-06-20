@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAuthorDto } from '../dto/create-author.dto';
-import { UpdateAuthorDto } from '../dto/update-author.dto';
-import { AuthorInterface } from '../interfaces/author.interface';
-import { FindOneAuthorInterface } from '../interfaces/find-one-author.interface';
+import { CreateArtistDto } from '../dto/create-artist.dto';
+import { UpdateAuthorDto } from '../dto/update-artist.dto';
+import { AuthorInterface } from '../interfaces/artists.interface';
+import { FindOneAuthorInterface } from '../interfaces/find-one-artists.interface';
 
 @Injectable()
-export class AuthorsRepository {
+export class ArtistssRepository {
   private authors: AuthorInterface[] = [];
 
-  create(createAuthorDto: CreateAuthorDto): AuthorInterface {
+  create(createArtistDto: CreateArtistDto): AuthorInterface {
     const newAuthor: AuthorInterface = {
       id: this.authors.length + 1,
-      ...createAuthorDto,
+      ...createArtistDto,
     };
     this.authors.push(newAuthor);
     return newAuthor;
