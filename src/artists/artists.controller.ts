@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ArtistssService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
-import { UpdateAuthorDto } from './dto/update-artist.dto';
-import { ArtistInterface } from './interfaces/artists.interface';
+import { UpdateArtistDto } from './dto/update-artist.dto';
+import { ArtistInterface } from './interfaces/artist.interface';
 
-@Controller('author')
+@Controller('artist')
 export class ArtistsController {
   constructor(private artistsService: ArtistssService) {}
 
@@ -26,9 +26,9 @@ export class ArtistsController {
   @Post(':id')
   update(
     @Param('id') id: string,
-    @Body() updateAuthorDto: UpdateAuthorDto,
+    @Body() updateArtistDto: UpdateArtistDto,
   ): ArtistInterface {
-    return this.artistsService.update(Number(id), updateAuthorDto);
+    return this.artistsService.update(Number(id), updateArtistDto);
   }
 
   @Delete(':id')
