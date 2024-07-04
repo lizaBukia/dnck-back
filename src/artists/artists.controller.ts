@@ -1,38 +1,39 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { DeleteResult } from 'typeorm';
 import { ArtistssService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
-import { UpdateAuthorDto } from './dto/update-artist.dto';
-import { ArtistInterface } from './interfaces/artists.interface';
+import { UpdateArtistDto } from './dto/update-artist.dto';
+import { ArtistEntity } from './entity/artist.entity';
 
-@Controller('author')
+@Controller('artist')
 export class ArtistsController {
   constructor(private artistsService: ArtistssService) {}
 
   @Post()
-  create(@Body() createArtistDto: CreateArtistDto): ArtistInterface {
+  create(@Body() createArtistDto: CreateArtistDto): Promise<CreateArtistDto> {
     return this.artistsService.create(createArtistDto);
   }
 
   @Get()
-  findAll(): ArtistInterface[] {
+  findAll(): Promise<CreateArtistDto[]> {
     return this.artistsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): ArtistInterface {
+  findOne(@Param('id') id: string): Promise<ArtistEntity> {
     return this.artistsService.findOne(Number(id));
   }
 
   @Post(':id')
   update(
     @Param('id') id: string,
-    @Body() updateAuthorDto: UpdateAuthorDto,
-  ): ArtistInterface {
-    return this.artistsService.update(Number(id), updateAuthorDto);
+    @Body() updateArtistDto: UpdateArtistDto,
+  ): Promise<ArtistEntity> {
+    return this.artistsService.update(Number(id), updateArtistDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): ArtistInterface[] {
+  remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.artistsService.remove(Number(id));
   }
 }
