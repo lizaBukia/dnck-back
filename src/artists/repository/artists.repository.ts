@@ -1,50 +1,44 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { CreateArtistDto } from '../dto/create-artist.dto';
 import { UpdateArtistDto } from '../dto/update-artist.dto';
-import { ArtistInterface } from '../interfaces/artist.interface';
-import { FindOneArtistInterface } from '../interfaces/find-one-artist.interface';
+import { ArtistEntity } from '../entity/artist.entity';
 
 @Injectable()
 export class ArtistsRepository {
-  private artists: ArtistInterface[] = [];
+  constructor(
+    @InjectRepository(ArtistEntity)
+    private artistsRepository: Repository<ArtistEntity>,
+  ) {}
 
-  create(createArtistDto: CreateArtistDto): ArtistInterface {
-    const newArtist: ArtistInterface = {
-      id: this.artists.length + 1,
-      ...createArtistDto,
-    };
-    this.artists.push(newArtist);
+  async create(createArtistDto: CreateArtistDto): Promise<CreateArtistDto> {
+    const { firstName, lastName, biography } = createArtistDto;
+    const newArtist: CreateArtistDto = await this.artistsRepository.create({
+      firstName,
+      lastName,
+      biography,
+    });
+    await this.artistsRepository.save(newArtist);
     return newArtist;
   }
 
-  findAll(): ArtistInterface[] {
-    return this.artists;
+  findAll(): Promise<CreateArtistDto[]> {
+    return this.artistsRepository.find();
   }
 
-  findOne(id: number): FindOneArtistInterface {
-    for (let i: number = 0; i < this.artists.length; i++) {
-      if (this.artists[i].id === id) {
-        return { index: i, ...this.artists[i] };
-      }
-    }
-    return null;
+  findOne(id: number): Promise<ArtistEntity> {
+    return this.artistsRepository.findOne({ where: { id: id } });
   }
 
-  update(id: number, updateArtistDto: UpdateArtistDto): ArtistInterface {
-    const artist: FindOneArtistInterface = this.findOne(id);
-    const { firstName, lastName, biography } = updateArtistDto;
-    const updatedArtists: ArtistInterface = {
-      firstName: firstName || artist.firstName,
-      lastName: lastName || artist.lastName,
-      biography: biography || artist.biography,
-      id: artist.id,
-    };
-    this.artists[artist.index] = updatedArtists;
-    return updatedArtists;
+  async update(
+    id: number,
+    updateArtistDto: UpdateArtistDto,
+  ): Promise<ArtistEntity> {
+    await this.artistsRepository.update(id, updateArtistDto);
+    return await this.findOne(id);
   }
-
-  remove(id: number): ArtistInterface[] {
-    const artist: FindOneArtistInterface = this.findOne(id);
-    return this.artists.splice(artist.index, 1);
+  remove(id: number): Promise<DeleteResult> {
+    return this.artistsRepository.delete(id);
   }
 }
