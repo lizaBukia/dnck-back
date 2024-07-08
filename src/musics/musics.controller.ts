@@ -7,9 +7,10 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { DeleteResult } from 'typeorm';
 import { CreateMusicDto } from './dto/create-music.dto';
 import { UpdateMusicDto } from './dto/update-music.dto';
-import { MusicInterface } from './interfaces/music.interface';
+import { Music } from './entities/musics.entity';
 import { MusicsService } from './musics.service';
 
 @Controller('musics')
@@ -17,30 +18,30 @@ export class MusicsController {
   constructor(private readonly musicsService: MusicsService) {}
 
   @Post()
-  creat(@Body() createMusicDto: CreateMusicDto): MusicInterface {
-    return this.musicsService.create(createMusicDto);
+  async create(@Body() createMusicDto: CreateMusicDto): Promise<Music> {
+    return await this.musicsService.create(createMusicDto);
   }
 
   @Get()
-  findAll(): MusicInterface[] {
-    return this.musicsService.findAll();
+  async findAll(): Promise<Music[]> {
+    return await this.musicsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number): MusicInterface {
-    return this.musicsService.findOne(Number(id));
+  async findOne(@Param('id') id: number): Promise<Music> {
+    return await this.musicsService.findOne(Number(id));
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateMusicDto: UpdateMusicDto,
-  ): MusicInterface {
-    return this.musicsService.update(Number(id), updateMusicDto);
+  ): Promise<Music> {
+    return await this.musicsService.update(Number(id), updateMusicDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): MusicInterface[] {
-    return this.musicsService.remove(Number(id));
+  async remove(@Param('id') id: string): Promise<DeleteResult> {
+    return await this.musicsService.remove(Number(id));
   }
 }

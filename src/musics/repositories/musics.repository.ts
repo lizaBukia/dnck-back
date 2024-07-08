@@ -1,50 +1,36 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { CreateMusicDto } from '../dto/create-music.dto';
 import { UpdateMusicDto } from '../dto/update-music.dto';
-import { FindOneMusicInterface } from '../interfaces/find-one-music.interface';
-import { MusicInterface } from '../interfaces/music.interface';
+import { Music } from '../entities/musics.entity';
 
 @Injectable()
 export class MusicsRepository {
-  private musics: MusicInterface[] = [];
+  constructor(
+    @InjectRepository(Music)
+    private readonly musicsRepository: Repository<Music>,
+  ) {}
 
-  create(data: CreateMusicDto): MusicInterface {
-    const newMusic: MusicInterface = {
-      id: (this.musics[this.musics.length - 1]?.id || 0) + 1,
-      name: data.name,
-      url: data.url,
-    };
-    this.musics.push(newMusic);
-    return newMusic;
+  async create(createMusicDto: CreateMusicDto): Promise<Music> {
+    const newMusic: Music = this.musicsRepository.create(createMusicDto);
+    return await this.musicsRepository.save(newMusic);
   }
 
-  findAll(): MusicInterface[] {
-    return this.musics;
+  async findAll(): Promise<Music[]> {
+    return await this.musicsRepository.find();
   }
 
-  findOne(id: number): FindOneMusicInterface {
-    for (let i: number = 0; i < this.musics.length; i++) {
-      if (id === this.musics[i].id)
-        return {
-          ...this.musics[i],
-          index: i,
-        };
-    }
+  async findOne(id: number): Promise<Music> {
+    return await this.musicsRepository.findOne({ where: { id } });
   }
 
-  update(id: number, data: UpdateMusicDto): MusicInterface {
-    const music: FindOneMusicInterface = this.findOne(id);
-    const updatedMusic: MusicInterface = {
-      id: music.id,
-      name: data.name || music.name,
-      url: data.url || music.url,
-    };
-    this.musics[music.index] = updatedMusic;
-    return updatedMusic;
+  async update(id: number, updateMusicDto: UpdateMusicDto): Promise<Music> {
+    await this.musicsRepository.update(id, updateMusicDto);
+    return await this.findOne(id);
   }
 
-  remove(id: number): MusicInterface[] {
-    const music: FindOneMusicInterface = this.findOne(id);
-    return this.musics.splice(music.index, 1);
+  async remove(id: number): Promise<DeleteResult> {
+    return await this.musicsRepository.delete(id);
   }
 }
