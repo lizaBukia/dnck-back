@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AlbumsModule } from './albums/albums.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthorsModule } from './author/authors.module';
+import { AuthorsModule } from './author/artists.module';
 import { MusicsModule } from './musics/musics.module';
 import { UsersModule } from './users/users.module';
 
