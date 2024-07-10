@@ -39,6 +39,6 @@ export class ArtistsRepository {
     return await this.findOne(id);
   }
   remove(id: number): Promise<DeleteResult> {
-    return this.artistsRepository.delete(id); 
+    return this.artistsRepository.delete(id);
   }
 }
