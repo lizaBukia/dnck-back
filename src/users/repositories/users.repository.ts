@@ -1,52 +1,36 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { CreateUsersDto } from '../dto/create-users.dto';
 import { UpdateUsersDto } from '../dto/update-users.dto';
-import { FindOneUserInterface } from '../interfaces/find-one-user.interface';
-import { UserInterface } from '../interfaces/user.interface';
+import { User } from '../entities/users.entity';
 
 @Injectable()
 export class UsersRepository {
-  private users: UserInterface[] = [];
+  constructor(
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
+  ) {}
 
-  create(data: CreateUsersDto): UserInterface {
-    const newUser: UserInterface = {
-      id: (this.users[this.users.length - 1]?.id || 0) + 1,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      birthYear: data.birthYear,
-    };
-    this.users.push(newUser);
-    return newUser;
+  async create(createUsersDto: CreateUsersDto): Promise<User> {
+    const newUser: User = this.usersRepository.create(createUsersDto);
+    return await this.usersRepository.save(newUser);
   }
 
-  findAll(): UserInterface[] {
-    return this.users;
+  async findAll(): Promise<User[]> {
+    return await this.usersRepository.find();
   }
 
-  findOne(id: number): FindOneUserInterface {
-    for (let i: number = 0; i < this.users.length; i++) {
-      if (id == this.users[i].id)
-        return {
-          ...this.users[i],
-          index: i,
-        };
-    }
+  async findOne(id: number): Promise<User> {
+    return await this.usersRepository.findOne({ where: { id } });
   }
 
-  update(id: number, data: UpdateUsersDto): UserInterface {
-    const user: FindOneUserInterface = this.findOne(id);
-    const updatedUser: UserInterface = {
-      id: user.id,
-      lastName: data.lastName || user.lastName,
-      firstName: data.firstName || user.firstName,
-      birthYear: data.birthYear || user.birthYear,
-    };
-    this.users[user.index] = updatedUser;
-    return updatedUser;
+  async update(id: number, updateUsersDto: UpdateUsersDto): Promise<User> {
+    await this.usersRepository.update(id, updateUsersDto);
+    return await this.findOne(id);
   }
 
-  remove(id: number): UserInterface[] {
-    const user: FindOneUserInterface = this.findOne(id);
-    return this.users.splice(user.index, 1);
+  async remove(id: number): Promise<DeleteResult> {
+    return await this.usersRepository.delete(id);
   }
 }
