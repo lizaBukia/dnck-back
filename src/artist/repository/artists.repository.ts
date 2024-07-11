@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { CreateArtistDto } from '../dto/create-artist.dto';
 import { UpdateArtistDto } from '../dto/update-artist.dto';
-import { ArtistEntity } from '../entity/artist.entity';
+import { ArtistEntity } from '../entities/artist.entity';
 
 @Injectable()
 export class ArtistsRepository {

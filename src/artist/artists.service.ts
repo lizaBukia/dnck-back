@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { ArtistEntity } from './entity/artist.entity';
 import { ArtistsRepository } from './repository/artists.repository';
+import { ArtistEntity } from './entities/artist.entity';
 
 @Injectable()
 export class ArtistssService {
