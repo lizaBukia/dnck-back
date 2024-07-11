@@ -24,10 +24,7 @@ export class AlbumsRepository {
     return await this.albumRepository.findOneOrFail({ where: { id } });
   }
 
-  async update(
-    id: number,
-    data: DeepPartial<Album>,
-  ): Promise<UpdateResult> {
+  async update(id: number, data: DeepPartial<Album>): Promise<UpdateResult> {
     return await this.albumRepository
       .createQueryBuilder()
       .update()
