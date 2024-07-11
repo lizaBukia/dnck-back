@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AlbumsModule } from './albums/albums.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthorsModule } from './author/artists.module';
+import { ArtistsModule } from './artist/artists.module';
 import { MusicsModule } from './musics/musics.module';
 import { UsersModule } from './users/users.module';
 
@@ -12,16 +12,16 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     MusicsModule,
     AlbumsModule,
-    AuthorsModule,
+    ArtistsModule,
     TypeOrmModule.forRoot({
+      port: 3306,
+      database: 'artists',
+      username: 'root',
+      password: 'NovaNova123!@',
+      synchronize: true,
+      autoLoadEntities: true,
       type: 'mysql',
       host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'Novatori123456789!@#',
-      database: 'dnckback',
-      autoLoadEntities: true,
-      synchronize: true,
     }),
     MusicsModule,
   ],
