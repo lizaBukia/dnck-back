@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AlbumsModule } from './albums/albums.module';
-import { AlbumEntity } from './albums/entities/album.entity';
+import { Album } from './albums/entities/album.entity';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthorsModule } from './author/authors.module';
@@ -20,7 +20,7 @@ import { UsersModule } from './users/users.module';
       port: 3306,
       username: 'root',
       password: '11998631a&X',
-      entities: [AlbumEntity],
+      entities: [Album],
       database: 'davaleba',
       synchronize: true,
     }),

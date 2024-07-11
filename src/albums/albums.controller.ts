@@ -11,24 +11,24 @@ import { UpdateResult } from 'typeorm';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { AlbumEntity } from './entities/album.entity';
+import { Album } from './entities/album.entity';
 
 @Controller('albums')
 export class AlbumsController {
   constructor(private readonly albumService: AlbumsService) {}
 
   @Post()
-  async create(@Body() createAlbumDto: CreateAlbumDto): Promise<AlbumEntity> {
+  async create(@Body() createAlbumDto: CreateAlbumDto): Promise<Album> {
     return await this.albumService.create(createAlbumDto);
   }
 
   @Get()
-  async findAll(): Promise<AlbumEntity[]> {
+  async findAll(): Promise<Album[]> {
     return await this.albumService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<AlbumEntity> {
+  async findOne(@Param('id') id: string): Promise<Album> {
     return await this.albumService.findOne(Number(id));
   }
 
