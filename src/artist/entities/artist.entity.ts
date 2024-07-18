@@ -7,22 +7,19 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 @Entity()
-export class User {
+export class ArtistEntity {
   @PrimaryGeneratedColumn()
   id: number;
-
   @Column()
-  email: string;
-
+  firstName: string;
   @Column()
-  password: string;
-
+  lastName: string;
+  @Column()
+  biography: string;
   @CreateDateColumn()
   createdAt: Date;
-
   @DeleteDateColumn()
   deletedAt: Date;
-
   @UpdateDateColumn()
   updatedAt: Date;
 }

@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AlbumsModule } from './albums/albums.module';
+import { Album } from './albums/entities/album.entity';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthorsModule } from './author/artists.module';
+import { ArtistsModule } from './artist/artists.module';
+import { ArtistEntity } from './artist/entities/artist.entity';
+import { Music } from './musics/entities/musics.entity';
 import { MusicsModule } from './musics/musics.module';
 import { UsersModule } from './users/users.module';
 
@@ -11,19 +14,18 @@ import { UsersModule } from './users/users.module';
   imports: [
     UsersModule,
     MusicsModule,
+    ArtistsModule,
     AlbumsModule,
-    AuthorsModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'Novatori123456789!@#',
-      database: 'dnckback',
-      autoLoadEntities: true,
+      password: '11998631a&X',
+      entities: [Album, Music, ArtistEntity],
+      database: 'davaleba',
       synchronize: true,
     }),
-    MusicsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
