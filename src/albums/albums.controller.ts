@@ -6,9 +6,7 @@ import {
   Param,
   Post,
   Put,
-  Query,
 } from '@nestjs/common';
-import { SearchDto } from 'src/search/dto/create-search.dto';
 import { UpdateResult } from 'typeorm';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';

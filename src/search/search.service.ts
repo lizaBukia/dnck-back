@@ -23,6 +23,6 @@ export class SearchService {
       albums,
       artists,
       musics,
-    }
+    };
   }
 }
