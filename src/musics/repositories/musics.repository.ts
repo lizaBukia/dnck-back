@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateMusicDto } from '../dto/create-music.dto';
 import { UpdateMusicDto } from '../dto/update-music.dto';
 import { Music } from '../entities/musics.entity';
@@ -17,7 +17,13 @@ export class MusicsRepository {
     return await this.musicsRepository.save(newMusic);
   }
 
-  async findAll(): Promise<Music[]> {
+  async findAll(search?: string): Promise<Music[]> {
+    if (search.length) {
+      const query: SelectQueryBuilder<Music> = this.musicsRepository
+        .createQueryBuilder('musics')
+        .where('musics.name LIKE :search', { search: `%${search}%` });
+      return await query.getMany();
+    }
     return await this.musicsRepository.find();
   }
 

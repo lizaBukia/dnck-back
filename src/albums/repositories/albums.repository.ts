@@ -1,52 +1,51 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import {
+  DeepPartial,
+  Repository,
+  SelectQueryBuilder,
+  UpdateResult,
+} from 'typeorm';
 import { CreateAlbumDto } from '../dto/create-album.dto';
-import { UpdateAlbumDto } from '../dto/update-album.dto';
-import { AlbumInterface } from '../interfaces/album.interface';
-import { FindOneAlbumInterface } from '../interfaces/find-one-album.interface';
+import { Album } from '../entities/album.entity';
 
 @Injectable()
 export class AlbumsRepository {
-  private albums: AlbumInterface[] = [];
+  constructor(
+    @InjectRepository(Album)
+    private albumRepository: Repository<Album>,
+  ) {}
 
-  create(data: CreateAlbumDto): AlbumInterface {
-    const newAlbum: AlbumInterface = {
-      id: (this.albums[this.albums.length - 1]?.id || 0) + 1,
-      title: data.title,
-      releaseDate: data.releaseDate,
-      artistName: data.artistName,
-    };
-    this.albums.push(newAlbum);
-    return newAlbum;
+  async create(data: CreateAlbumDto): Promise<Album> {
+    const newAlbum: Album = this.albumRepository.create(data);
+    return await this.albumRepository.save(newAlbum);
   }
 
-  findAll(): AlbumInterface[] {
-    return this.albums;
-  }
+  async findAll(search?: string): Promise<Album[]> {
+    const query: SelectQueryBuilder<Album> =
+      this.albumRepository.createQueryBuilder('album');
 
-  findOne(id: number): FindOneAlbumInterface {
-    for (let i: number = 0; i < this.albums.length; i++) {
-      if (id === this.albums[i].id)
-        return {
-          ...this.albums[i],
-          index: i,
-        };
+    if (search) {
+      query.where('album.name like :search', { search: `%${search}%` });
     }
+
+    return await query.getMany();
   }
 
-  update(id: number, data: UpdateAlbumDto): AlbumInterface {
-    const album: FindOneAlbumInterface = this.findOne(id);
-    const updatedAlbum: AlbumInterface = {
-      id: album.id,
-      title: data.title || album.title,
-      releaseDate: data.releaseDate || album.releaseDate,
-      artistName: data.artistName || album.artistName,
-    };
-    this.albums[album.index] = updatedAlbum;
-    return updatedAlbum;
+  async findOne(id: number): Promise<Album> {
+    return await this.albumRepository.findOneOrFail({ where: { id } });
   }
 
-  remove(id: number): AlbumInterface[] {
-    const album: FindOneAlbumInterface = this.findOne(id);
-    return this.albums.splice(album.index, 1);
+  async update(id: number, data: DeepPartial<Album>): Promise<UpdateResult> {
+    return await this.albumRepository
+      .createQueryBuilder()
+      .update()
+      .set(data)
+      .where('id = :id', { id })
+      .execute();
+  }
+
+  async remove(id: number): Promise<UpdateResult> {
+    return await this.albumRepository.softDelete(id);
   }
 }

@@ -9,5 +9,6 @@ import { MusicsRepository } from './repositories/musics.repository';
   imports: [TypeOrmModule.forFeature([Music])],
   controllers: [MusicsController],
   providers: [MusicsService, MusicsRepository],
+  exports: [MusicsRepository],
 })
 export class MusicsModule {}

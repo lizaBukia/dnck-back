@@ -1,8 +1,10 @@
+import { Album } from 'src/albums/entities/album.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -16,6 +18,8 @@ export class ArtistEntity {
   lastName: string;
   @Column()
   biography: string;
+  @ManyToMany(() => Album, (album) => album.artists)
+  albums: Album[];
   @CreateDateColumn()
   createdAt: Date;
   @DeleteDateColumn()

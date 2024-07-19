@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ArtistsModule } from './artist/artists.module';
 import { MusicsModule } from './musics/musics.module';
+import { SearchModule } from './search/search.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -15,15 +16,16 @@ import { UsersModule } from './users/users.module';
     ArtistsModule,
     TypeOrmModule.forRoot({
       port: 3306,
-      database: 'artists',
+      database: 'davaleba',
       username: 'root',
-      password: 'NovaNova123!@',
+      password: '11998631a&X',
       synchronize: true,
       autoLoadEntities: true,
       type: 'mysql',
       host: 'localhost',
     }),
     MusicsModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

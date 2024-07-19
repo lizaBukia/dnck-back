@@ -1,6 +1,5 @@
 export interface AlbumInterface {
-  id: number;
-  title: string;
+  imgUrl: string;
   releaseDate: string;
-  artistName: string;
+  name: string;
 }
