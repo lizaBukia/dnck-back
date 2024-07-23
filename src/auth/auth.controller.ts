@@ -1,9 +1,9 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { User } from 'src/users/entities/users.entity';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { Public } from './gurads/guard.key';
 import { LoginInterface } from './interface/login.response';
-import { User } from 'src/users/entities/users.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -15,8 +15,7 @@ export class AuthController {
   }
   @Public()
   @Post()
-  register(@Body() authdto:AuthDto): Promise<User>{
-    return this.authsService.register(authdto)
+  register(@Body() authdto: AuthDto): Promise<User> {
+    return this.authsService.register(authdto);
   }
-
 }
