@@ -5,4 +5,4 @@ export const ROLES_KEY: string = 'roles';
 
 export const Roles: (...roles: role[]) => CustomDecorator<string> = (
   ...roles: role[]
-) => SetMetadata(ROLES_KEY, roles);
+) => SetMetadata(ROLES_KEY, roles); 
