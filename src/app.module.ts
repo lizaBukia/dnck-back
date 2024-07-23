@@ -4,6 +4,7 @@ import { AlbumsModule } from './albums/albums.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ArtistsModule } from './artist/artists.module';
+import { AuthModule } from './auth/auth.module';
 import { MusicsModule } from './musics/musics.module';
 import { UsersModule } from './users/users.module';
 
@@ -15,15 +16,16 @@ import { UsersModule } from './users/users.module';
     ArtistsModule,
     TypeOrmModule.forRoot({
       port: 3306,
-      database: 'artists',
+      database: 'dnck',
       username: 'root',
-      password: 'NovaNova123!@',
+      password: 'Newpassword123!',
       synchronize: true,
       autoLoadEntities: true,
       type: 'mysql',
       host: 'localhost',
     }),
     MusicsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
