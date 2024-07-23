@@ -26,7 +26,7 @@ export class AuthService {
     const { email, password } = authDto;
     const user: User = await this.usersRepository.findEmail(email);
     const chekpassword: boolean = await bcrypt.compare(password, user.password);
-    if (user && chekpassword) {
+    if (user && chekpassword) { 
       const payload: {
         email: string;
         password: string;
