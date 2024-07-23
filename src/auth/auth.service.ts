@@ -16,11 +16,11 @@ export class AuthService {
     const { email, password }: AuthDto = authDto;
     const salt: string = await bcrypt.genSalt();
     const hashedpassword: string = await bcrypt.hash(password, salt);
-    const user: Promise<User> = this.usersRepository.create({
+    const user: User = await this.usersRepository.create({
       email,
       password: hashedpassword,
     });
-    return await user;
+    return user;
   }
   async login(authDto: AuthDto): Promise<LoginInterface> {
     const { email, password } = authDto;

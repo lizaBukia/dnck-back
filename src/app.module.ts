@@ -12,8 +12,8 @@ import { UsersModule } from './users/users.module';
   imports: [
     UsersModule,
     MusicsModule,
-    AlbumsModule,
     ArtistsModule,
+    AlbumsModule,
     TypeOrmModule.forRoot({
       port: 3306,
       database: 'dnck',

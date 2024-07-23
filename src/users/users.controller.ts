@@ -12,12 +12,15 @@ import { CreateUsersDto } from './dto/create-users.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import { User } from './entities/users.entity';
 import { UsersService } from './users.service';
+import { Public } from 'src/auth/gurads/guard.key';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @Public()
   async create(@Body() createUsersDto: CreateUsersDto): Promise<User> {
     return await this.usersService.create(createUsersDto);
   }

@@ -2,11 +2,11 @@ import { IsDateString, IsString } from 'class-validator';
 
 export class CreateAlbumDto {
   @IsString()
-  title!: string;
+  name!: string;
 
   @IsDateString()
   releaseDate!: string;
 
   @IsString()
-  artistName!: string;
+  imgUrl!: string;
 }

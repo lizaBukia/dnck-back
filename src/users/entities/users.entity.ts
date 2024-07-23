@@ -13,13 +13,7 @@ export class User {
   id: number;
 
   @Column()
-  email: string;
-
-  @Column()
-  lastName: string;
-
-  @Column()
-  biography: string;
+  email: string;  
 
   @Column()
   password: string;

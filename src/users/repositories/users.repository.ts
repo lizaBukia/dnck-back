@@ -13,10 +13,9 @@ export class UsersRepository {
   ) {}
 
   async create(createUsersDto: CreateUsersDto): Promise<User> {
-    const newUser: User = this.usersRepository.create(createUsersDto);
+    const newUser: User =  await this.usersRepository.create(createUsersDto);
     return await this.usersRepository.save(newUser);
   }
-
   async findAll(): Promise<User[]> {
     return await this.usersRepository.find();
   }
@@ -24,7 +23,6 @@ export class UsersRepository {
   async findOne(id: number): Promise<User> {
     return await this.usersRepository.findOne({ where: { id } });
   }
-
   async update(id: number, updateUsersDto: UpdateUsersDto): Promise<User> {
     await this.usersRepository.update(id, updateUsersDto);
     return await this.findOne(id);
