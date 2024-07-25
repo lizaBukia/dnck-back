@@ -3,25 +3,27 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Playlist } from '../../playlists/entities/playlist.entity';
+import { Music } from '../../musics/entities/musics.entity';
 
 @Entity()
-export class Music {
+export class Playlist {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  name: string;
+  title: string;
 
   @Column()
   imgUrl: string;
 
-  @ManyToMany(() => Playlist, (playlist) => playlist.music)
-  playlist: Playlist[];
+  @ManyToMany(() => Music, (music) => music.playlist)
+  @JoinTable()
+  music: Music[];
 
   @CreateDateColumn()
   createdAt: Date;
