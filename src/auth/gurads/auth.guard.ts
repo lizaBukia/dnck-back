@@ -8,19 +8,10 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { jwtConstants } from 'src/auth/auth.constants';
-import { role } from '../enum/user.role';
+import { JwtPayload } from '../interface/payload.response';
+import { RoleMetadata } from '../interface/role.response';
 import { IS_PUBLIC_KEY } from './guard.key';
 import { ROLES_KEY } from './gurad.interface';
-
-interface JwtPayload {
-  verifyAsync: boolean;
-  secret: string;
-  role: role;
-}
-
-interface RoleMetadata {
-  roles: role[];
-}
 
 @Injectable()
 export class AuthGuard implements CanActivate {
