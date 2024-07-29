@@ -45,8 +45,8 @@ export class AuthGuard implements CanActivate {
           context.getHandler(),
           context.getClass(),
         ]);
-
-      if (roles && roles.roles && roles.roles.length) {
+      const isRouteGuardedWithRoles: boolean = roles.length;
+      if (roles && roles.roles && isRouteGuardedWithRoles) {
         return roles.roles.some((role) => payload.role === role);
       }
 
