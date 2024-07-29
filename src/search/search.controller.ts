@@ -5,10 +5,12 @@ import { SearchService } from './search.service';
 
 @Controller('search')
 export class SearchController {
-  constructor(private readonly searchService: SearchService) { }
+  constructor(private readonly searchService: SearchService) {}
 
   @Get()
-  async search(@Query() searchQueryDto: SearchQueryDto): Promise<SearchResponseDto> {
+  async search(
+    @Query() searchQueryDto: SearchQueryDto,
+  ): Promise<SearchResponseDto> {
     return await this.searchService.search(searchQueryDto.search);
   }
 }
