@@ -1,6 +1,6 @@
 import { RoleEnum } from '../enum/user.role';
 
 export interface RoleMetadata {
-  length: any;
+  length: number;
   roles: RoleEnum[];
 }
