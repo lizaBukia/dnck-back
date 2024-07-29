@@ -1,4 +1,4 @@
 import { PartialType } from '@nestjs/swagger';
-import { SearchDto } from './create-search.dto';
+import { SearchQueryDto } from './create-search.dto';
 
-export class UpdateSearchDto extends PartialType(SearchDto) {}
+export class UpdateSearchDto extends PartialType(SearchQueryDto) { }

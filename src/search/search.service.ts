@@ -14,6 +14,7 @@ export class SearchService {
     private artistRepository: ArtistsRepository,
     private musicRepository: MusicsRepository,
   ) {}
+
   async search(search: string): Promise<SearchResponseDto> {
     const albums: Album[] = await this.albumsRepository.findAll(search);
     const artists: ArtistEntity[] = await this.artistRepository.findAll(search);

@@ -18,7 +18,7 @@ export class MusicsRepository {
   }
 
   async findAll(search?: string): Promise<Music[]> {
-    if (search.length) {
+    if (search) {
       const query: SelectQueryBuilder<Music> = this.musicsRepository
         .createQueryBuilder('musics')
         .where('musics.name LIKE :search', { search: `%${search}%` });
