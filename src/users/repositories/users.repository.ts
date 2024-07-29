@@ -16,6 +16,7 @@ export class UsersRepository {
     const newUser: User = await this.usersRepository.create(createUsersDto);
     return await this.usersRepository.save(newUser);
   }
+
   async findAll(): Promise<User[]> {
     return await this.usersRepository.find();
   }
@@ -23,6 +24,7 @@ export class UsersRepository {
   async findOne(id: number): Promise<User> {
     return await this.usersRepository.findOne({ where: { id } });
   }
+
   async update(id: number, updateUsersDto: UpdateUsersDto): Promise<User> {
     await this.usersRepository.update(id, updateUsersDto);
     return await this.findOne(id);
@@ -31,6 +33,7 @@ export class UsersRepository {
   async remove(id: number): Promise<DeleteResult> {
     return await this.usersRepository.delete(id);
   }
+
   async findEmail(email: string): Promise<User> {
     return await this.usersRepository.findOne({ where: { email } });
   }

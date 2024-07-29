@@ -9,10 +9,10 @@ import { LoginInterface } from './interface/login.response';
 export class AuthController {
   constructor(private authsService: AuthService) {}
   @Post('login')
-  @Public()
   login(@Body() authDto: AuthDto): Promise<LoginInterface> {
     return this.authsService.login(authDto);
   }
+
   @Public()
   @Post()
   register(@Body() authdto: AuthDto): Promise<User> {

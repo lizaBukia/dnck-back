@@ -4,7 +4,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/users.entity';
 import { UsersRepository } from 'src/users/repositories/users.repository';
-import { JwtConstants } from './auth.constants';
+import { jwtConstants } from './auth.constants';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './gurads/auth.guard';
@@ -14,7 +14,7 @@ import { AuthGuard } from './gurads/auth.guard';
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
       global: true,
-      secret: JwtConstants.secret,
+      secret: jwtConstants.secret,
       signOptions: { expiresIn: '6000s' },
     }),
   ],

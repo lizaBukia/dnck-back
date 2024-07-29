@@ -1,3 +1,3 @@
 export class LoginInterface {
-  access_token: string;
+  accessToken: string;
 }
