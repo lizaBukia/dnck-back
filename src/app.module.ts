@@ -29,6 +29,7 @@ import { UsersModule } from './users/users.module';
       database: 'dnckback',
       synchronize: true,
     }),
+    MusicsModule,
     PlaylistsModule,
   ],
   controllers: [AppController],
