@@ -8,10 +8,10 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { jwtConstants } from 'src/auth/auth.constants';
+import { RoleEnum } from '../enum/user.role';
 import { JwtPayload } from '../interface/payload.response';
-import { RoleMetadata } from '../interface/role.response';
-import { IS_PUBLIC_KEY } from './guard.key';
-import { ROLES_KEY } from './gurad.interface';
+import { IS_PUBLIC_KEY } from './publick.key';
+import { ROLES_KEY } from './roles.key';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate {
 
     const request: Request = context.switchToHttp().getRequest();
     const token: string = this.extractTokenFromHeader(request);
-    
+
     if (!token) {
       throw new UnauthorizedException('Unauthorized');
     }
@@ -40,17 +40,16 @@ export class AuthGuard implements CanActivate {
       const payload: JwtPayload = await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.secret,
       });
-      
-      const roles: RoleMetadata =
-        this.reflector.getAllAndOverride<RoleMetadata>(ROLES_KEY, [
-          context.getHandler(),
-          context.getClass(),
-        ]);
-        
-        if(roles.length) {
-          return roles.some((role) => payload.role === role)
-        }
-      
+
+      const roles: RoleEnum[] = this.reflector.getAllAndOverride<RoleEnum[]>(
+        ROLES_KEY,
+        [context.getHandler(), context.getClass()],
+      );
+
+      if (roles.length) {
+        return roles.some((role) => payload.role === role);
+      }
+
       return true;
     } catch (err) {
       throw new UnauthorizedException('Unauthorized');

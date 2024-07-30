@@ -7,7 +7,7 @@ import { UsersRepository } from 'src/users/repositories/users.repository';
 import { jwtConstants } from './auth.constants';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './gurads/auth.guard';
+import { AuthGuard } from './guard/auth.guard';
 
 @Module({
   imports: [

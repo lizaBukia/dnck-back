@@ -7,14 +7,11 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { Public } from 'src/auth/gurads/guard.key';
 import { DeleteResult } from 'typeorm';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import { User } from './entities/users.entity';
 import { UsersService } from './users.service';
-import { Roles } from 'src/auth/gurads/gurad.interface';
-import { RoleEnum } from 'src/auth/enum/user.role';
 
 @Controller('users')
 export class UsersController {
