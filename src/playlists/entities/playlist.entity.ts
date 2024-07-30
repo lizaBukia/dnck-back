@@ -21,9 +21,9 @@ export class Playlist {
   @Column()
   imgUrl: string;
 
-  @ManyToMany(() => Music, (music) => music.playlist)
+  @ManyToMany(() => Music, (music) => music.playlists)
   @JoinTable()
-  music: Music[];
+  musics: Music[];
 
   @CreateDateColumn()
   createdAt: Date;

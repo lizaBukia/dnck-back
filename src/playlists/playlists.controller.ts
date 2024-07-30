@@ -31,7 +31,7 @@ export class PlaylistsController {
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Playlist> {
-    return await this.playlistsService.findOne(+id);
+    return await this.playlistsService.findOne(Number(id));
   }
 
   @Patch(':id')
@@ -39,11 +39,11 @@ export class PlaylistsController {
     @Param('id') id: string,
     @Body() updatePlaylistDto: UpdatePlaylistDto,
   ): Promise<Playlist> {
-    return await this.playlistsService.update(+id, updatePlaylistDto);
+    return await this.playlistsService.update(Number(id), updatePlaylistDto);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<DeleteResult> {
-    return await this.playlistsService.remove(+id);
+    return await this.playlistsService.remove(Number(id));
   }
 }

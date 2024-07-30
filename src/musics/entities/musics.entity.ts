@@ -20,8 +20,8 @@ export class Music {
   @Column()
   imgUrl: string;
 
-  @ManyToMany(() => Playlist, (playlist) => playlist.music)
-  playlist: Playlist[];
+  @ManyToMany(() => Playlist, (playlist) => playlist.musics, { cascade: true })
+  playlists: Playlist[];
 
   @CreateDateColumn()
   createdAt: Date;

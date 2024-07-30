@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateQueryBuilder } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Music } from '../../musics/entities/musics.entity';
 import { CreatePlaylistDto } from '../dto/create-playlist.dto';
@@ -17,31 +17,39 @@ export class PlaylistsRepository {
   async create(createPlaylistDto: CreatePlaylistDto): Promise<Playlist> {
     const playlist: Playlist =
       this.playlistRepository.create(createPlaylistDto);
-    const arrayOfMusics: Music[] = [];
-    for (const musicId of createPlaylistDto.musicIds) {
-      const music: Music = new Music();
-      music.id = musicId;
-      arrayOfMusics.push(music);
-    }
-    playlist.music = arrayOfMusics;
+    playlist.musics = this.createMusics(createPlaylistDto.musicIds);
+
     await this.playlistRepository.save(playlist);
+
     return await this.playlistRepository.findOne({
       where: { id: playlist.id },
-      relations: { music: true },
+      relations: { musics: true },
     });
+  }
+
+  private createMusics(musicIds: number[]): Music[] {
+    const musics: Music[] = [];
+
+    for (const musicId of musicIds) {
+      const music: Music = new Music();
+      music.id = musicId;
+      musics.push(music);
+    }
+
+    return musics;
   }
 
   async findAll(): Promise<Playlist[]> {
     return await this.playlistRepository
       .createQueryBuilder('playlist')
-      .leftJoinAndSelect('playlist.music', 'music')
+      .leftJoinAndSelect('playlist.musics', 'musics')
       .getMany();
   }
 
   async findOne(id: number): Promise<Playlist | undefined> {
     return await this.playlistRepository
       .createQueryBuilder('playlist')
-      .leftJoinAndSelect('playlist.music', 'music')
+      .leftJoinAndSelect('playlist.musics', 'musics')
       .where('playlist.id= :id', { id })
       .getOne();
   }
@@ -50,19 +58,45 @@ export class PlaylistsRepository {
     id: number,
     updatePlaylistDto: UpdatePlaylistDto,
   ): Promise<Playlist> {
-    const { musicIds: _musicIds, ...rest } = updatePlaylistDto;
-    console.log(id);
-    const query: UpdateQueryBuilder<Playlist> = this.playlistRepository
-      .createQueryBuilder()
-      .update()
-      .set(rest as QueryDeepPartialEntity<Playlist>)
-      .where('id = :id', { id });
+    const { musicIds: newMusicIds, ...rest } = updatePlaylistDto;
+    const playlist: Playlist = await this.playlistRepository.findOneOrFail({
+      where: { id },
+      relations: ['musics'],
+    });
 
-    await query.execute();
-    return await this.findOne(id);
+    await this.playlistRepository
+      .createQueryBuilder()
+      .update(Playlist)
+      .set(rest as QueryDeepPartialEntity<Playlist>)
+      .where('id = :id', { id })
+      .execute();
+
+    if (newMusicIds?.length) {
+      await this.updatePlaylistMusics(
+        id,
+        newMusicIds,
+        playlist.musics.map((music) => music.id),
+      );
+    }
+    return await this.playlistRepository.findOne({
+      where: { id },
+      relations: ['musics'],
+    });
   }
 
   async remove(id: number): Promise<DeleteResult> {
     return await this.playlistRepository.softDelete(id);
+  }
+
+  async updatePlaylistMusics(
+    id: number,
+    newMusicIds: number[],
+    oldMusicIds: number[],
+  ): Promise<void> {
+    await this.playlistRepository
+      .createQueryBuilder()
+      .relation(Playlist, 'musics')
+      .of(id)
+      .addAndRemove(newMusicIds, oldMusicIds);
   }
 }
