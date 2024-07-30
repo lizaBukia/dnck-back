@@ -8,6 +8,7 @@ import { ArtistsModule } from './artist/artists.module';
 import { ArtistEntity } from './artist/entities/artist.entity';
 import { Music } from './musics/entities/musics.entity';
 import { MusicsModule } from './musics/musics.module';
+import { SearchModule } from './search/search.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -26,6 +27,8 @@ import { UsersModule } from './users/users.module';
       database: 'davaleba',
       synchronize: true,
     }),
+    MusicsModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

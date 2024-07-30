@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Repository, UpdateResult } from 'typeorm';
+import {
+  DeepPartial,
+  Repository,
+  SelectQueryBuilder,
+  UpdateResult,
+} from 'typeorm';
 import { CreateAlbumDto } from '../dto/create-album.dto';
 import { Album } from '../entities/album.entity';
 
@@ -16,8 +21,15 @@ export class AlbumsRepository {
     return await this.albumRepository.save(newAlbum);
   }
 
-  async findAll(): Promise<Album[]> {
-    return await this.albumRepository.find();
+  async findAll(search?: string): Promise<Album[]> {
+    const query: SelectQueryBuilder<Album> =
+      this.albumRepository.createQueryBuilder('album');
+
+    if (search) {
+      query.where('album.name like :search', { search: `%${search}%` });
+    }
+
+    return await query.getMany();
   }
 
   async findOne(id: number): Promise<Album> {
