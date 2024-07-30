@@ -15,12 +15,6 @@ export class User {
   email: string;
 
   @Column()
-  lastName: string;
-
-  @Column()
-  biography: string;
-
-  @Column()
   password: string;
 
   @CreateDateColumn()
