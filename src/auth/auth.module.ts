@@ -15,7 +15,7 @@ import { AuthGuard } from './gurads/auth.guard';
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '6000s' },
+      signOptions: { expiresIn: '60000000000000000000s' },
     }),
   ],
   providers: [

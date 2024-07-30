@@ -31,6 +31,7 @@ export class AuthGuard implements CanActivate {
 
     const request: Request = context.switchToHttp().getRequest();
     const token: string = this.extractTokenFromHeader(request);
+    
     if (!token) {
       throw new UnauthorizedException('Unauthorized');
     }
@@ -39,17 +40,17 @@ export class AuthGuard implements CanActivate {
       const payload: JwtPayload = await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.secret,
       });
-
+      
       const roles: RoleMetadata =
         this.reflector.getAllAndOverride<RoleMetadata>(ROLES_KEY, [
           context.getHandler(),
           context.getClass(),
         ]);
-      const isRouteGuardedWithRoles: number = roles.length;
-      if (roles && roles.roles && isRouteGuardedWithRoles) {
-        return roles.roles.some((role) => payload.role === role);
-      }
-
+        
+        if(roles.length) {
+          return roles.some((role) => payload.role === role)
+        }
+      
       return true;
     } catch (err) {
       throw new UnauthorizedException('Unauthorized');

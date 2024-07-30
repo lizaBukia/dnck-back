@@ -45,6 +45,8 @@ export class AuthService {
         password: user.password,
         role: user.role,
       };
+      console.log(payload.role, 'role');
+      
       return {
         accessToken: await this.jwtService.signAsync(payload, {
           secret: jwtConstants.secret,
