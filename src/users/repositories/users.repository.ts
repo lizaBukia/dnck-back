@@ -13,7 +13,7 @@ export class UsersRepository {
   ) {}
 
   async create(createUsersDto: CreateUsersDto): Promise<User> {
-    const newUser: User = this.usersRepository.create(createUsersDto);
+    const newUser: User = await this.usersRepository.create(createUsersDto);
     return await this.usersRepository.save(newUser);
   }
 
@@ -32,5 +32,9 @@ export class UsersRepository {
 
   async remove(id: number): Promise<DeleteResult> {
     return await this.usersRepository.delete(id);
+  }
+
+  async findEmail(email: string): Promise<User> {
+    return await this.usersRepository.findOne({ where: { email } });
   }
 }
