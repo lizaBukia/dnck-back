@@ -18,7 +18,7 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ default: RoleEnum.USER })
+  @Column({ default: RoleEnum.User })
   role: RoleEnum;
 
   @CreateDateColumn()
