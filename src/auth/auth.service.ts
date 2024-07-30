@@ -35,7 +35,7 @@ export class AuthService {
     const isPasswordCorrect: boolean =
       user && (await bcrypt.compare(password, user.password));
 
-    if (user && isPasswordCorrect) {
+    if (isPasswordCorrect) {
       const payload: {
         email: string;
         password: string;
@@ -45,8 +45,6 @@ export class AuthService {
         password: user.password,
         role: user.role,
       };
-      console.log(payload.role, 'role');
-
       return {
         accessToken: await this.jwtService.signAsync(payload, {
           secret: jwtConstants.secret,
