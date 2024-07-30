@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateArtistDto } from '../dto/create-artist.dto';
 import { UpdateArtistDto } from '../dto/update-artist.dto';
 import { ArtistEntity } from '../entities/artist.entity';
@@ -23,8 +23,16 @@ export class ArtistsRepository {
     return newArtist;
   }
 
-  findAll(): Promise<CreateArtistDto[]> {
-    return this.artistsRepository.find();
+  async findAll(search?: string): Promise<ArtistEntity[]> {
+    if (search) {
+      const query: SelectQueryBuilder<ArtistEntity> = this.artistsRepository
+        .createQueryBuilder('artist')
+        .where("CONCAT(artist.firstName, ' ', artist.lastName) LIKE :search", {
+          search: `%${search}%`,
+        });
+      return await query.getMany();
+    }
+    return await this.artistsRepository.find();
   }
 
   findOne(id: number): Promise<ArtistEntity> {
