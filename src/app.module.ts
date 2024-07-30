@@ -8,7 +8,8 @@ import { ArtistsModule } from './artist/artists.module';
 import { ArtistEntity } from './artist/entities/artist.entity';
 import { Music } from './musics/entities/musics.entity';
 import { MusicsModule } from './musics/musics.module';
-import { SearchModule } from './search/search.module';
+import { Playlist } from './playlists/entities/playlist.entity';
+import { PlaylistsModule } from './playlists/playlists.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -17,18 +18,19 @@ import { UsersModule } from './users/users.module';
     MusicsModule,
     ArtistsModule,
     AlbumsModule,
+    PlaylistsModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: '11998631a&X',
-      entities: [Album, Music, ArtistEntity],
-      database: 'davaleba',
+      password: 'Novatori123456789!@#',
+      entities: [Album, Music, ArtistEntity, Playlist],
+      database: 'dnckback',
       synchronize: true,
     }),
     MusicsModule,
-    SearchModule,
+    PlaylistsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
