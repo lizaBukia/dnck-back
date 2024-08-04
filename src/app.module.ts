@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AlbumsModule } from './albums/albums.module';
 import { Album } from './albums/entities/album.entity';
@@ -16,20 +17,21 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     UsersModule,
     MusicsModule,
     ArtistsModule,
     AlbumsModule,
     PlaylistsModule,
     TypeOrmModule.forRoot({
-      port: 3306,
-      database: 'dnck',
-      username: 'root',
-      password: 'Newpassword123!',
+      port: +process.env.DATABASE_PORT,
+      database: process.env.DATABASE_NAME,
+      username: process.env.DATABASE_USERNAME,
+      password: process.env.DATABASE_PASSWORD,
       synchronize: true,
       autoLoadEntities: true,
       type: 'mysql',
-      host: 'localhost',
+      host: process.env.DATABASE_HOST,
       entities: [Album, Music, ArtistEntity, Playlist],
     }),
     MusicsModule,
