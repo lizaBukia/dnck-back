@@ -3,6 +3,7 @@ import { User } from 'src/users/entities/users.entity';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { LoginInterface } from './interface/login.response';
+import { Public } from './guard/publick.key';
 
 @Controller('auth')
 export class AuthController {
@@ -12,7 +13,7 @@ export class AuthController {
   login(@Body() authDto: AuthDto): Promise<LoginInterface> {
     return this.authsService.login(authDto);
   }
-
+  @Public()
   @Post('register')
   register(@Body() authDto: AuthDto): Promise<User> {
     return this.authsService.register(authDto);
