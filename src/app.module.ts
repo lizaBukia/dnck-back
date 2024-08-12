@@ -12,6 +12,7 @@ import { MusicsModule } from './musics/musics.module';
 import { Playlist } from './playlists/entities/playlist.entity';
 import { PlaylistsModule } from './playlists/playlists.module';
 import { SearchModule } from './search/search.module';
+import { StatisticsModule } from './statistics/statistics.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -36,6 +37,7 @@ import { UsersModule } from './users/users.module';
     PlaylistsModule,
     AuthModule,
     SearchModule,
+    StatisticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

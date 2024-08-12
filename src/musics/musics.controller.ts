@@ -7,6 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { Public } from 'src/auth/guard/publick.key';
 import { DeleteResult } from 'typeorm';
 import { CreateMusicDto } from './dto/create-music.dto';
 import { UpdateMusicDto } from './dto/update-music.dto';
@@ -18,6 +19,7 @@ export class MusicsController {
   constructor(private readonly musicsService: MusicsService) {}
 
   @Post()
+  @Public()
   async create(@Body() createMusicDto: CreateMusicDto): Promise<Music> {
     return await this.musicsService.create(createMusicDto);
   }
@@ -28,7 +30,7 @@ export class MusicsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number): Promise<Music> {
+  async findOne(@Param('id') id: string): Promise<Music> {
     return await this.musicsService.findOne(Number(id));
   }
 
