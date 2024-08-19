@@ -12,8 +12,6 @@ export class StatisticsController {
   addlisendMusic(
     @Body() createStatisticDto: CreateStatisticDto,
   ): Promise<Statistic> {
-    console.log(createStatisticDto);
-
     return this.statistcsService.createStatistic(createStatisticDto);
   }
   @Public()

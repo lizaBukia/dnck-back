@@ -6,10 +6,11 @@ import {
   Param,
   Post,
   Put,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
+import * as jwt from 'jsonwebtoken';
 import { Public } from 'src/auth/guard/publick.key';
-import { CreateStatisticDto } from 'src/statistics/dto/create-statistc.dto';
-import { Statistic } from 'src/statistics/entity/statistic.entity';
 import { DeleteResult } from 'typeorm';
 import { CreateMusicDto } from './dto/create-music.dto';
 import { UpdateMusicDto } from './dto/update-music.dto';
@@ -30,12 +31,20 @@ export class MusicsController {
   async findAll(): Promise<Music[]> {
     return await this.musicsService.findAll();
   }
-
+  @Public()
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Music> {
-    return await this.musicsService.findOne(Number(id));
-  }
+  async findOne(@Param('id') id: string, @Req() req: Request): Promise<Music> {
+    const [type, token] = req.headers.authorization.split(' ');
 
+    if (type !== 'Bearer') {
+      throw new Error('invalid token');
+    }
+    const decodedToken: string | jwt.JwtPayload = jwt.decode(token);
+
+    const userId: number = (decodedToken as jwt.JwtPayload).userId;
+
+    return await this.musicsService.findOne(Number(id), userId);
+  }
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -47,13 +56,5 @@ export class MusicsController {
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<DeleteResult> {
     return await this.musicsService.remove(Number(id));
-  }
-
-  @Post('user/statistics')
-  @Public()
-  async createStatistic(
-    @Body() createStatistickDto: CreateStatisticDto,
-  ): Promise<Statistic> {
-    return await this.musicsService.createStatistic(createStatistickDto);
   }
 }

@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateStatisticDto } from 'src/statistics/dto/create-statistc.dto';
-import { Statistic } from 'src/statistics/entity/statistic.entity';
 import { StatisticsRepository } from 'src/statistics/repositorys/statisticks.repository';
 import { DeleteResult } from 'typeorm';
 import { CreateMusicDto } from './dto/create-music.dto';
@@ -23,8 +21,12 @@ export class MusicsService {
     return await this.musicsRepository.findAll();
   }
 
-  async findOne(id: number): Promise<Music> {
-    return await this.musicsRepository.findOne(id);
+  async findOne(id: number, userId: number): Promise<Music> {
+    await this.statisticsRepository.createStatistic({ musicId: id, userId });
+
+    const musics: Music = await this.musicsRepository.findOne(id);
+
+    return musics;
   }
 
   async update(id: number, updateMusicDto: UpdateMusicDto): Promise<Music> {
@@ -33,10 +35,5 @@ export class MusicsService {
 
   async remove(id: number): Promise<DeleteResult> {
     return await this.musicsRepository.remove(id);
-  }
-  async createStatistic(
-    createStatistickDto: CreateStatisticDto,
-  ): Promise<Statistic> {
-    return await this.statisticsRepository.createStatistic(createStatistickDto);
   }
 }

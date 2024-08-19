@@ -21,8 +21,6 @@ export class AlbumsController {
   @Post()
   @Public()
   async create(@Body() createAlbumDto: CreateAlbumDto): Promise<Album> {
-    console.log('shemodis');
-
     return await this.albumService.create(createAlbumDto);
   }
 

@@ -40,10 +40,12 @@ export class AuthService {
         email: string;
         password: string;
         role: string;
+        userId: number;
       } = {
         email: user.email,
         password: user.password,
         role: user.role,
+        userId: user.id,
       };
       return {
         accessToken: await this.jwtService.signAsync(payload, {
