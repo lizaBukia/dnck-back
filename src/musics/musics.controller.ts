@@ -8,6 +8,8 @@ import {
   Put,
 } from '@nestjs/common';
 import { Public } from 'src/auth/guard/publick.key';
+import { CreateStatisticDto } from 'src/statistics/dto/create-statistc.dto';
+import { Statistic } from 'src/statistics/entity/statistic.entity';
 import { DeleteResult } from 'typeorm';
 import { CreateMusicDto } from './dto/create-music.dto';
 import { UpdateMusicDto } from './dto/update-music.dto';
@@ -45,5 +47,13 @@ export class MusicsController {
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<DeleteResult> {
     return await this.musicsService.remove(Number(id));
+  }
+
+  @Post('user/statistics')
+  @Public()
+  async createStatistic(
+    @Body() createStatistickDto: CreateStatisticDto,
+  ): Promise<Statistic> {
+    return await this.musicsService.createStatistic(createStatistickDto);
   }
 }

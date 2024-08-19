@@ -1,11 +1,14 @@
-import { Playlist } from 'src/playlists/entities/playlist.entity';
+import { Music } from 'src/musics/entities/musics.entity';
+import { User } from 'src/users/entities/users.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  ManyToMany,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -14,16 +17,24 @@ export class Statistic {
   id: number;
 
   @Column()
-  name: string;
+  musicId: number;
 
   @Column()
-  imgUrl: string;
+  userId: number;
 
-  @ManyToMany(() => Playlist, (playlist) => playlist.musics, { cascade: true })
-  playlists: Playlist[];
+  @ManyToOne(() => Music, (music) => music.statistics, { cascade: true })
+  @JoinColumn({ name: 'musicId' })
+  musics: Music[];
+
+  @ManyToOne(() => User, (user) => user.statistics, { cascade: true })
+  @JoinColumn({ name: 'userId' })
+  users: User[];
 
   @CreateDateColumn()
-  date: Date;
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @DeleteDateColumn()
   deletedAt: Date;

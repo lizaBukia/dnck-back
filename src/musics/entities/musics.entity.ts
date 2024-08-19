@@ -1,9 +1,11 @@
+import { Statistic } from 'src/statistics/entity/statistic.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -22,6 +24,9 @@ export class Music {
 
   @ManyToMany(() => Playlist, (playlist) => playlist.musics, { cascade: true })
   playlists: Playlist[];
+
+  @OneToMany(() => Statistic, (statistic) => statistic.musics)
+  statistics: Statistic;
 
   @CreateDateColumn()
   createdAt: Date;

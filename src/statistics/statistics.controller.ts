@@ -1,6 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { Public } from 'src/auth/guard/publick.key';
-import { MusicId } from './dto/musickId.dto';
+import { CreateStatisticDto } from './dto/create-statistc.dto';
 import { Statistic } from './entity/statistic.entity';
 import { StatisticsService } from './statistics.service';
 
@@ -9,7 +9,16 @@ export class StatisticsController {
   constructor(private statistcsService: StatisticsService) {}
   @Public()
   @Post()
-  addlisendMusic(@Body() musicId: MusicId): Promise<Statistic> {
-    return this.statistcsService.addLisendMusic(musicId);
+  addlisendMusic(
+    @Body() createStatisticDto: CreateStatisticDto,
+  ): Promise<Statistic> {
+    console.log(createStatisticDto);
+
+    return this.statistcsService.createStatistic(createStatisticDto);
+  }
+  @Public()
+  @Get()
+  async findAll(): Promise<Statistic[]> {
+    return await this.statistcsService.findAll();
   }
 }

@@ -8,7 +8,7 @@ import { LoginInterface } from './interface/login.response';
 @Controller('auth')
 export class AuthController {
   constructor(private authsService: AuthService) {}
-
+  @Public()
   @Post('login')
   login(@Body() authDto: AuthDto): Promise<LoginInterface> {
     return this.authsService.login(authDto);

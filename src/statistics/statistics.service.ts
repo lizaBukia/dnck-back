@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { MusicId } from './dto/musickId.dto';
+import { CreateStatisticDto } from './dto/create-statistc.dto';
 import { Statistic } from './entity/statistic.entity';
 import { StatisticsRepository } from './repositorys/statisticks.repository';
 
 @Injectable()
 export class StatisticsService {
   constructor(private statisticsRepository: StatisticsRepository) {}
-  async addLisendMusic(musickId: MusicId): Promise<Statistic> {
-    return await this.statisticsRepository.addLisendMusic(musickId);
+  async createStatistic(
+    createStatisticDto: CreateStatisticDto,
+  ): Promise<Statistic> {
+    return await this.statisticsRepository.createStatistic(createStatisticDto);
+  }
+  async findAll(): Promise<Statistic[]> {
+    return await this.statisticsRepository.findAll();
   }
 }

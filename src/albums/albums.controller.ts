@@ -7,6 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { Public } from 'src/auth/guard/publick.key';
 import { UpdateResult } from 'typeorm';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -18,10 +19,14 @@ export class AlbumsController {
   constructor(private readonly albumService: AlbumsService) {}
 
   @Post()
+  @Public()
   async create(@Body() createAlbumDto: CreateAlbumDto): Promise<Album> {
+    console.log('shemodis');
+
     return await this.albumService.create(createAlbumDto);
   }
 
+  @Public()
   @Get()
   async findAll(): Promise<Album[]> {
     return await this.albumService.findAll();
