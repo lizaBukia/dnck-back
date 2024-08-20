@@ -14,7 +14,9 @@ export class UsersRepository {
 
   async create(createUsersDto: CreateUsersDto): Promise<User> {
     const newUser: User = await this.usersRepository.create(createUsersDto);
-    return await this.usersRepository.save(newUser);
+    await this.usersRepository.save(newUser);
+    delete newUser.password;
+    return newUser;
   }
 
   async findAll(): Promise<User[]> {

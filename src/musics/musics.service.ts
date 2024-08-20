@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { StatisticsRepository } from 'src/statistics/repositorys/statisticks.repository';
 import { DeleteResult } from 'typeorm';
 import { CreateMusicDto } from './dto/create-music.dto';
 import { UpdateMusicDto } from './dto/update-music.dto';
@@ -7,7 +8,10 @@ import { MusicsRepository } from './repositories/musics.repository';
 
 @Injectable()
 export class MusicsService {
-  constructor(private readonly musicsRepository: MusicsRepository) {}
+  constructor(
+    private readonly statisticsRepository: StatisticsRepository,
+    private readonly musicsRepository: MusicsRepository,
+  ) {}
 
   async create(createMusicDto: CreateMusicDto): Promise<Music> {
     return await this.musicsRepository.create(createMusicDto);
@@ -17,8 +21,12 @@ export class MusicsService {
     return await this.musicsRepository.findAll();
   }
 
-  async findOne(id: number): Promise<Music> {
-    return await this.musicsRepository.findOne(id);
+  async findOne(id: number, userId: number): Promise<Music> {
+    await this.statisticsRepository.createStatistic({ musicId: id, userId });
+
+    const musics: Music = await this.musicsRepository.findOne(id);
+
+    return musics;
   }
 
   async update(id: number, updateMusicDto: UpdateMusicDto): Promise<Music> {

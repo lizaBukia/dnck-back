@@ -1,9 +1,11 @@
 import { RoleEnum } from 'src/auth/enum/user.role';
+import { Statistic } from 'src/statistics/entity/statistic.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -20,6 +22,9 @@ export class User {
 
   @Column({ default: RoleEnum.User })
   role: RoleEnum;
+
+  @OneToMany(() => Statistic, (statistic) => statistic.users)
+  statistics: Statistic;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -11,18 +11,12 @@ export class ArtistsRepository {
     @InjectRepository(ArtistEntity)
     private artistsRepository: Repository<ArtistEntity>,
   ) {}
-
   async create(createArtistDto: CreateArtistDto): Promise<CreateArtistDto> {
-    const { firstName, lastName, biography } = createArtistDto;
-    const newArtist: CreateArtistDto = await this.artistsRepository.create({
-      firstName,
-      lastName,
-      biography,
-    });
+    const newArtist: CreateArtistDto =
+      await this.artistsRepository.create(createArtistDto);
     await this.artistsRepository.save(newArtist);
     return newArtist;
   }
-
   async findAll(search?: string): Promise<ArtistEntity[]> {
     if (search) {
       const query: SelectQueryBuilder<ArtistEntity> = this.artistsRepository
