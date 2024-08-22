@@ -18,7 +18,7 @@ export class Album {
   @Column()
   name!: string;
 
-  @Column()
+  @Column({ default: '' })
   imgUrl!: string;
 
   @Column()

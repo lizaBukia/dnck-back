@@ -1,4 +1,5 @@
 import { RoleEnum } from 'src/auth/enum/user.role';
+import { Data } from 'src/data/entity/data.entity';
 import { Statistic } from 'src/statistics/entity/statistic.entity';
 import {
   Column,
@@ -22,6 +23,9 @@ export class User {
 
   @Column({ default: RoleEnum.User })
   role: RoleEnum;
+
+  @OneToMany(() => Data, (data) => data.user)
+  data: Data;
 
   @OneToMany(() => Statistic, (statistic) => statistic.users)
   statistics: Statistic;

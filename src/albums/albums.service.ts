@@ -9,8 +9,8 @@ import { AlbumsRepository } from './repositories/albums.repository';
 export class AlbumsService {
   constructor(private readonly albumsRepository: AlbumsRepository) {}
 
-  async create(createAlbumDto: CreateAlbumDto): Promise<Album> {
-    return await this.albumsRepository.create(createAlbumDto);
+  async create(createAlbomDto: CreateAlbumDto): Promise<Album> {
+    return await this.albumsRepository.create(createAlbomDto);
   }
 
   async findAll(): Promise<Album[]> {
