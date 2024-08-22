@@ -50,7 +50,7 @@ export class AlbumsController {
       throw new Error('invalid token');
     }
     const decodedToken: string | jwt.JwtPayload = jwt.decode(token);
-    
+
     const userId: number = (decodedToken as jwt.JwtPayload).userId;
 
     const buffer: Buffer = file.buffer;
