@@ -24,9 +24,7 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
 @Controller('albums')
 export class AlbumsController {
-  constructor(
-    private readonly albumService: AlbumsService,
-  ) {}
+  constructor(private readonly albumService: AlbumsService) {}
   @Post()
   @Roles(RoleEnum.User)
   @UseInterceptors(FileInterceptor('file'))
@@ -46,7 +44,7 @@ export class AlbumsController {
     if (type !== 'Bearer') {
       throw new Error('invalid token');
     }
-    return await this.albumService.create(createAlbomDto,token,file);
+    return await this.albumService.create(createAlbomDto, token, file);
   }
 
   @Public()
