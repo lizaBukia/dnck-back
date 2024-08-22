@@ -28,9 +28,9 @@ export class StorageController {
     file: Express.Multer.File,
     @Req() req: Request,
   ): Promise<string> {
-    const filename:string = file.originalname;
+    const filename: string = file.originalname;
 
-    const buffer:Buffer = file.buffer;
+    const buffer: Buffer = file.buffer;
 
     const [token, type] = await req.headers.authorization.split(' ');
     if (type !== 'Bearer') {
