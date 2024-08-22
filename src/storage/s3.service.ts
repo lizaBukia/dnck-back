@@ -23,12 +23,12 @@ export class S3Service {
     try {
       await this.s3Client.send(
         new PutObjectCommand({
-          Bucket:'dnck-back',
+          Bucket: 'dnck-back',
           Key: filename,
           Body: buffer,
         }),
-      ); 
-      const path  = this.configService.getOrThrow('LOCATION')
+      );
+      const path: string = this.configService.getOrThrow('LOCATION');
       const location: string = `${path}${filename}`;
       await this.dataRepository.createData({
         location,
@@ -36,7 +36,7 @@ export class S3Service {
       });
       return location;
     } catch (e) {
-      throw Error('cant get location')
+      throw Error('cant get location');
     }
   }
 }
