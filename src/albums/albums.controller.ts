@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import { RoleEnum } from 'src/auth/enum/user.role';
 import { Public } from 'src/auth/guard/publick.key';
 import { Roles } from 'src/auth/guard/roles.key';
@@ -24,7 +24,6 @@ import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
-
 @Controller('albums')
 export class AlbumsController {
   constructor(
@@ -45,12 +44,13 @@ export class AlbumsController {
     )
     file: Express.Multer.File,
   ): Promise<Album> {
-    const [type, token] = await req.headers.authorization.split(' ');
+    const [type, token] = req.headers.authorization.split(' ');
+
     if (type !== 'Bearer') {
-      throw new Error('Invalid Token');
+      throw new Error('invalid token');
     }
     const decodedToken: string | jwt.JwtPayload = jwt.decode(token);
-
+    
     const userId: number = (decodedToken as jwt.JwtPayload).userId;
 
     const buffer: Buffer = file.buffer;
