@@ -14,11 +14,9 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
-import * as jwt from 'jsonwebtoken';
 import { RoleEnum } from 'src/auth/enum/user.role';
 import { Public } from 'src/auth/guard/publick.key';
 import { Roles } from 'src/auth/guard/roles.key';
-import { S3Service } from 'src/storage/s3.service';
 import { UpdateResult } from 'typeorm';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -28,7 +26,6 @@ import { Album } from './entities/album.entity';
 export class AlbumsController {
   constructor(
     private readonly albumService: AlbumsService,
-    private readonly s3Service: S3Service,
   ) {}
   @Post()
   @Roles(RoleEnum.User)
@@ -49,23 +46,7 @@ export class AlbumsController {
     if (type !== 'Bearer') {
       throw new Error('invalid token');
     }
-    const decodedToken: string | jwt.JwtPayload = jwt.decode(token);
-
-    const userId: number = (decodedToken as jwt.JwtPayload).userId;
-
-    const buffer: Buffer = file.buffer;
-
-    const filename: string = file.originalname;
-
-    const location: string = await this.s3Service.uploadFile(
-      buffer,
-      filename,
-      userId,
-    );
-    if (location) {
-      createAlbomDto.imgUrl = location;
-    }
-    return await this.albumService.create(createAlbomDto);
+    return await this.albumService.create(createAlbomDto,token,file);
   }
 
   @Public()
