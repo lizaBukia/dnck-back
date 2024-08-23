@@ -1,16 +1,32 @@
 import { Injectable } from '@nestjs/common';
+import * as jwt from 'jsonwebtoken';
+import { S3Service } from 'src/storage/s3.service';
 import { UpdateResult } from 'typeorm';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
 import { AlbumsRepository } from './repositories/albums.repository';
-
 @Injectable()
 export class AlbumsService {
-  constructor(private readonly albumsRepository: AlbumsRepository) {}
+  constructor(
+    private readonly albumsRepository: AlbumsRepository,
+    private readonly s3Service: S3Service,
+  ) {}
 
-  async create(createAlbumDto: CreateAlbumDto): Promise<Album> {
-    return await this.albumsRepository.create(createAlbumDto);
+  async create(
+    createAlbomDto: CreateAlbumDto,
+    token: string,
+    file: Express.Multer.File,
+  ): Promise<Album> {
+    const decodedToken: string | jwt.JwtPayload = jwt.decode(token);
+
+    const userId: number = (decodedToken as jwt.JwtPayload).userId;
+
+    const location: string = await this.s3Service.uploadFile(file, userId);
+    if (location) {
+      createAlbomDto.imgUrl = location;
+    }
+    return await this.albumsRepository.create(createAlbomDto);
   }
 
   async findAll(): Promise<Album[]> {

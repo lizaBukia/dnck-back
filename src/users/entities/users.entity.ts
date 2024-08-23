@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { History } from '../../history/entity/history.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -22,6 +23,9 @@ export class User {
 
   @Column({ default: RoleEnum.User })
   role: RoleEnum;
+
+  @OneToMany(() => History, (history) => history.user)
+  history: History;
 
   @OneToMany(() => Statistic, (statistic) => statistic.users)
   statistics: Statistic;
