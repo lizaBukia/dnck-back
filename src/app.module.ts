@@ -8,7 +8,7 @@ import { AppService } from './app.service';
 import { ArtistsModule } from './artist/artists.module';
 import { ArtistEntity } from './artist/entities/artist.entity';
 import { AuthModule } from './auth/auth.module';
-import { DataModule } from './data/data.module';
+import { HistoryModule } from './history/history.module';
 import { Music } from './musics/entities/musics.entity';
 import { MusicsModule } from './musics/musics.module';
 import { Playlist } from './playlists/entities/playlist.entity';
@@ -43,7 +43,7 @@ import { UsersModule } from './users/users.module';
     SearchModule,
     StatisticsModule,
     StorageModule,
-    DataModule,
+    HistoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

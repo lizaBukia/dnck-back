@@ -1,5 +1,4 @@
 import { RoleEnum } from 'src/auth/enum/user.role';
-import { Data } from 'src/data/entity/data.entity';
 import { Statistic } from 'src/statistics/entity/statistic.entity';
 import {
   Column,
@@ -10,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { History } from '../../history/entity/history.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -24,8 +24,8 @@ export class User {
   @Column({ default: RoleEnum.User })
   role: RoleEnum;
 
-  @OneToMany(() => Data, (data) => data.user)
-  data: Data;
+  @OneToMany(() => History, (history) => history.user)
+  history: History;
 
   @OneToMany(() => Statistic, (statistic) => statistic.users)
   statistics: Statistic;

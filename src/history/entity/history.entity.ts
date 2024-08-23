@@ -11,14 +11,14 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Data {
+export class History {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   userId: number;
 
-  @ManyToOne(() => User, (user) => user.data)
+  @ManyToOne(() => User, (user) => user.history)
   @JoinColumn({ name: 'userId' })
   user: User;
 

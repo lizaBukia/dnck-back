@@ -1,7 +1,7 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { DataRepository } from 'src/data/repository/data.repository';
+import { HistoryRepository } from 'src/history/repository/history.repository';
 @Injectable()
 export class S3Service {
   private readonly s3Client: S3Client = new S3Client({
@@ -12,14 +12,13 @@ export class S3Service {
     },
   });
   constructor(
-    private dataRepository: DataRepository,
+    private historyRepository: HistoryRepository,
     private configService: ConfigService,
   ) {}
-  async uploadFile(
-    buffer: Buffer,
-    filename: string,
-    userId: number,
-  ): Promise<string> {
+  async uploadFile(file: Express.Multer.File, userId: number): Promise<string> {
+    const filename: string = file.originalname;
+
+    const buffer: Buffer = file.buffer;
     try {
       await this.s3Client.send(
         new PutObjectCommand({
@@ -30,7 +29,7 @@ export class S3Service {
       );
       const path: string = this.configService.getOrThrow('LOCATION');
       const location: string = `${path}${filename}`;
-      await this.dataRepository.createData({
+      await this.historyRepository.createData({
         location,
         userId,
       });
