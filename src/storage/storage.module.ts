@@ -1,14 +1,12 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { History } from '../history/entity/history.entity';
-import { HistoryRepository } from '../history/repository/history.repository';
+import { HistoryModule } from 'src/history/history.module';
 import { S3Service } from './s3.service';
 import { StorageController } from './storage.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([History])],
+  imports: [HistoryModule],
   controllers: [StorageController],
-  providers: [S3Service, HistoryRepository],
+  providers: [S3Service],
   exports: [S3Service],
 })
 export class StorageModule {}

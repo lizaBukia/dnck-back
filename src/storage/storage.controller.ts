@@ -10,7 +10,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
 import jwt from 'jsonwebtoken';
-import { Public } from 'src/auth/guard/publick.key';
+import { Public } from '../auth/guard/publick.key';
 import { S3Service } from './s3.service';
 @Controller('storage')
 export class StorageController {

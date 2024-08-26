@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { RoleEnum } from 'src/auth/enum/user.role';
-import { Public } from 'src/auth/guard/publick.key';
-import { Roles } from 'src/auth/guard/roles.key';
 import { DeleteResult } from 'typeorm';
+import { RoleEnum } from '../auth/enum/user.role';
+import { Public } from '../auth/guard/publick.key';
+import { Roles } from '../auth/guard/roles.key';
 import { ArtistssService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';

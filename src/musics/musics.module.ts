@@ -1,16 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Statistic } from 'src/statistics/entity/statistic.entity';
-import { StatisticsRepository } from 'src/statistics/repositorys/statisticks.repository';
+import { StatisticsModule } from 'src/statistics/statistics.module';
 import { Music } from './entities/musics.entity';
 import { MusicsController } from './musics.controller';
 import { MusicsService } from './musics.service';
 import { MusicsRepository } from './repositories/musics.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Music, Statistic])],
+  imports: [TypeOrmModule.forFeature([Music]), StatisticsModule],
   controllers: [MusicsController],
-  providers: [MusicsService, MusicsRepository, StatisticsRepository],
+  providers: [MusicsService, MusicsRepository],
   exports: [MusicsRepository],
 })
 export class MusicsModule {}

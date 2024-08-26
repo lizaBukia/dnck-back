@@ -1,7 +1,7 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { HistoryRepository } from 'src/history/repository/history.repository';
+import { HistoryRepository } from '../history/repository/history.repository';
 @Injectable()
 export class S3Service {
   private readonly s3Client: S3Client = new S3Client({

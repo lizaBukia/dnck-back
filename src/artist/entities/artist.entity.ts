@@ -1,4 +1,3 @@
-import { Album } from 'src/albums/entities/album.entity';
 import {
   Column,
   CreateDateColumn,
@@ -8,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Album } from '../../albums/entities/album.entity';
 
 @Entity()
 export class ArtistEntity {
@@ -24,7 +24,7 @@ export class ArtistEntity {
   @CreateDateColumn()
   createdAt: Date;
   @DeleteDateColumn()
-  deletedAt: Date;
+  deleted: Date;
   @UpdateDateColumn()
   updatedAt: Date;
 }

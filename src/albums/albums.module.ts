@@ -1,17 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { S3Service } from 'src/storage/s3.service';
-import { History } from '../history/entity/history.entity';
-import { HistoryRepository } from '../history/repository/history.repository';
+import { StorageModule } from '../storage/storage.module';
 import { AlbumsController } from './albums.controller';
 import { AlbumsService } from './albums.service';
 import { Album } from './entities/album.entity';
 import { AlbumsRepository } from './repositories/albums.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Album, History])],
+  imports: [TypeOrmModule.forFeature([Album]), StorageModule],
   controllers: [AlbumsController],
-  providers: [AlbumsService, AlbumsRepository, S3Service, HistoryRepository],
+  providers: [AlbumsService, AlbumsRepository],
   exports: [AlbumsRepository],
 })
 export class AlbumsModule {}
