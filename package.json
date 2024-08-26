@@ -10,7 +10,7 @@
     "migration:run": "typeorm-ts-node-commonjs migration:run -d ./ormconfig.ts",
     "migration:generate": "typeorm-ts-node-commonjs migration:generate -d ./ormconfig.ts",
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d ./ormconfig.ts",
-    "migration:create": "typeorm-ts-node-commonjs migration:create ",
+    "migration:create": "typeorm-ts-node-commonjs migration:create  ./src/migrations/$npm_config_name",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
