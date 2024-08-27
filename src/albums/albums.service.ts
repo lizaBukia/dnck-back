@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
-import { S3Service } from 'src/storage/s3.service';
 import { UpdateResult } from 'typeorm';
+import { S3Service } from '../storage/s3.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';

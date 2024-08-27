@@ -8,14 +8,17 @@ import { AppService } from './app.service';
 import { ArtistsModule } from './artist/artists.module';
 import { ArtistEntity } from './artist/entities/artist.entity';
 import { AuthModule } from './auth/auth.module';
+import { History } from './history/entity/history.entity';
 import { HistoryModule } from './history/history.module';
 import { Music } from './musics/entities/musics.entity';
 import { MusicsModule } from './musics/musics.module';
 import { Playlist } from './playlists/entities/playlist.entity';
 import { PlaylistsModule } from './playlists/playlists.module';
 import { SearchModule } from './search/search.module';
+import { Statistic } from './statistics/entity/statistic.entity';
 import { StatisticsModule } from './statistics/statistics.module';
 import { StorageModule } from './storage/storage.module';
+import { User } from './users/entities/users.entity';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -25,18 +28,6 @@ import { UsersModule } from './users/users.module';
     MusicsModule,
     ArtistsModule,
     AlbumsModule,
-    PlaylistsModule,
-    TypeOrmModule.forRoot({
-      port: 3306,
-      host: 'localhost',
-      username: 'root',
-      type: 'mysql',
-      password: 'Newpassword123!',
-      database: 'dnck',
-      autoLoadEntities: true,
-      synchronize: true,
-      entities: [Album, Music, ArtistEntity, Playlist],
-    }),
     MusicsModule,
     PlaylistsModule,
     AuthModule,
@@ -44,6 +35,26 @@ import { UsersModule } from './users/users.module';
     StatisticsModule,
     StorageModule,
     HistoryModule,
+    PlaylistsModule,
+    TypeOrmModule.forRoot({
+      port: +process.env.DATABASE_PORT,
+      database: process.env.DATABASE_NAME,
+      username: process.env.DATABASE_USERNAME,
+      password: process.env.DATABASE_PASSWORD,
+      synchronize: false,
+      autoLoadEntities: true,
+      type: 'mysql',
+      host: process.env.DATABASE_HOST,
+      entities: [
+        Album,
+        Music,
+        ArtistEntity,
+        Playlist,
+        History,
+        Statistic,
+        User,
+      ],
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

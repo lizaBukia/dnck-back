@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { S3Service } from 'src/storage/s3.service';
 import {
   DeepPartial,
   Repository,
@@ -15,7 +14,6 @@ export class AlbumsRepository {
   constructor(
     @InjectRepository(Album)
     private albumRepository: Repository<Album>,
-    private s3Service: S3Service,
   ) {}
 
   async create(data: CreateAlbumDto): Promise<Album> {

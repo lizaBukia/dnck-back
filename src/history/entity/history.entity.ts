@@ -1,4 +1,3 @@
-import { User } from 'src/users/entities/users.entity';
 import {
   Column,
   CreateDateColumn,
@@ -9,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from '../../users/entities/users.entity';
 
 @Entity()
 export class History {

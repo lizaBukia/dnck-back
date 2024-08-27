@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { User } from 'src/users/entities/users.entity';
-import { UsersRepository } from 'src/users/repositories/users.repository';
+import { User } from '../users/entities/users.entity';
+import { UsersRepository } from '../users/repositories/users.repository';
 import { jwtConstants } from './auth.constants';
 import { AuthDto } from './dto/auth.dto';
 import { LoginInterface } from './interface/login.response';
@@ -15,12 +15,10 @@ export class AuthService {
 
   async register(authDto: AuthDto): Promise<User> {
     const { email, password }: AuthDto = authDto;
-    console.log(authDto);
 
     const salt: string = await bcrypt.genSalt();
 
     const hashedPassword: string = await bcrypt.hash(password, salt);
-    console.log(hashedPassword, 'hashedpassword');
 
     const user: User = await this.usersRepository.create({
       email,
@@ -33,6 +31,7 @@ export class AuthService {
     const { email, password } = authDto;
 
     const user: User = await this.usersRepository.findEmail(email);
+
     const isPasswordCorrect: boolean =
       user && (await bcrypt.compare(password, user.password));
 
@@ -48,6 +47,7 @@ export class AuthService {
         role: user.role,
         userId: user.id,
       };
+
       return {
         accessToken: await this.jwtService.signAsync(payload, {
           secret: jwtConstants.secret,

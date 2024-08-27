@@ -9,5 +9,6 @@ import { HistoryRepository } from './repository/history.repository';
   imports: [TypeOrmModule.forFeature([History])],
   controllers: [HistoryController],
   providers: [HistoryService, HistoryRepository],
+  exports: [HistoryRepository],
 })
 export class HistoryModule {}

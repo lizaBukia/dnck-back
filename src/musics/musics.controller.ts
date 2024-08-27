@@ -10,8 +10,10 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { Public } from 'src/auth/guard/publick.key';
 import { DeleteResult } from 'typeorm';
+import { RoleEnum } from '../auth/enum/user.role';
+import { Public } from '../auth/guard/publick.key';
+import { Roles } from '../auth/guard/roles.key';
 import { CreateMusicDto } from './dto/create-music.dto';
 import { UpdateMusicDto } from './dto/update-music.dto';
 import { Music } from './entities/musics.entity';
@@ -22,7 +24,7 @@ export class MusicsController {
   constructor(private readonly musicsService: MusicsService) {}
 
   @Post()
-  @Public()
+  @Roles(RoleEnum.Admin, RoleEnum.User)
   async create(@Body() createMusicDto: CreateMusicDto): Promise<Music> {
     return await this.musicsService.create(createMusicDto);
   }

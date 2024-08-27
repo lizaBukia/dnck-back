@@ -14,10 +14,9 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
-import { RoleEnum } from 'src/auth/enum/user.role';
-import { Public } from 'src/auth/guard/publick.key';
-import { Roles } from 'src/auth/guard/roles.key';
 import { UpdateResult } from 'typeorm';
+import { RoleEnum } from '../auth/enum/user.role';
+import { Roles } from '../auth/guard/roles.key';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
@@ -47,7 +46,6 @@ export class AlbumsController {
     return await this.albumService.create(createAlbomDto, token, file);
   }
 
-  @Public()
   @Get()
   async findAll(): Promise<Album[]> {
     return await this.albumService.findAll();

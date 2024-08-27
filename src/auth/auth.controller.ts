@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { User } from 'src/users/entities/users.entity';
+import { User } from '../users/entities/users.entity';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { Public } from './guard/publick.key';
@@ -14,7 +14,6 @@ export class AuthController {
     return this.authsService.login(authDto);
   }
   @Public()
-  @Post('register')
   register(@Body() authDto: AuthDto): Promise<User> {
     return this.authsService.register(authDto);
   }

@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { Public } from 'src/auth/guard/publick.key';
+import { Public } from '../auth/guard/publick.key';
 import { CreateStatisticDto } from './dto/create-statistc.dto';
 import { Statistic } from './entity/statistic.entity';
 import { StatisticsService } from './statistics.service';

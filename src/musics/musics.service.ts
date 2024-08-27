@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { StatisticsRepository } from 'src/statistics/repositorys/statisticks.repository';
 import { DeleteResult } from 'typeorm';
+import { StatisticsRepository } from '../statistics/repositorys/statisticks.repository';
 import { CreateMusicDto } from './dto/create-music.dto';
 import { UpdateMusicDto } from './dto/update-music.dto';
 import { Music } from './entities/musics.entity';

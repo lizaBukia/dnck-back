@@ -1,4 +1,3 @@
-import { Statistic } from 'src/statistics/entity/statistic.entity';
 import {
   Column,
   CreateDateColumn,
@@ -10,6 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Playlist } from '../../playlists/entities/playlist.entity';
+import { Statistic } from '../../statistics/entity/statistic.entity';
 
 @Entity()
 export class Music {

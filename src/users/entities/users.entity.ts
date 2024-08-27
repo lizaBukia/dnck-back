@@ -1,5 +1,3 @@
-import { RoleEnum } from 'src/auth/enum/user.role';
-import { Statistic } from 'src/statistics/entity/statistic.entity';
 import {
   Column,
   CreateDateColumn,
@@ -9,7 +7,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { RoleEnum } from '../../auth/enum/user.role';
 import { History } from '../../history/entity/history.entity';
+import { Statistic } from '../../statistics/entity/statistic.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()

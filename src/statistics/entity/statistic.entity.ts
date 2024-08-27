@@ -1,5 +1,3 @@
-import { Music } from 'src/musics/entities/musics.entity';
-import { User } from 'src/users/entities/users.entity';
 import {
   Column,
   CreateDateColumn,
@@ -10,6 +8,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Music } from '../../musics/entities/musics.entity';
+import { User } from '../../users/entities/users.entity';
 
 @Entity()
 export class Statistic {
