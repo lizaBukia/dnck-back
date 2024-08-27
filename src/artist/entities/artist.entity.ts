@@ -24,7 +24,7 @@ export class ArtistEntity {
   @CreateDateColumn()
   createdAt: Date;
   @DeleteDateColumn()
-  deleted: Date;
+  deletedAt: Date;
   @UpdateDateColumn()
   updatedAt: Date;
 }

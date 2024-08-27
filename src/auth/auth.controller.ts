@@ -2,10 +2,8 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { User } from '../users/entities/users.entity';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
-import { RoleEnum } from './enum/user.role';
-import { Roles } from './guard/roles.key';
-import { LoginInterface } from './interface/login.response';
 import { Public } from './guard/publick.key';
+import { LoginInterface } from './interface/login.response';
 
 @Controller('auth')
 export class AuthController {
