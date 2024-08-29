@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 
-export const connectionSource:DataSource = new DataSource({
+export const connectionSource: DataSource = new DataSource({
   name: 'default',
   host: process.env.DATABASE_HOST,
   port: +process.env.DATABASE_PORT,
