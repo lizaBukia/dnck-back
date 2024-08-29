@@ -1,10 +1,6 @@
 import { DataSource } from 'typeorm';
-import * as dotenv from 'dotenv';
-import * as path from 'path';
 
-dotenv.config({ path: path.resolve(__dirname, '.env') });
-
-export const connectionSource = new DataSource({
+export const connectionSource:DataSource = new DataSource({
   name: 'default',
   host: process.env.DATABASE_HOST,
   port: +process.env.DATABASE_PORT,
@@ -14,7 +10,7 @@ export const connectionSource = new DataSource({
   type: 'mysql',
   logging: true,
   entities: ['./src/**/*entity.ts'],
-  migrations: ['src/migrations/*{.ts,.js}'],
+  migrations: ['./src/migrations/*{.ts,.js}'],
   synchronize: false,
   migrationsTableName: 'typeorm_migrations',
   migrationsRun: true,

@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "typeorm": "npx typeorm-ts-node-commonjs --dataSource src/migrations",
-    "migration:run": "typeorm-ts-node-commonjs migration:run -d ./ormconfig.ts",
+    "migration:run": "typeorm-ts-node-commonjs migration:run -d ./src/ormconfig.ts",
     "migration:generate": "typeorm-ts-node-commonjs migration:generate -d ./ormconfig.ts",
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d ./ormconfig.ts",
     "migration:create": "typeorm-ts-node-commonjs migration:create  ./src/migrations/$npm_config_name",
