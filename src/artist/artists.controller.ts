@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
 import { RoleEnum } from '../auth/enum/user.role';
-import { Public } from '../auth/guard/publick.key';
 import { Roles } from '../auth/guard/roles.key';
 import { ArtistssService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
@@ -11,22 +10,22 @@ import { ArtistEntity } from './entities/artist.entity';
 @Controller('artists')
 export class ArtistsController {
   constructor(private artistsService: ArtistssService) {}
-  @Roles(RoleEnum.User)
+  @Roles(RoleEnum.Admin)
   @Post()
   create(@Body() createArtistDto: CreateArtistDto): Promise<CreateArtistDto> {
     return this.artistsService.create(createArtistDto);
   }
-  @Public()
+  @Roles(RoleEnum.User, RoleEnum.Admin)
   @Get()
   findAll(): Promise<CreateArtistDto[]> {
     return this.artistsService.findAll();
   }
-
+  @Roles(RoleEnum.User, RoleEnum.Admin)
   @Get(':id')
   findOne(@Param('id') id: string): Promise<ArtistEntity> {
     return this.artistsService.findOne(Number(id));
   }
-
+  @Roles(RoleEnum.Admin)
   @Post(':id')
   update(
     @Param('id') id: string,
@@ -34,7 +33,7 @@ export class ArtistsController {
   ): Promise<ArtistEntity> {
     return this.artistsService.update(Number(id), updateArtistDto);
   }
-
+  @Roles(RoleEnum.Admin)
   @Delete(':id')
   remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.artistsService.remove(Number(id));

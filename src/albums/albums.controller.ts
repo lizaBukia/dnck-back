@@ -50,12 +50,12 @@ export class AlbumsController {
   async findAll(): Promise<Album[]> {
     return await this.albumService.findAll();
   }
-
+  @Roles(RoleEnum.Admin, RoleEnum.User)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Album> {
     return await this.albumService.findOne(Number(id));
   }
-
+  @Roles(RoleEnum.Admin)
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -63,7 +63,7 @@ export class AlbumsController {
   ): Promise<UpdateResult> {
     return await this.albumService.update(Number(id), updateAlbumDto);
   }
-
+  @Roles(RoleEnum.Admin)
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<UpdateResult> {
     return await this.albumService.remove(Number(id));
