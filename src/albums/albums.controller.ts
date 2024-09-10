@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
+import { Public } from 'src/auth/guard/publick.key';
 import { UpdateResult } from 'typeorm';
 import { RoleEnum } from '../auth/enum/user.role';
 import { Roles } from '../auth/guard/roles.key';
@@ -21,7 +22,6 @@ import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
-import { Public } from 'src/auth/guard/publick.key';
 @Controller('albums')
 export class AlbumsController {
   constructor(private readonly albumService: AlbumsService) {}
