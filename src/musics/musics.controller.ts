@@ -23,16 +23,19 @@ import { MusicsService } from './musics.service';
 export class MusicsController {
   constructor(private readonly musicsService: MusicsService) {}
 
+  @Roles(RoleEnum.Admin)
   @Post()
-  @Roles(RoleEnum.Admin, RoleEnum.User)
   async create(@Body() createMusicDto: CreateMusicDto): Promise<Music> {
     return await this.musicsService.create(createMusicDto);
   }
 
+  @Roles(RoleEnum.Admin, RoleEnum.User)
   @Get()
   async findAll(): Promise<Music[]> {
     return await this.musicsService.findAll();
   }
+
+  @Roles(RoleEnum.Admin, RoleEnum.User)
   @Public()
   @Get(':id')
   async findOne(@Param('id') id: string, @Req() req: Request): Promise<Music> {
@@ -47,6 +50,8 @@ export class MusicsController {
 
     return await this.musicsService.findOne(Number(id), userId);
   }
+
+  @Roles(RoleEnum.Admin)
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -55,6 +60,7 @@ export class MusicsController {
     return await this.musicsService.update(Number(id), updateMusicDto);
   }
 
+  @Roles(RoleEnum.Admin)
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<DeleteResult> {
     return await this.musicsService.remove(Number(id));
