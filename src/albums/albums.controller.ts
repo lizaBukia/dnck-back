@@ -21,6 +21,7 @@ import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
+import { Public } from 'src/auth/guard/publick.key';
 @Controller('albums')
 export class AlbumsController {
   constructor(private readonly albumService: AlbumsService) {}
@@ -45,7 +46,7 @@ export class AlbumsController {
     }
     return await this.albumService.create(createAlbomDto, token, file);
   }
-
+  @Public()
   @Get()
   async findAll(): Promise<Album[]> {
     return await this.albumService.findAll();

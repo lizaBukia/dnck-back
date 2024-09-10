@@ -14,6 +14,7 @@ export class AuthController {
     return this.authsService.login(authDto);
   }
   @Public()
+  @Post('register')
   register(@Body() authDto: AuthDto): Promise<User> {
     return this.authsService.register(authDto);
   }
