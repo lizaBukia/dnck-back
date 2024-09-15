@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from '../users/entities/users.entity';
@@ -6,6 +6,7 @@ import { UsersRepository } from '../users/repositories/users.repository';
 import { jwtConstants } from './auth.constants';
 import { AuthDto } from './dto/auth.dto';
 import { LoginInterface } from './interface/login.response';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -15,6 +16,10 @@ export class AuthService {
 
   async register(authDto: AuthDto): Promise<User> {
     const { email, password }: AuthDto = authDto;
+    const existingUser: User = await this.usersRepository.findEmail(email);
+    if (existingUser) {
+      throw new BadRequestException('Email is already in use');
+    }
 
     const salt: string = await bcrypt.genSalt();
 
@@ -24,7 +29,9 @@ export class AuthService {
       email,
       password: hashedPassword,
     });
-    return user;
+    const savedUser: User = await this.usersRepository.create(user);
+    delete savedUser.password;
+    return savedUser;
   }
 
   async login(authDto: AuthDto): Promise<LoginInterface> {

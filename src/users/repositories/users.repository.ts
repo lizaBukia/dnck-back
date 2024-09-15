@@ -13,7 +13,7 @@ export class UsersRepository {
   ) {}
 
   async create(createUsersDto: CreateUsersDto): Promise<User> {
-    const newUser: User = await this.usersRepository.create(createUsersDto);
+    const newUser: User = this.usersRepository.create(createUsersDto);
     await this.usersRepository.save(newUser);
     delete newUser.password;
     return newUser;
