@@ -22,10 +22,6 @@ import { AuthGuard } from './guard/auth.guard';
     AuthService,
     JwtService,
     UsersRepository,
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
   ],
   controllers: [AuthController],
 })
