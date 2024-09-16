@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
 import { CreateArtistDto } from './dto/create-artist.dto';
+import { SearchArtistQueryDto } from './dto/search-artist-query.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { ArtistEntity } from './entities/artist.entity';
 import { ArtistsRepository } from './repository/artists.repository';
@@ -13,8 +14,10 @@ export class ArtistssService {
     return this.artistsRepository.create(createArtistDto);
   }
 
-  findAll(): Promise<CreateArtistDto[]> {
-    return this.artistsRepository.findAll();
+  findAll(
+    searchArtistQueryDto: SearchArtistQueryDto,
+  ): Promise<CreateArtistDto[]> {
+    return this.artistsRepository.findAll(searchArtistQueryDto.search);
   }
 
   findOne(id: number): Promise<ArtistEntity> {
