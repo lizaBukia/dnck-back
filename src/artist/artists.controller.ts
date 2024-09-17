@@ -1,9 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
 import { RoleEnum } from '../auth/enum/user.role';
 import { Roles } from '../auth/guard/roles.key';
 import { ArtistssService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
+import { SearchArtistQueryDto } from './dto/search-artist-query.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { ArtistEntity } from './entities/artist.entity';
 
@@ -17,8 +26,8 @@ export class ArtistsController {
   }
   @Roles(RoleEnum.User, RoleEnum.Admin)
   @Get()
-  findAll(): Promise<CreateArtistDto[]> {
-    return this.artistsService.findAll();
+  findAll(@Query() query: SearchArtistQueryDto): Promise<CreateArtistDto[]> {
+    return this.artistsService.findAll(query);
   }
   @Roles(RoleEnum.User, RoleEnum.Admin)
   @Get(':id')

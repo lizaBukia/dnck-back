@@ -3,6 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import { UpdateResult } from 'typeorm';
 import { S3Service } from '../storage/s3.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
+import { SearchAlbumQueryDto } from './dto/search-album-query.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
 import { AlbumsRepository } from './repositories/albums.repository';
@@ -29,8 +30,8 @@ export class AlbumsService {
     return await this.albumsRepository.create(createAlbomDto);
   }
 
-  async findAll(): Promise<Album[]> {
-    return await this.albumsRepository.findAll();
+  async findAll(searchAlbumQueryDto: SearchAlbumQueryDto): Promise<Album[]> {
+    return await this.albumsRepository.findAll(searchAlbumQueryDto.search);
   }
 
   async findOne(id: number): Promise<Album> {
