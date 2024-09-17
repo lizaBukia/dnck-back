@@ -39,7 +39,7 @@ import { UsersModule } from './users/users.module';
       database: process.env.DATABASE_NAME,
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
-      synchronize: false,
+      synchronize: true,
       autoLoadEntities: true,
       type: 'mysql',
       host: process.env.DATABASE_HOST,

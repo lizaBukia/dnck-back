@@ -23,11 +23,12 @@ import { CreateAlbumDto } from './dto/create-album.dto';
 import { SearchAlbumQueryDto } from './dto/search-album-query.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
+
 @Controller('albums')
 export class AlbumsController {
   constructor(private readonly albumService: AlbumsService) {}
   @Post()
-  @Roles(RoleEnum.User)
+  @Roles(RoleEnum.Admin)
   @UseInterceptors(FileInterceptor('file'))
   async create(
     @Body() createAlbomDto: CreateAlbumDto,
@@ -47,7 +48,7 @@ export class AlbumsController {
     }
     return await this.albumService.create(createAlbomDto, token, file);
   }
-
+  @Roles(RoleEnum.User, RoleEnum.Admin)
   @Get()
   async findAll(@Query() query: SearchAlbumQueryDto): Promise<Album[]> {
     return await this.albumService.findAll(query);
