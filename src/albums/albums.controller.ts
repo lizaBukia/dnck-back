@@ -45,7 +45,7 @@ export class AlbumsController {
     }
     return await this.albumService.create(createAlbomDto, token, file);
   }
-
+  @Roles(RoleEnum.Admin)
   @Get()
   async findAll(): Promise<Album[]> {
     return await this.albumService.findAll();

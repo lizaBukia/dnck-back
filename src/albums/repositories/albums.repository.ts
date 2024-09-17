@@ -22,9 +22,9 @@ export class AlbumsRepository {
   }
 
   async findAll(search?: string): Promise<Album[]> {
-    const query: SelectQueryBuilder<Album> =
-      this.albumRepository.createQueryBuilder('album')
-      .leftJoinAndSelect('album.artists','artists')
+    const query: SelectQueryBuilder<Album> = this.albumRepository
+      .createQueryBuilder('album')
+      .leftJoinAndSelect('album.artists', 'artists');
     if (search) {
       query.where('album.name like :search', { search: `%${search}%` });
     }
