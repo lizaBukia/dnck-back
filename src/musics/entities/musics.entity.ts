@@ -1,3 +1,4 @@
+import { Album } from 'src/albums/entities/album.entity';
 import {
   Column,
   CreateDateColumn,
@@ -12,7 +13,6 @@ import {
 } from 'typeorm';
 import { Playlist } from '../../playlists/entities/playlist.entity';
 import { Statistic } from '../../statistics/entity/statistic.entity';
-import { Album } from 'src/albums/entities/album.entity';
 
 @Entity()
 export class Music {
@@ -33,7 +33,7 @@ export class Music {
 
   @ManyToOne(() => Album, (album) => album.musics)
   @JoinColumn({ name: 'albumId' })
-  album:Album
+  album: Album;
 
   @CreateDateColumn()
   createdAt: Date;
