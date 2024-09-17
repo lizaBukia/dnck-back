@@ -8,6 +8,7 @@ import {
   ParseFilePipeBuilder,
   Post,
   Put,
+  Query,
   Req,
   UploadedFile,
   UseInterceptors,
@@ -19,6 +20,7 @@ import { RoleEnum } from '../auth/enum/user.role';
 import { Roles } from '../auth/guard/roles.key';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
+import { SearchAlbumQueryDto } from './dto/search-album-query.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
 
@@ -48,8 +50,8 @@ export class AlbumsController {
   }
   @Roles(RoleEnum.User, RoleEnum.Admin)
   @Get()
-  async findAll(): Promise<Album[]> {
-    return await this.albumService.findAll();
+  async findAll(@Query() query: SearchAlbumQueryDto): Promise<Album[]> {
+    return await this.albumService.findAll(query);
   }
   @Roles(RoleEnum.Admin, RoleEnum.User)
   @Get(':id')
