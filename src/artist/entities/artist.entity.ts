@@ -13,25 +13,18 @@ import { Album } from '../../albums/entities/album.entity';
 export class ArtistEntity {
   @PrimaryGeneratedColumn()
   id: number;
-
   @Column()
   firstName: string;
-
   @Column()
   lastName: string;
-
   @Column()
   biography: string;
-
-  @ManyToMany(() => Album, (album) => album.artists, { eager: true })
+  @ManyToMany(() => Album, (album) => album.artists)
   albums: Album[];
-
   @CreateDateColumn()
   createdAt: Date;
-
   @DeleteDateColumn()
   deletedAt: Date;
-
   @UpdateDateColumn()
   updatedAt: Date;
 }

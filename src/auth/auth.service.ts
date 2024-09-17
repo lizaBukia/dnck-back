@@ -5,8 +5,8 @@ import { User } from '../users/entities/users.entity';
 import { UsersRepository } from '../users/repositories/users.repository';
 import { jwtConstants } from './auth.constants';
 import { AuthDto } from './dto/auth.dto';
+import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
 import { LoginInterface } from './interfaces/login.response';
-import { JwtPayloadInterface } from './interfaces/payload.response';
 
 @Injectable()
 export class AuthService {
@@ -49,9 +49,10 @@ export class AuthService {
 
     if (isPasswordCorrect) {
       const payload: JwtPayloadInterface = {
+        email: user.email,
+        password: user.password,
         role: user.role,
         userId: user.id,
-        secret: '',
       };
 
       return {
