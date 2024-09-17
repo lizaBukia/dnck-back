@@ -6,11 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
 import { RoleEnum } from '../auth/enum/user.role';
 import { Roles } from '../auth/guard/roles.key';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
+import { SearchPLaylistQueryDto } from './dto/search-playlist-query.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { Playlist } from './entities/playlist.entity';
 import { PlaylistsService } from './playlists.service';
@@ -29,8 +31,8 @@ export class PlaylistsController {
 
   @Roles(RoleEnum.Admin, RoleEnum.User)
   @Get()
-  async findAll(): Promise<Playlist[]> {
-    return await this.playlistsService.findAll();
+  async findAll(@Query() query: SearchPLaylistQueryDto): Promise<Playlist[]> {
+    return await this.playlistsService.findAll(query);
   }
 
   @Roles(RoleEnum.Admin, RoleEnum.User)

@@ -40,5 +40,5 @@ export class Album {
   updatedAt!: Date;
 
   @DeleteDateColumn()
-  deleted!: Date;
+  deletedAt!: Date;
 }

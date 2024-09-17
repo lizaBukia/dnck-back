@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Music } from '../../musics/entities/musics.entity';
 import { CreatePlaylistDto } from '../dto/create-playlist.dto';
@@ -39,11 +39,16 @@ export class PlaylistsRepository {
     return musics;
   }
 
-  async findAll(): Promise<Playlist[]> {
-    return await this.playlistRepository
+  async findAll(search?: string): Promise<Playlist[]> {
+    const query: SelectQueryBuilder<Playlist> = await this.playlistRepository
       .createQueryBuilder('playlist')
-      .leftJoinAndSelect('playlist.musics', 'musics')
-      .getMany();
+      .leftJoinAndSelect('playlist.musics', 'musics');
+
+    if (search) {
+      query.where('playlist.title LIKE :search', { search: `%${search}%` });
+    }
+
+    return await query.getMany();
   }
 
   async findOne(id: number): Promise<Playlist | undefined> {

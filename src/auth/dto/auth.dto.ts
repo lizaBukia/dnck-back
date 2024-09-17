@@ -6,4 +6,7 @@ export class AuthDto {
 
   @IsString()
   email!: string;
+
+  @IsString()
+  confirmPassword!: string;
 }
