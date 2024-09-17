@@ -18,13 +18,14 @@ export class MusicsRepository {
   }
 
   async findAll(search?: string): Promise<Music[]> {
+    const query: SelectQueryBuilder<Music> = this.musicsRepository
+      .createQueryBuilder('musics')
+      .leftJoinAndSelect('musics.album', 'album')
+      .leftJoinAndSelect('album.artist', 'artists');
     if (search) {
-      const query: SelectQueryBuilder<Music> = this.musicsRepository
-        .createQueryBuilder('musics')
-        .where('musics.name LIKE :search', { search: `%${search}%` });
-      return await query.getMany();
+      query.where('musics.name LIKE :search', { search: `%${search}%` });
     }
-    return await this.musicsRepository.find();
+    return await query.getMany();
   }
 
   async findOne(id: number): Promise<Music> {

@@ -11,22 +11,29 @@ export class ArtistsRepository {
     @InjectRepository(ArtistEntity)
     private artistsRepository: Repository<ArtistEntity>,
   ) {}
+
   async create(createArtistDto: CreateArtistDto): Promise<CreateArtistDto> {
     const newArtist: CreateArtistDto =
       await this.artistsRepository.create(createArtistDto);
     await this.artistsRepository.save(newArtist);
     return newArtist;
   }
+
   async findAll(search?: string): Promise<ArtistEntity[]> {
+    const query: SelectQueryBuilder<ArtistEntity> =
+      this.artistsRepository.createQueryBuilder('artist')
+        .leftJoinAndSelect('artist.albums', 'album')
+        .leftJoinAndSelect('album.musics', 'musics')
     if (search) {
-      const query: SelectQueryBuilder<ArtistEntity> = this.artistsRepository
-        .createQueryBuilder('artist')
-        .where("CONCAT(artist.firstName, ' ', artist.lastName) LIKE :search", {
+      query.where(
+        "CONCAT(artist.firstName, ' ', artist.lastName) LIKE :search",
+        {
           search: `%${search}%`,
-        });
-      return await query.getMany();
+        },
+      );
     }
-    return await this.artistsRepository.find();
+
+    return await query.getMany();
   }
 
   findOne(id: number): Promise<ArtistEntity> {
@@ -40,6 +47,7 @@ export class ArtistsRepository {
     await this.artistsRepository.update(id, updateArtistDto);
     return await this.findOne(id);
   }
+
   remove(id: number): Promise<DeleteResult> {
     return this.artistsRepository.softDelete(id);
   }

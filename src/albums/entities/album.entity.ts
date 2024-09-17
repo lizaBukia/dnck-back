@@ -5,10 +5,12 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ArtistEntity } from '../../artist/entities/artist.entity';
+import { Music } from '../../musics/entities/musics.entity';
 
 @Entity('album')
 export class Album {
@@ -27,6 +29,9 @@ export class Album {
   @ManyToMany(() => ArtistEntity, (artistEntity) => artistEntity.albums)
   @JoinTable({ name: 'artist_albums' })
   artists!: ArtistEntity[];
+
+  @OneToMany(() => Music, (music) => music.album)
+  musics: Music[];
 
   @CreateDateColumn()
   createdAt!: Date;
