@@ -24,7 +24,7 @@ export class MusicsRepository {
         .where('musics.name LIKE :search', { search: `%${search}%` });
       return await query.getMany();
     }
-    return await this.musicsRepository.find({relations:{album:true}});
+    return await this.musicsRepository.find({ relations: { album: true } });
   }
 
   async findOne(id: number): Promise<Music> {
