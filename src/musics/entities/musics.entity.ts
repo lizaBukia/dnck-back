@@ -25,6 +25,9 @@ export class Music {
   @Column()
   albumId!: number;
 
+  @Column()
+  src!:string
+
   @ManyToMany(() => Playlist, (playlist) => playlist.musics, { cascade: true })
   playlists: Playlist[];
 
