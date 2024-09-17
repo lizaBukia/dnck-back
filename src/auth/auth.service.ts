@@ -16,7 +16,7 @@ export class AuthService {
   ) {}
 
   async register(authDto: AuthDto): Promise<User> {
-    const { email, password , confirmPassword}: AuthDto = authDto;
+    const { email, password, confirmPassword }: AuthDto = authDto;
 
     if (confirmPassword !== password) {
       throw new BadRequestException('Password Do Not Match');
