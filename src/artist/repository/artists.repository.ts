@@ -26,7 +26,7 @@ export class ArtistsRepository {
         });
       return await query.getMany();
     }
-    return await this.artistsRepository.find();
+    return await this.artistsRepository.find({relations:{albums:true}});
   }
 
   findOne(id: number): Promise<ArtistEntity> {
