@@ -1,11 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from '../users/entities/users.entity';
 import { UsersRepository } from '../users/repositories/users.repository';
 import { jwtConstants } from './auth.constants';
 import { AuthDto } from './dto/auth.dto';
-import { LoginInterface } from './interface/login.response';
+import { LoginInterface } from './interfaces/login.response';
+import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
 @Injectable()
 export class AuthService {
   constructor(
@@ -20,11 +21,17 @@ export class AuthService {
 
     const hashedPassword: string = await bcrypt.hash(password, salt);
 
-    const user: User = await this.usersRepository.create({
-      email,
-      password: hashedPassword,
-    });
-    return user;
+    try {
+      const user: User = await this.usersRepository.create({
+        email,
+        password: hashedPassword,
+      });
+      return user;
+    } catch (err) {
+      throw new BadRequestException(
+        'Email is already in use. Please choose a different email address.',
+      );
+    }
   }
 
   async login(authDto: AuthDto): Promise<LoginInterface> {
@@ -36,12 +43,7 @@ export class AuthService {
       user && (await bcrypt.compare(password, user.password));
 
     if (isPasswordCorrect) {
-      const payload: {
-        email: string;
-        password: string;
-        role: string;
-        userId: number;
-      } = {
+      const payload: JwtPayloadInterface = {
         email: user.email,
         password: user.password,
         role: user.role,
@@ -56,3 +58,4 @@ export class AuthService {
     }
   }
 }
+

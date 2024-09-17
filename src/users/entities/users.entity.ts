@@ -10,12 +10,13 @@ import {
 import { RoleEnum } from '../../auth/enum/user.role';
 import { History } from '../../history/entity/history.entity';
 import { Statistic } from '../../statistics/entity/statistic.entity';
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()

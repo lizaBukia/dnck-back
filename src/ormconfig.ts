@@ -1,5 +1,6 @@
+import * as dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
-
+dotenv.config({ path: '.env' });
 export const connectionSource: DataSource = new DataSource({
   name: 'default',
   host: process.env.DATABASE_HOST,

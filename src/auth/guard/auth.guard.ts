@@ -7,17 +7,15 @@ import {
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { jwtConstants } from 'src/auth/auth.constants';
-import { RoleEnum } from '../enum/user.role';
-import { JwtPayload } from '../interface/payload.response';
 import { IS_PUBLIC_KEY } from './publick.key';
 import { ROLES_KEY } from './roles.key';
+import { JwtPayloadInterface } from '../interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private readonly jwtService: JwtService,
-    private reflector: Reflector,
+    private jwtService: JwtService,
+    private readonly reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -25,42 +23,44 @@ export class AuthGuard implements CanActivate {
       IS_PUBLIC_KEY,
       [context.getHandler(), context.getClass()],
     );
+
+    const roles: string[] = this.reflector.getAllAndOverride<string[]>(
+      ROLES_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+    const isRouteGuardedWithRoles: boolean = !!roles?.length;
+
     if (isPublic) {
       return true;
     }
 
     const request: Request = context.switchToHttp().getRequest();
     const token: string = this.extractTokenFromHeader(request);
-
-    if (!token) {
-      throw new UnauthorizedException('Unauthorized');
-    }
-
     try {
-      const payload: JwtPayload = await this.jwtService.verifyAsync(token, {
-        secret: jwtConstants.secret,
+      const payload: JwtPayloadInterface = await this.jwtService.verifyAsync<JwtPayloadInterface>(token, {
+        secret: process.env.JWT_SECRET,
       });
-
-      const roles: RoleEnum[] = this.reflector.getAllAndOverride<RoleEnum[]>(
-        ROLES_KEY,
-        [context.getHandler(), context.getClass()],
-      );
-
-      const isRouteGuardedWithRole: boolean = !!roles.length;
-
-      if (isRouteGuardedWithRole) {
-        return roles.some((role) => payload.role === role);
+      if (isRouteGuardedWithRoles) {
+        this.validateRoles(roles, payload.role);
       }
-
-      return true;
-    } catch (err) {
-      throw new UnauthorizedException('Unauthorized');
+      request['user'] = payload;
+    } catch {
+      throw new UnauthorizedException();
     }
+    return true;
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
-
     return type === 'Bearer' ? token : undefined;
+  }
+
+  private validateRoles(routeRoles: string[], userRole: string): void {
+    const doesUserHasRequiredRoles: boolean = routeRoles.some((role: string) =>
+      role.includes(userRole),
+    );
+    if (!doesUserHasRequiredRoles) {
+      throw new UnauthorizedException();
+    }
   }
 }
