@@ -51,7 +51,7 @@ export class AuthService {
       const payload: JwtPayloadInterface = {
         role: user.role,
         userId: user.id,
-        secret: ''
+        secret: '',
       };
 
       return {
