@@ -3,7 +3,7 @@ import { User } from '../users/entities/users.entity';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { Public } from './guard/publick.key';
-import { LoginInterface } from './interface/login.response';
+import { LoginInterface } from './interfaces/login.response';
 
 @Controller('auth')
 export class AuthController {

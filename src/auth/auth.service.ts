@@ -5,8 +5,9 @@ import { User } from '../users/entities/users.entity';
 import { UsersRepository } from '../users/repositories/users.repository';
 import { jwtConstants } from './auth.constants';
 import { AuthDto } from './dto/auth.dto';
-import { LoginInterface } from './interfaces/login.response';
 import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
+import { LoginInterface } from './interfaces/login.response';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -15,7 +16,11 @@ export class AuthService {
   ) {}
 
   async register(authDto: AuthDto): Promise<User> {
-    const { email, password }: AuthDto = authDto;
+    const { email, password , confirmPassword}: AuthDto = authDto;
+
+    if (confirmPassword !== password) {
+      throw new BadRequestException('Password Do Not Match');
+    }
 
     const salt: string = await bcrypt.genSalt();
 
@@ -58,4 +63,3 @@ export class AuthService {
     }
   }
 }
-
