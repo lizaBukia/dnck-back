@@ -20,10 +20,10 @@ export class ArtistsRepository {
   }
 
   async findAll(search?: string): Promise<ArtistEntity[]> {
-    const query: SelectQueryBuilder<ArtistEntity> =
-      this.artistsRepository.createQueryBuilder('artist')
-        .leftJoinAndSelect('artist.albums', 'album')
-        .leftJoinAndSelect('album.musics', 'musics')
+    const query: SelectQueryBuilder<ArtistEntity> = this.artistsRepository
+      .createQueryBuilder('artist')
+      .leftJoinAndSelect('artist.albums', 'album')
+      .leftJoinAndSelect('album.musics', 'musics');
     if (search) {
       query.where(
         "CONCAT(artist.firstName, ' ', artist.lastName) LIKE :search",

@@ -22,9 +22,6 @@ export class Music {
   @Column()
   name: string;
 
-  @Column()
-  imgUrl: string;
-
   @ManyToMany(() => Playlist, (playlist) => playlist.musics, { cascade: true })
   playlists: Playlist[];
 
@@ -37,6 +34,9 @@ export class Music {
   @ManyToOne(() => Album, (album) => album.musics)
   @JoinColumn({ name: 'albumId' })
   album!: Album;
+
+  @Column()
+  src!: string;
 
   @CreateDateColumn()
   createdAt: Date;
