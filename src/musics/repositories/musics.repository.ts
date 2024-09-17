@@ -21,7 +21,7 @@ export class MusicsRepository {
     const query: SelectQueryBuilder<Music> = this.musicsRepository
       .createQueryBuilder('musics')
       .leftJoinAndSelect('musics.album', 'album')
-      .leftJoinAndSelect('album.artist', 'artists');
+      .leftJoinAndSelect('album.artists', 'artists');
     if (search) {
       query.where('musics.name LIKE :search', { search: `%${search}%` });
     }
