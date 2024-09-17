@@ -1,12 +1,9 @@
-import { Album } from 'src/albums/entities/album.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
   ManyToMany,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -23,17 +20,13 @@ export class Music {
   name: string;
 
   @Column()
-  albumId!: number;
+  imgUrl: string;
 
   @ManyToMany(() => Playlist, (playlist) => playlist.musics, { cascade: true })
   playlists: Playlist[];
 
   @OneToMany(() => Statistic, (statistic) => statistic.musics)
   statistics: Statistic;
-
-  @ManyToOne(() => Album, (album) => album.musics)
-  @JoinColumn({ name: 'albumId' })
-  album: Album;
 
   @CreateDateColumn()
   createdAt: Date;

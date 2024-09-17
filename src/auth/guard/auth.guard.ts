@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { JwtPayload } from 'jsonwebtoken';
+import { JwtPayloadInterface } from '../interfaces/jwt-payload.interface';
 import { IS_PUBLIC_KEY } from './publick.key';
 import { ROLES_KEY } from './roles.key';
 
@@ -37,12 +37,10 @@ export class AuthGuard implements CanActivate {
     const request: Request = context.switchToHttp().getRequest();
     const token: string = this.extractTokenFromHeader(request);
     try {
-      const payload: JwtPayload = await this.jwtService.verifyAsync<JwtPayload>(
-        token,
-        {
+      const payload: JwtPayloadInterface =
+        await this.jwtService.verifyAsync<JwtPayloadInterface>(token, {
           secret: process.env.JWT_SECRET,
-        },
-      );
+        });
       if (isRouteGuardedWithRoles) {
         this.validateRoles(roles, payload.role);
       }

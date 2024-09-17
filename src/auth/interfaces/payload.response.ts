@@ -1,7 +1,6 @@
 import { RoleEnum } from '../enum/user.role';
 
-export interface JwtPayloadInterface {
+export interface JwtPayload {
   secret: string;
   role: RoleEnum;
-  userId: number;
 }
