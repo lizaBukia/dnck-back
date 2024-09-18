@@ -21,12 +21,14 @@ export class ArtistsController {
   constructor(private artistsService: ArtistssService) {}
   @Roles(RoleEnum.Admin)
   @Post()
-  create(@Body() createArtistDto: CreateArtistDto): Promise<CreateArtistDto> {
+  create(@Body() createArtistDto: CreateArtistDto): Promise<ArtistEntity> {
+    console.log(createArtistDto);
+
     return this.artistsService.create(createArtistDto);
   }
   @Roles(RoleEnum.User, RoleEnum.Admin)
   @Get()
-  findAll(@Query() query: SearchArtistQueryDto): Promise<CreateArtistDto[]> {
+  findAll(@Query() query: SearchArtistQueryDto): Promise<ArtistEntity[]> {
     return this.artistsService.findAll(query);
   }
   @Roles(RoleEnum.User, RoleEnum.Admin)

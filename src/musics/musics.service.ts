@@ -1,20 +1,34 @@
 import { Injectable } from '@nestjs/common';
+import * as jwt from 'jsonwebtoken';
+import { S3Service } from 'src/storage/s3.service';
 import { DeleteResult } from 'typeorm';
 import { StatisticsRepository } from '../statistics/repositorys/statisticks.repository';
 import { CreateMusicDto } from './dto/create-music.dto';
 import { UpdateMusicDto } from './dto/update-music.dto';
 import { Music } from './entities/musics.entity';
 import { MusicsRepository } from './repositories/musics.repository';
+import { History } from 'src/history/entity/history.entity';
 
 @Injectable()
 export class MusicsService {
   constructor(
     private readonly statisticsRepository: StatisticsRepository,
     private readonly musicsRepository: MusicsRepository,
+    private readonly s3Service: S3Service,
   ) {}
 
-  async create(createMusicDto: CreateMusicDto): Promise<Music> {
-    return await this.musicsRepository.create(createMusicDto);
+  async create(
+    createMusicDto: CreateMusicDto,
+    file: Express.Multer.File,
+    token: string,
+  ): Promise<Music> {
+    const decodedToken: string | jwt.JwtPayload = jwt.decode(token);
+
+    const userId: number = (decodedToken as jwt.JwtPayload).userId;
+
+    const data:History = await this.s3Service.uploadFile(file, userId);
+
+    return await this.musicsRepository.create(createMusicDto, data);
   }
 
   async findAll(): Promise<Music[]> {

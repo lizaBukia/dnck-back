@@ -44,7 +44,6 @@ export class AuthGuard implements CanActivate {
       if (isRouteGuardedWithRoles) {
         this.validateRoles(roles, payload.role);
       }
-      request['user'] = payload;
     } catch {
       throw new UnauthorizedException();
     }

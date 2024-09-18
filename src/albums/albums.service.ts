@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
+import { History } from 'src/history/entity/history.entity';
 import { UpdateResult } from 'typeorm';
 import { S3Service } from '../storage/s3.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -23,11 +24,10 @@ export class AlbumsService {
 
     const userId: number = (decodedToken as jwt.JwtPayload).userId;
 
-    const location: string = await this.s3Service.uploadFile(file, userId);
-    if (location) {
-      createAlbomDto.imgUrl = location;
-    }
-    return await this.albumsRepository.create(createAlbomDto);
+    const data: History = await this.s3Service.uploadFile(file, userId);
+    console.log(data);
+
+    return await this.albumsRepository.create(createAlbomDto, data);
   }
 
   async findAll(searchAlbumQueryDto: SearchAlbumQueryDto): Promise<Album[]> {

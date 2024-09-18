@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -13,18 +14,25 @@ import { Album } from '../../albums/entities/album.entity';
 export class ArtistEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
   @Column()
   firstName: string;
   @Column()
   lastName: string;
+
   @Column()
   biography: string;
-  @ManyToMany(() => Album, (album) => album.artists)
+
+  @ManyToMany(() => Album, (album) => album.artists, { eager: true })
+  @JoinTable({ name: 'artists_albums' })
   albums: Album[];
+
   @CreateDateColumn()
   createdAt: Date;
+
   @DeleteDateColumn()
   deletedAt: Date;
+
   @UpdateDateColumn()
   updatedAt: Date;
 }

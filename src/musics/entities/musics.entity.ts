@@ -1,3 +1,4 @@
+import { History } from 'src/history/entity/history.entity';
 import {
   Column,
   CreateDateColumn,
@@ -35,8 +36,8 @@ export class Music {
   @JoinColumn({ name: 'albumId' })
   album!: Album;
 
-  @Column()
-  src!: string;
+  @ManyToOne(() => History)
+  history: History;
 
   @CreateDateColumn()
   createdAt: Date;

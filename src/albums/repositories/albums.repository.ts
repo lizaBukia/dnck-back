@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { History } from 'src/history/entity/history.entity';
 import {
   DeepPartial,
   Repository,
@@ -16,8 +17,15 @@ export class AlbumsRepository {
     private albumRepository: Repository<Album>,
   ) {}
 
-  async create(data: CreateAlbumDto): Promise<Album> {
-    const newAlbum: Album = this.albumRepository.create(data);
+  async create(data: CreateAlbumDto, historyData: History): Promise<Album> {
+    const newAlbum: Album = new Album();
+    newAlbum.history = historyData;
+    newAlbum.name = data.name;
+    newAlbum.releaseDate = data.releaseDate;
+    console.log(newAlbum.history, 'history');
+
+    console.log(newAlbum);
+
     return await this.albumRepository.save(newAlbum);
   }
 
@@ -25,7 +33,8 @@ export class AlbumsRepository {
     const query: SelectQueryBuilder<Album> = this.albumRepository
       .createQueryBuilder('album')
       .leftJoinAndSelect('album.musics', 'musics')
-      .leftJoinAndSelect('album.artists', 'artists');
+      .leftJoinAndSelect('album.artists', 'artists')
+      .leftJoinAndSelect('album.history', 'history');
 
     if (search) {
       query.where('album.name like :search', { search: `%${search}%` });

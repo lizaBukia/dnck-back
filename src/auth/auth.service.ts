@@ -5,6 +5,7 @@ import { User } from '../users/entities/users.entity';
 import { UsersRepository } from '../users/repositories/users.repository';
 import { jwtConstants } from './auth.constants';
 import { AuthDto } from './dto/auth.dto';
+import { LoginDto } from './dto/auth.login.dto';
 import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
 import { LoginInterface } from './interfaces/login.response';
 
@@ -39,8 +40,8 @@ export class AuthService {
     }
   }
 
-  async login(authDto: AuthDto): Promise<LoginInterface> {
-    const { email, password } = authDto;
+  async login(loginDto: LoginDto): Promise<LoginInterface> {
+    const { email, password } = loginDto;
 
     const user: User = await this.usersRepository.findEmail(email);
 
