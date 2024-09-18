@@ -46,7 +46,7 @@ export class AuthService {
   async login(authDto: AuthDto): Promise<LoginInterface> {
     const { email, password } = authDto;
 
-    const user: User = await this.usersRepository.findEmail(email);
+    const user: User | null = await this.usersRepository.findEmail(email);
 
     const isPasswordCorrect: boolean =
       user && (await bcrypt.compare(password, user.password));

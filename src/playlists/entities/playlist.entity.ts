@@ -18,7 +18,7 @@ export class Playlist {
   @Column()
   title: string;
 
-  @Column()
+  @Column({ nullable: true })
   imgUrl: string;
 
   @ManyToMany(() => Music, (music) => music.playlists)
