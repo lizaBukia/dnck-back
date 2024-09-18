@@ -34,7 +34,7 @@ export class S3Service {
       const path: string = this.configService.getOrThrow('LOCATION');
       const location: string = `${path}${filename}`;
 
-      const file:History = await this.historyRepository.createData({
+      const file: History = await this.historyRepository.createData({
         location,
         userId,
       });

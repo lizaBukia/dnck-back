@@ -21,7 +21,7 @@ export class ArtistsRepository {
 
     const araayOfAlbums: Array<Album> = [];
     for (const albumId of createArtistDto.albumId) {
-      const album:Album = new Album();
+      const album: Album = new Album();
       album.id = albumId;
       araayOfAlbums.push(album);
     }
