@@ -5,5 +5,5 @@ export class CreateMusicDto {
   name!: string;
 
   @IsUrl()
-  imgUrl: string;
+  src!: string;
 }

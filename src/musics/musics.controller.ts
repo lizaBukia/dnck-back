@@ -26,6 +26,7 @@ export class MusicsController {
   @Roles(RoleEnum.Admin)
   @Post()
   async create(@Body() createMusicDto: CreateMusicDto): Promise<Music> {
+    console.log(createMusicDto);
     return await this.musicsService.create(createMusicDto);
   }
 
