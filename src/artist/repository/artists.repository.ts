@@ -67,7 +67,7 @@ export class ArtistsRepository {
     if (searchQueryDto?.limit) {
       query.limit(searchQueryDto.limit);
     }
-    return await query.getMany();
+    return await query.getMany(); 
   }
 
   findOne(id: number): Promise<ArtistEntity> {

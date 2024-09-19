@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { History } from 'src/history/entity/history.entity';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { UpdateResult } from 'typeorm';
 import { S3Service } from '../storage/s3.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
 import { AlbumsRepository } from './repositories/albums.repository';
-import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 @Injectable()
 export class AlbumsService {
   constructor(

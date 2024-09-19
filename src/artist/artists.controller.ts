@@ -7,6 +7,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { DeleteResult } from 'typeorm';
 import { RoleEnum } from '../auth/enum/user.role';
 import { Roles } from '../auth/guard/roles.key';
@@ -14,7 +15,6 @@ import { ArtistssService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { ArtistEntity } from './entities/artist.entity';
-import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 
 @Controller('artists')
 export class ArtistsController {

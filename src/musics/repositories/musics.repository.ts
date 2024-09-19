@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { History } from 'src/history/entity/history.entity';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateMusicDto } from '../dto/create-music.dto';
 import { UpdateMusicDto } from '../dto/update-music.dto';
 import { Music } from '../entities/musics.entity';
-import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 
 @Injectable()
 export class MusicsRepository {
@@ -39,10 +39,9 @@ export class MusicsRepository {
     query
       .groupBy('musics.id, album.id, artist.id, history.id')
       .orderBy('COUNT(statistics.musicId)', 'DESC');
-      if (search.limit){
-        query
-        .limit(search.limit)
-      }
+    if (search.limit) {
+      query.limit(search.limit);
+    }
 
     return await query.getMany();
   }

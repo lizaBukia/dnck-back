@@ -5,8 +5,8 @@ import { ArtistEntity } from 'src/artist/entities/artist.entity';
 import { ArtistsRepository } from 'src/artist/repository/artists.repository';
 import { Music } from 'src/musics/entities/musics.entity';
 import { MusicsRepository } from 'src/musics/repositories/musics.repository';
-import { SearchResponseDto } from './dto/search-result.dto';
 import { SearchQueryDto } from './dto/create-search.dto';
+import { SearchResponseDto } from './dto/search-result.dto';
 
 @Injectable()
 export class SearchService {

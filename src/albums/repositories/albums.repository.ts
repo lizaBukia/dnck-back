@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { History } from 'src/history/entity/history.entity';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import {
   DeepPartial,
   Repository,
@@ -9,7 +10,6 @@ import {
 } from 'typeorm';
 import { CreateAlbumDto } from '../dto/create-album.dto';
 import { Album } from '../entities/album.entity';
-import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 
 @Injectable()
 export class AlbumsRepository {
@@ -42,23 +42,26 @@ export class AlbumsRepository {
             .groupBy('musics.albumId');
         },
         'albumListenings',
-        'albumListenings.albumId = album.id'
+        'albumListenings.albumId = album.id',
       )
-      .addSelect('COALESCE(albumListenings.totalListenings, 0)', 'totalListenings');
-  
+      .addSelect(
+        'COALESCE(albumListenings.totalListenings, 0)',
+        'totalListenings',
+      );
+
     if (searchAlbumQueryDto?.search) {
-      query.where('album.name LIKE :search', { search: `%${searchAlbumQueryDto.search}%` });
+      query.where('album.name LIKE :search', {
+        search: `%${searchAlbumQueryDto.search}%`,
+      });
     }
-    
-    
+
     query.orderBy('totalListenings', 'DESC');
-  
+
     if (searchAlbumQueryDto?.limit) {
       query.limit(searchAlbumQueryDto.limit);
     }
     return await query.getRawMany();
   }
-  
 
   async findOne(id: number): Promise<Album> {
     return await this.albumRepository.findOneOrFail({ where: { id } });
