@@ -29,7 +29,7 @@ export class MusicsRepository {
       .leftJoinAndSelect('musics.album', 'album')
       .leftJoinAndSelect('album.artists', 'artist')
       .leftJoinAndSelect('musics.history', 'history')
-      .leftJoinAndSelect('album.history', 'albumhistory')
+      .leftJoinAndSelect('album.history', 'albumhistory');
     if (search) {
       query.where('musics.name LIKE :search', { search: `%${search}%` });
     }
