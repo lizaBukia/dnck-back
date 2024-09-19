@@ -53,15 +53,13 @@ export class AuthService {
 
     if (isPasswordCorrect) {
       const payload: JwtPayloadInterface = {
-        email: user.email,
-        password: user.password,
         role: user.role,
-        userId: user.id,
+        id: user.id,
       };
 
       return {
         accessToken: await this.jwtService.signAsync(payload, {
-          secret: jwtConstants.secret,
+          secret: process.env.JWT_SECRET,
         }),
       };
     }

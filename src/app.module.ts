@@ -41,6 +41,7 @@ import { UsersModule } from './users/users.module';
       password: process.env.DATABASE_PASSWORD,
       synchronize: true,
       autoLoadEntities: true,
+      logging: false,
       type: 'mysql',
       host: process.env.DATABASE_HOST,
       entities: [

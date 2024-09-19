@@ -6,10 +6,13 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
+import * as dotenv from 'dotenv';
 import { Request } from 'express';
 import { JwtPayloadInterface } from '../interfaces/jwt-payload.interface';
 import { IS_PUBLIC_KEY } from './publick.key';
 import { ROLES_KEY } from './roles.key';
+
+dotenv.config();
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -41,10 +44,12 @@ export class AuthGuard implements CanActivate {
         await this.jwtService.verifyAsync<JwtPayloadInterface>(token, {
           secret: process.env.JWT_SECRET,
         });
+
       if (isRouteGuardedWithRoles) {
         this.validateRoles(roles, payload.role);
       }
-    } catch {
+      request['user'] = payload;
+    } catch (err) {;
       throw new UnauthorizedException();
     }
     return true;

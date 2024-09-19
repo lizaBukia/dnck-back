@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
 } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
 import { RoleEnum } from '../auth/enum/user.role';
@@ -21,12 +22,13 @@ import { PlaylistsService } from './playlists.service';
 export class PlaylistsController {
   constructor(private readonly playlistsService: PlaylistsService) {}
 
-  @Roles(RoleEnum.Admin)
+  @Roles(RoleEnum.Admin, RoleEnum.User)
   @Post()
   async create(
     @Body() createPlaylistDto: CreatePlaylistDto,
+    @Req() req: { user: { id: number } },
   ): Promise<Playlist> {
-    return await this.playlistsService.create(createPlaylistDto);
+    return await this.playlistsService.create(createPlaylistDto, req.user?.id);
   }
 
   @Roles(RoleEnum.Admin, RoleEnum.User)
@@ -41,13 +43,18 @@ export class PlaylistsController {
     return await this.playlistsService.findOne(Number(id));
   }
 
-  @Roles(RoleEnum.Admin)
+  @Roles(RoleEnum.User, RoleEnum.Admin)
   @Patch(':id')
   async update(
     @Param('id') id: string,
     @Body() updatePlaylistDto: UpdatePlaylistDto,
+    @Req() req: { user: { id: number } },
   ): Promise<Playlist> {
-    return await this.playlistsService.update(Number(id), updatePlaylistDto);
+    return await this.playlistsService.update(
+      Number(id),
+      updatePlaylistDto,
+      req.user.id,
+    );
   }
 
   @Roles(RoleEnum.Admin)
