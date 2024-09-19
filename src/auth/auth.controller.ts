@@ -12,6 +12,8 @@ export class AuthController {
   @Public()
   @Post('login')
   login(@Body() authDto: LoginDto): Promise<LoginInterface> {
+    console.log('sds');
+    
     return this.authsService.login(authDto);
   }
   @Public()
