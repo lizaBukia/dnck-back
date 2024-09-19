@@ -8,12 +8,13 @@ import {
   ParseFilePipeBuilder,
   Post,
   Put,
+  Query,
   Req,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Request } from 'express';
+import { query, Request } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { DeleteResult } from 'typeorm';
 import { RoleEnum } from '../auth/enum/user.role';
@@ -23,6 +24,7 @@ import { CreateMusicDto } from './dto/create-music.dto';
 import { UpdateMusicDto } from './dto/update-music.dto';
 import { Music } from './entities/musics.entity';
 import { MusicsService } from './musics.service';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 
 @Controller('musics')
 export class MusicsController {
@@ -51,8 +53,8 @@ export class MusicsController {
 
   @Roles(RoleEnum.Admin, RoleEnum.User)
   @Get()
-  async findAll(): Promise<Music[]> {
-    return await this.musicsService.findAll();
+  async findAll(@Query() query:SearchQueryDto): Promise<Music[]> {
+    return await this.musicsService.findAll(query);
   }
 
   @Roles(RoleEnum.Admin, RoleEnum.User)

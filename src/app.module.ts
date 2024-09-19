@@ -1,4 +1,4 @@
-import { Module, Search } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AlbumsModule } from './albums/albums.module';
@@ -14,12 +14,12 @@ import { Music } from './musics/entities/musics.entity';
 import { MusicsModule } from './musics/musics.module';
 import { Playlist } from './playlists/entities/playlist.entity';
 import { PlaylistsModule } from './playlists/playlists.module';
+import { SearchModule } from './search/search.module';
 import { Statistic } from './statistics/entity/statistic.entity';
 import { StatisticsModule } from './statistics/statistics.module';
 import { StorageModule } from './storage/storage.module';
 import { User } from './users/entities/users.entity';
 import { UsersModule } from './users/users.module';
-import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [

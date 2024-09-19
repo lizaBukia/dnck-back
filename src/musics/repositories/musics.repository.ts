@@ -5,6 +5,7 @@ import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateMusicDto } from '../dto/create-music.dto';
 import { UpdateMusicDto } from '../dto/update-music.dto';
 import { Music } from '../entities/musics.entity';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 
 @Injectable()
 export class MusicsRepository {
@@ -23,32 +24,38 @@ export class MusicsRepository {
     return await this.musicsRepository.save(newMusic);
   }
 
-  async findAll(search?: string): Promise<Music[]> {
+  async findAll(search?: SearchQueryDto): Promise<Music[]> {
     const query: SelectQueryBuilder<Music> = this.musicsRepository
       .createQueryBuilder('musics')
       .leftJoinAndSelect('musics.album', 'album')
       .leftJoinAndSelect('album.artists', 'artist')
       .leftJoinAndSelect('musics.history', 'history')
       .leftJoin('musics.statistics', 'statistics');
-  
-    if (search) {
+
+    if (search.search) {
       query.where('musics.name LIKE :search', { search: `%${search}%` });
     }
-  
+
     query
       .groupBy('musics.id, album.id, artist.id, history.id')
-      .orderBy('COUNT(statistics.musicId)', 'ASC'); 
-  
+      .orderBy('COUNT(statistics.musicId)', 'DESC');
+      if (search.limit){
+        query
+        .limit(search.limit)
+      }
+
     return await query.getMany();
   }
-  
 
   async findOne(id: number): Promise<Music> {
     return await this.musicsRepository.findOne({
       where: { id },
-      relations: { statistics: true, album: {
-        artists: true
-      } },
+      relations: {
+        statistics: true,
+        album: {
+          artists: true,
+        },
+      },
     });
   }
 

@@ -8,6 +8,7 @@ import { CreateMusicDto } from './dto/create-music.dto';
 import { UpdateMusicDto } from './dto/update-music.dto';
 import { Music } from './entities/musics.entity';
 import { MusicsRepository } from './repositories/musics.repository';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 
 @Injectable()
 export class MusicsService {
@@ -31,8 +32,8 @@ export class MusicsService {
     return await this.musicsRepository.create(createMusicDto, data);
   }
 
-  async findAll(): Promise<Music[]> {
-    return await this.musicsRepository.findAll();
+  async findAll(query: SearchQueryDto): Promise<Music[]> {
+    return await this.musicsRepository.findAll(query);
   }
 
   async findOne(id: number, userId: number): Promise<Music> {

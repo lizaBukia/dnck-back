@@ -12,9 +12,9 @@ import { RoleEnum } from '../auth/enum/user.role';
 import { Roles } from '../auth/guard/roles.key';
 import { ArtistssService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
-import { SearchArtistQueryDto } from './dto/search-artist-query.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { ArtistEntity } from './entities/artist.entity';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 
 @Controller('artists')
 export class ArtistsController {
@@ -22,13 +22,11 @@ export class ArtistsController {
   @Roles(RoleEnum.Admin)
   @Post()
   create(@Body() createArtistDto: CreateArtistDto): Promise<ArtistEntity> {
-    console.log(createArtistDto);
-
     return this.artistsService.create(createArtistDto);
   }
   @Roles(RoleEnum.User, RoleEnum.Admin)
   @Get()
-  findAll(@Query() query: SearchArtistQueryDto): Promise<ArtistEntity[]> {
+  findAll(@Query() query: SearchQueryDto): Promise<ArtistEntity[]> {
     return this.artistsService.findAll(query);
   }
   @Roles(RoleEnum.User, RoleEnum.Admin)

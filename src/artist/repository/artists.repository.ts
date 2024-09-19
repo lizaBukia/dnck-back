@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Album } from 'src/albums/entities/album.entity';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateArtistDto } from '../dto/create-artist.dto';
 import { UpdateArtistDto } from '../dto/update-artist.dto';
@@ -31,20 +32,41 @@ export class ArtistsRepository {
     return newArtist;
   }
 
-  async findAll(search?: string): Promise<ArtistEntity[]> {
+  async findAll(searchQueryDto?: SearchQueryDto): Promise<ArtistEntity[]> {
     const query: SelectQueryBuilder<ArtistEntity> = this.artistsRepository
       .createQueryBuilder('artist')
       .leftJoinAndSelect('artist.albums', 'album')
-      .leftJoinAndSelect('album.musics', 'musics');
-    if (search) {
+      .leftJoinAndSelect('album.musics', 'musics')
+      .leftJoinAndSelect('album.artists', 'artists')
+      .leftJoin(
+        (subQuery) => {
+          return subQuery
+            .select('musics.albumId', 'albumId')
+            .addSelect('COUNT(statistics.musicId)', 'totalListenings')
+            .from('music', 'musics')
+            .leftJoin('musics.statistics', 'statistics')
+            .groupBy('musics.albumId');
+        },
+        'albumListenings',
+        'albumListenings.albumId = album.id',
+      )
+      .addSelect(
+        'COALESCE(albumListenings.totalListenings, 0)',
+        'totalListenings',
+      );
+
+    if (searchQueryDto?.search) {
       query.where(
         "CONCAT(artist.firstName, ' ', artist.lastName) LIKE :search",
-        {
-          search: `%${search}%`,
-        },
+        { search: `%${searchQueryDto.search}%` },
       );
     }
 
+    query.orderBy('totalListenings', 'DESC');
+
+    if (searchQueryDto?.limit) {
+      query.limit(searchQueryDto.limit);
+    }
     return await query.getMany();
   }
 

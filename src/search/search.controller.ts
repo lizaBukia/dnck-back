@@ -11,7 +11,6 @@ export class SearchController {
   async search(
     @Query() searchQueryDto: SearchQueryDto,
   ): Promise<SearchResponseDto> {
-    console.log(searchQueryDto.search)
-    return await this.searchService.search(searchQueryDto.search);
+    return await this.searchService.search(searchQueryDto);
   }
 }

@@ -10,4 +10,3 @@ export class CreateAlbumDto {
   @IsNumberString()
   artistId!: number;
 }
-  

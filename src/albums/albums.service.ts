@@ -4,10 +4,10 @@ import { History } from 'src/history/entity/history.entity';
 import { UpdateResult } from 'typeorm';
 import { S3Service } from '../storage/s3.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
-import { SearchAlbumQueryDto } from './dto/search-album-query.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
 import { AlbumsRepository } from './repositories/albums.repository';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 @Injectable()
 export class AlbumsService {
   constructor(
@@ -25,12 +25,11 @@ export class AlbumsService {
     const userId: number = (decodedToken as jwt.JwtPayload).userId;
 
     const data: History = await this.s3Service.uploadFile(file, userId);
-    console.log(createAlbomDto, ' service ')
     return await this.albumsRepository.create(createAlbomDto, data);
   }
 
-  async findAll(searchAlbumQueryDto: SearchAlbumQueryDto): Promise<Album[]> {
-    return await this.albumsRepository.findAll(searchAlbumQueryDto.search);
+  async findAll(searchAlbumQueryDto: SearchQueryDto): Promise<Album[]> {
+    return await this.albumsRepository.findAll(searchAlbumQueryDto);
   }
 
   async findOne(id: number): Promise<Album> {

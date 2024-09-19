@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { CreateAlbumDto } from '../dto/create-album.dto';
 import { Album } from '../entities/album.entity';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 
 @Injectable()
 export class AlbumsRepository {
@@ -23,23 +24,41 @@ export class AlbumsRepository {
     newAlbum.name = data.name;
     newAlbum.releaseDate = data.releaseDate;
     newAlbum.artistId = data.artistId;
-    console.log(newAlbum, ' controller')
     return await this.albumRepository.save(newAlbum);
   }
 
-  async findAll(search?: string): Promise<Album[]> {
+  async findAll(searchAlbumQueryDto?: SearchQueryDto): Promise<Album[]> {
     const query: SelectQueryBuilder<Album> = this.albumRepository
       .createQueryBuilder('album')
       .leftJoinAndSelect('album.musics', 'musics')
       .leftJoinAndSelect('album.artists', 'artists')
-      .leftJoinAndSelect('album.history', 'history');
-
-    if (search) {
-      query.where('album.name like :search', { search: `%${search}%` });
+      .leftJoin(
+        (subQuery) => {
+          return subQuery
+            .select('musics.albumId', 'albumId')
+            .addSelect('COUNT(statistics.musicId)', 'totalListenings')
+            .from('music', 'musics')
+            .leftJoin('musics.statistics', 'statistics')
+            .groupBy('musics.albumId');
+        },
+        'albumListenings',
+        'albumListenings.albumId = album.id'
+      )
+      .addSelect('COALESCE(albumListenings.totalListenings, 0)', 'totalListenings');
+  
+    if (searchAlbumQueryDto?.search) {
+      query.where('album.name LIKE :search', { search: `%${searchAlbumQueryDto.search}%` });
     }
-
-    return await query.getMany();
+    
+    
+    query.orderBy('totalListenings', 'DESC');
+  
+    if (searchAlbumQueryDto?.limit) {
+      query.limit(searchAlbumQueryDto.limit);
+    }
+    return await query.getRawMany();
   }
+  
 
   async findOne(id: number): Promise<Album> {
     return await this.albumRepository.findOneOrFail({ where: { id } });

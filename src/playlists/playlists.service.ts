@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
-import { SearchPLaylistQueryDto } from './dto/search-playlist-query.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { Playlist } from './entities/playlist.entity';
 import { PlaylistsRepository } from './repositories/playlists.repository';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 
 @Injectable()
 export class PlaylistsService {
@@ -15,7 +15,7 @@ export class PlaylistsService {
   }
 
   async findAll(
-    searchPLaylistQueryDto: SearchPLaylistQueryDto,
+    searchPLaylistQueryDto: SearchQueryDto,
   ): Promise<Playlist[]> {
     return await this.playlistsRepository.findAll(
       searchPLaylistQueryDto.search,

@@ -12,10 +12,10 @@ import { DeleteResult } from 'typeorm';
 import { RoleEnum } from '../auth/enum/user.role';
 import { Roles } from '../auth/guard/roles.key';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
-import { SearchPLaylistQueryDto } from './dto/search-playlist-query.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { Playlist } from './entities/playlist.entity';
 import { PlaylistsService } from './playlists.service';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 
 @Controller('playlists')
 export class PlaylistsController {
@@ -31,7 +31,7 @@ export class PlaylistsController {
 
   @Roles(RoleEnum.Admin, RoleEnum.User)
   @Get()
-  async findAll(@Query() query: SearchPLaylistQueryDto): Promise<Playlist[]> {
+  async findAll(@Query() query: SearchQueryDto): Promise<Playlist[]> {
     return await this.playlistsService.findAll(query);
   }
 
@@ -41,7 +41,7 @@ export class PlaylistsController {
     return await this.playlistsService.findOne(Number(id));
   }
 
-  @Roles(RoleEnum.Admin)   
+  @Roles(RoleEnum.Admin)
   @Patch(':id')
   async update(
     @Param('id') id: string,

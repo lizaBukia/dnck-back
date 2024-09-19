@@ -20,9 +20,9 @@ import { RoleEnum } from '../auth/enum/user.role';
 import { Roles } from '../auth/guard/roles.key';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
-import { SearchAlbumQueryDto } from './dto/search-album-query.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 
 @Controller('albums')
 export class AlbumsController {
@@ -41,7 +41,6 @@ export class AlbumsController {
     )
     file: Express.Multer.File,
   ): Promise<Album> {
-    console.log(createAlbomDto, ' controller ')
     const [type, token] = req.headers.authorization.split(' ');
     if (type !== 'Bearer') {
       throw new Error('invalid token');
@@ -50,7 +49,7 @@ export class AlbumsController {
   }
   @Roles(RoleEnum.User, RoleEnum.Admin)
   @Get()
-  async findAll(@Query() query: SearchAlbumQueryDto): Promise<Album[]> {
+  async findAll(@Query() query: SearchQueryDto): Promise<Album[]> {
     return await this.albumService.findAll(query);
   }
   @Roles(RoleEnum.Admin, RoleEnum.User)

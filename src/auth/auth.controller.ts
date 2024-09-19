@@ -13,8 +13,6 @@ export class AuthController {
   @Public()
   @Post('login')
   login(@Body() loginDto: LoginDto): Promise<LoginInterface> {
-    console.log('sds');
-
     return this.authsService.login(loginDto);
   }
   @Public()

@@ -6,6 +6,7 @@ import { ArtistsRepository } from 'src/artist/repository/artists.repository';
 import { Music } from 'src/musics/entities/musics.entity';
 import { MusicsRepository } from 'src/musics/repositories/musics.repository';
 import { SearchResponseDto } from './dto/search-result.dto';
+import { SearchQueryDto } from './dto/create-search.dto';
 
 @Injectable()
 export class SearchService {
@@ -15,7 +16,7 @@ export class SearchService {
     private musicRepository: MusicsRepository,
   ) {}
 
-  async search(search: string): Promise<SearchResponseDto> {
+  async search(search: SearchQueryDto): Promise<SearchResponseDto> {
     const albums: Album[] = await this.albumsRepository.findAll(search);
     const artists: ArtistEntity[] = await this.artistRepository.findAll(search);
     const musics: Music[] = await this.musicRepository.findAll(search);
