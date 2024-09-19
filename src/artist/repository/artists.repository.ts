@@ -54,11 +54,10 @@ export class ArtistsRepository {
       .leftJoinAndSelect('artist.albums', 'albums')
       .leftJoinAndSelect('albums.history', 'albumsHistory')
       .leftJoinAndSelect('albums.musics', 'musics')
-      .leftJoinAndSelect('musics.history', 'musicsHistory') 
+      .leftJoinAndSelect('musics.history', 'musicsHistory')
       .where('artist.id = :id', { id })
       .getOne();
-}
-
+  }
 
   async update(
     id: number,
