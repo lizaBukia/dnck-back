@@ -1,24 +1,25 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { User } from '../users/entities/users.entity';
 import { AuthService } from './auth.service';
-import { AuthDto } from './dto/auth.dto';
-import { LoginDto } from './dto/auth.login.dto';
+
 import { Public } from './guard/publick.key';
 import { LoginInterface } from './interfaces/login.response';
+import {SignUpDto} from './dto/signUp.dto'
+import { LoginDto } from './dto/auth.login.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authsService: AuthService) {}
   @Public()
   @Post('login')
-  login(@Body() authDto: LoginDto): Promise<LoginInterface> {
+  login(@Body() loginDto: LoginDto): Promise<LoginInterface> {
     console.log('sds');
 
-    return this.authsService.login(authDto);
+    return this.authsService.login(loginDto);
   }
   @Public()
   @Post('register')
-  register(@Body() loginDto: AuthDto): Promise<User> {
-    return this.authsService.register(loginDto);
+  register(@Body() signUpDto: SignUpDto): Promise<User> {
+    return this.authsService.register(signUpDto);
   }
 }

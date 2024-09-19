@@ -17,7 +17,10 @@ export class PlaylistsRepository {
   async create(createPlaylistDto: CreatePlaylistDto): Promise<Playlist> {
     const playlist: Playlist =
       this.playlistRepository.create(createPlaylistDto);
-    playlist.musics = this.createMusics(createPlaylistDto.musicIds);
+
+    const { musicIds = [] } = createPlaylistDto;
+
+    playlist.musics = this.createMusics(musicIds);
 
     await this.playlistRepository.save(playlist);
 
