@@ -38,7 +38,7 @@ export class AuthService {
       });
       return user;
     } catch (err) {
-      throw new BadRequestException();
+      throw new BadRequestException(err);
     }
   }
 
@@ -47,9 +47,15 @@ export class AuthService {
 
     const user: User | null = await this.usersRepository.findEmail(email);
 
+    if(!user){
+      throw new BadRequestException("email is not incorrect")
+    }
     const isPasswordCorrect: boolean =
       user && (await bcrypt.compare(password, user.password));
 
+    if(!isPasswordCorrect){
+      throw new BadRequestException("password is not correct")
+    }
     if (isPasswordCorrect) {
       const payload: JwtPayloadInterface = {
         role: user.role,
