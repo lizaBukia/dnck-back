@@ -41,6 +41,8 @@ export class S3Service {
 
       return file;
     } catch (e) {
+      console.log(e);
+
       throw Error('cant get location');
     }
   }

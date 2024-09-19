@@ -3,11 +3,18 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
+  ParseFilePipeBuilder,
   Patch,
   Post,
   Query,
+  Req,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Request } from 'express';
 import { DeleteResult } from 'typeorm';
 import { RoleEnum } from '../auth/enum/user.role';
 import { Roles } from '../auth/guard/roles.key';
@@ -21,12 +28,27 @@ import { PlaylistsService } from './playlists.service';
 export class PlaylistsController {
   constructor(private readonly playlistsService: PlaylistsService) {}
 
+  @UseInterceptors(FileInterceptor('file'))
   @Roles(RoleEnum.Admin)
   @Post()
   async create(
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({ fileType: 'image' })
+        .addMaxSizeValidator({ maxSize: 5000000 })
+        .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
+    )
+    file: Express.Multer.File,
     @Body() createPlaylistDto: CreatePlaylistDto,
+    @Req() req: Request,
   ): Promise<Playlist> {
-    return await this.playlistsService.create(createPlaylistDto);
+    const [type, token] = req.headers.authorization.split(' ');
+
+    if (type !== 'Bearer') {
+      throw new Error('invalid token');
+    }
+
+    return await this.playlistsService.create(createPlaylistDto, file, token);
   }
 
   @Roles(RoleEnum.Admin, RoleEnum.User)
@@ -47,6 +69,8 @@ export class PlaylistsController {
     @Param('id') id: string,
     @Body() updatePlaylistDto: UpdatePlaylistDto,
   ): Promise<Playlist> {
+    console.log(id);
+
     return await this.playlistsService.update(Number(id), updatePlaylistDto);
   }
 

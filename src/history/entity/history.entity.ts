@@ -1,4 +1,5 @@
 import { Music } from 'src/musics/entities/musics.entity';
+import { Playlist } from 'src/playlists/entities/playlist.entity';
 import {
   Column,
   CreateDateColumn,
@@ -24,6 +25,9 @@ export class History {
 
   @Column()
   location: string;
+
+  @OneToMany(() => Playlist, (playlist) => playlist.history)
+  playlist: Playlist;
 
   @OneToMany(() => Music, (music) => music.history)
   musics: Music[];

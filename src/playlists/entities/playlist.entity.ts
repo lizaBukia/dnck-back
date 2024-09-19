@@ -1,3 +1,4 @@
+import { History } from 'src/history/entity/history.entity';
 import {
   Column,
   CreateDateColumn,
@@ -5,6 +6,7 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -18,12 +20,12 @@ export class Playlist {
   @Column()
   title: string;
 
-  @Column({ nullable: true })
-  imgUrl: string;
-
   @ManyToMany(() => Music, (music) => music.playlists)
   @JoinTable()
   musics: Music[];
+
+  @ManyToOne(() => History)
+  history: History;
 
   @CreateDateColumn()
   createdAt: Date;
