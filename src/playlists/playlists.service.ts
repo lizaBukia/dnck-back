@@ -30,6 +30,10 @@ export class PlaylistsService {
     return await this.playlistsRepository.findOne(id);
   }
 
+  async getPersonal(userId: number): Promise<Playlist[]> {
+    return await this.playlistsRepository.getPersonal(userId);
+  }
+
   async update(
     id: number,
     updatePlaylistDto: UpdatePlaylistDto,

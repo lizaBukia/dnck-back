@@ -37,6 +37,11 @@ export class PlaylistsController {
     return await this.playlistsService.findAll(query);
   }
 
+  @Get('personal')
+  async getPersonalPlaylists(@Req() req: { user: { id: number } }): Promise<Playlist[]> {
+    return await this.playlistsService.getPersonal(req.user.id);
+  }
+
   @Roles(RoleEnum.Admin, RoleEnum.User)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Playlist> {

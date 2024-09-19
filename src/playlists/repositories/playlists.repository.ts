@@ -66,6 +66,10 @@ export class PlaylistsRepository {
       .getOne();
   }
 
+  async getPersonal(userId: number) : Promise<Playlist[]> {
+    return await this.playlistRepository.find({ where: { userId } });
+  }
+
   async update(
     id: number,
     updatePlaylistDto: UpdatePlaylistDto,
