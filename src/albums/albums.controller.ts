@@ -41,7 +41,6 @@ export class AlbumsController {
     )
     file: Express.Multer.File,
   ): Promise<Album> {
-
     const [type, token] = req.headers.authorization.split(' ');
 
     if (type !== 'Bearer') {
