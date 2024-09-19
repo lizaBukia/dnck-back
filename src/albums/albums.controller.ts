@@ -52,7 +52,7 @@ export class AlbumsController {
   @Get()
   async findAll(@Query() query: SearchAlbumQueryDto): Promise<Album[]> {
     console.log('ok');
-    
+
     return await this.albumService.findAll(query);
   }
   @Roles(RoleEnum.Admin, RoleEnum.User)
