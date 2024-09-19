@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { History } from 'src/history/entity/history.entity';
+import { HistoryRepository } from 'src/history/repository/history.repository';
+import { S3Service } from 'src/storage/s3.service';
 import {
   DeepPartial,
   Repository,
@@ -9,12 +11,13 @@ import {
 } from 'typeorm';
 import { CreateAlbumDto } from '../dto/create-album.dto';
 import { Album } from '../entities/album.entity';
-
 @Injectable()
 export class AlbumsRepository {
   constructor(
     @InjectRepository(Album)
     private albumRepository: Repository<Album>,
+    private readonly historyRepository: HistoryRepository,
+    private readonly s3Service: S3Service,
   ) {}
 
   async create(data: CreateAlbumDto, historyData: History): Promise<Album> {
@@ -44,7 +47,17 @@ export class AlbumsRepository {
     return await this.albumRepository.findOneOrFail({ where: { id } });
   }
 
-  async update(id: number, data: DeepPartial<Album>): Promise<UpdateResult> {
+  async update(
+    id: number,
+    data: DeepPartial<Album>,
+    _file: Express.Multer.File,
+  ): Promise<UpdateResult> {
+    if (_file) {
+      const file:History = await this.historyRepository.findOne(id);
+      const newLocation:string = await this.s3Service.uploadMusic(_file);
+      file.location = newLocation;
+      await this.historyRepository.save(file);
+    }
     return await this.albumRepository
       .createQueryBuilder()
       .update()

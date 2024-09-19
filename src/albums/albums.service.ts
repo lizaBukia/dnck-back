@@ -40,9 +40,9 @@ export class AlbumsService {
   async update(
     id: number,
     updateAlbumDto: UpdateAlbumDto,
-    _file: File,
+    _file: Express.Multer.File,
   ): Promise<UpdateResult> {
-    return await this.albumsRepository.update(id, updateAlbumDto);
+    return await this.albumsRepository.update(id, updateAlbumDto, _file);
   }
 
   async remove(id: number): Promise<UpdateResult> {
