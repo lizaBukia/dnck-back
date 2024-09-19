@@ -22,7 +22,8 @@ export class AlbumsRepository {
     newAlbum.history = historyData;
     newAlbum.name = data.name;
     newAlbum.releaseDate = data.releaseDate;
-
+    newAlbum.artistId = data.artistId;
+    console.log(newAlbum, ' controller')
     return await this.albumRepository.save(newAlbum);
   }
 

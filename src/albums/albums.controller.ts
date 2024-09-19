@@ -36,13 +36,13 @@ export class AlbumsController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({ fileType: 'image' })
-        .addMaxSizeValidator({ maxSize: 50000 })
+        .addMaxSizeValidator({ maxSize: 500000 })
         .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
     )
     file: Express.Multer.File,
   ): Promise<Album> {
+    console.log(createAlbomDto, ' controller ')
     const [type, token] = req.headers.authorization.split(' ');
-
     if (type !== 'Bearer') {
       throw new Error('invalid token');
     }

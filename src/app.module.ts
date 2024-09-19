@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Search } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AlbumsModule } from './albums/albums.module';
@@ -19,6 +19,7 @@ import { StatisticsModule } from './statistics/statistics.module';
 import { StorageModule } from './storage/storage.module';
 import { User } from './users/entities/users.entity';
 import { UsersModule } from './users/users.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UsersModule } from './users/users.module';
     ArtistsModule,
     AlbumsModule,
     MusicsModule,
+    SearchModule,
     PlaylistsModule,
     AuthModule,
     StatisticsModule,

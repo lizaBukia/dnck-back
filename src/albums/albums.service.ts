@@ -25,7 +25,7 @@ export class AlbumsService {
     const userId: number = (decodedToken as jwt.JwtPayload).userId;
 
     const data: History = await this.s3Service.uploadFile(file, userId);
-
+    console.log(createAlbomDto, ' service ')
     return await this.albumsRepository.create(createAlbomDto, data);
   }
 

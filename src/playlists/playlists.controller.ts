@@ -41,7 +41,7 @@ export class PlaylistsController {
     return await this.playlistsService.findOne(Number(id));
   }
 
-  @Roles(RoleEnum.Admin)
+  @Roles(RoleEnum.Admin)   
   @Patch(':id')
   async update(
     @Param('id') id: string,

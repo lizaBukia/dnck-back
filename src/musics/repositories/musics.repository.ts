@@ -28,12 +28,20 @@ export class MusicsRepository {
       .createQueryBuilder('musics')
       .leftJoinAndSelect('musics.album', 'album')
       .leftJoinAndSelect('album.artists', 'artist')
-      .leftJoinAndSelect('musics.history', 'history');
+      .leftJoinAndSelect('musics.history', 'history')
+      .leftJoin('musics.statistics', 'statistics');
+  
     if (search) {
       query.where('musics.name LIKE :search', { search: `%${search}%` });
     }
+  
+    query
+      .groupBy('musics.id, album.id, artist.id, history.id')
+      .orderBy('COUNT(statistics.musicId)', 'ASC'); 
+  
     return await query.getMany();
   }
+  
 
   async findOne(id: number): Promise<Music> {
     return await this.musicsRepository.findOne({
