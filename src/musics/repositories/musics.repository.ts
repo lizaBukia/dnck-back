@@ -38,9 +38,12 @@ export class MusicsRepository {
   async findOne(id: number): Promise<Music> {
     return await this.musicsRepository.findOne({
       where: { id },
-      relations: { statistics: true, album: {
-        artists: true
-      } },
+      relations: {
+        statistics: true,
+        album: {
+          artists: true,
+        },
+      },
     });
   }
 
