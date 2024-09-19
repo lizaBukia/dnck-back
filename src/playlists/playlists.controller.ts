@@ -38,7 +38,9 @@ export class PlaylistsController {
   }
 
   @Get('personal')
-  async getPersonalPlaylists(@Req() req: { user: { id: number } }): Promise<Playlist[]> {
+  async getPersonalPlaylists(
+    @Req() req: { user: { id: number } },
+  ): Promise<Playlist[]> {
     return await this.playlistsService.getPersonal(req.user.id);
   }
 

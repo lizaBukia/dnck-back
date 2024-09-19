@@ -66,7 +66,7 @@ export class PlaylistsRepository {
       .getOne();
   }
 
-  async getPersonal(userId: number) : Promise<Playlist[]> {
+  async getPersonal(userId: number): Promise<Playlist[]> {
     return await this.playlistRepository.find({ where: { userId } });
   }
 
