@@ -27,6 +27,7 @@ export class MusicsRepository {
     const query: SelectQueryBuilder<Music> = this.musicsRepository
       .createQueryBuilder('musics')
       .leftJoinAndSelect('musics.album', 'album')
+      .leftJoinAndSelect('album.artists', 'artist')
       .leftJoinAndSelect('musics.history', 'history');
     if (search) {
       query.where('musics.name LIKE :search', { search: `%${search}%` });
@@ -37,7 +38,9 @@ export class MusicsRepository {
   async findOne(id: number): Promise<Music> {
     return await this.musicsRepository.findOne({
       where: { id },
-      relations: { statistics: true },
+      relations: { statistics: true, album: {
+        artists: true
+      } },
     });
   }
 
