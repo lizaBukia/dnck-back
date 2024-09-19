@@ -2,10 +2,10 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { User } from '../users/entities/users.entity';
 import { AuthService } from './auth.service';
 
+import { LoginDto } from './dto/auth.login.dto';
+import { SignUpDto } from './dto/signUp.dto';
 import { Public } from './guard/publick.key';
 import { LoginInterface } from './interfaces/login.response';
-import {SignUpDto} from './dto/signUp.dto'
-import { LoginDto } from './dto/auth.login.dto';
 
 @Controller('auth')
 export class AuthController {
