@@ -3,11 +3,16 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
+  ParseFilePipeBuilder,
   Post,
   Put,
   Req,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { DeleteResult } from 'typeorm';
@@ -22,12 +27,26 @@ import { MusicsService } from './musics.service';
 @Controller('musics')
 export class MusicsController {
   constructor(private readonly musicsService: MusicsService) {}
-
+  @UseInterceptors(FileInterceptor('src'))
   @Roles(RoleEnum.Admin)
   @Post()
-  async create(@Body() createMusicDto: CreateMusicDto): Promise<Music> {
-    console.log(createMusicDto);
-    return await this.musicsService.create(createMusicDto);
+  async create(
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({ fileType: 'mp4' })
+        .addMaxSizeValidator({ maxSize: 50000 * 10000 * 1000 })
+        .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
+    )
+    file: Express.Multer.File,
+    @Body() createMusicDto: CreateMusicDto,
+    @Req() req: Request,
+  ): Promise<Music> {
+    const [type, token] = req.headers.authorization.split(' ');
+
+    if (type !== 'Bearer') {
+      throw new Error('invalid token');
+    }
+    return await this.musicsService.create(createMusicDto, file, token);
   }
 
   @Roles(RoleEnum.Admin, RoleEnum.User)

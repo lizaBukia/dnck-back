@@ -10,13 +10,11 @@ import { ArtistsRepository } from './repository/artists.repository';
 export class ArtistssService {
   constructor(private artistsRepository: ArtistsRepository) {}
 
-  create(createArtistDto: CreateArtistDto): Promise<CreateArtistDto> {
+  create(createArtistDto: CreateArtistDto): Promise<ArtistEntity> {
     return this.artistsRepository.create(createArtistDto);
   }
 
-  findAll(
-    searchArtistQueryDto: SearchArtistQueryDto,
-  ): Promise<CreateArtistDto[]> {
+  findAll(searchArtistQueryDto: SearchArtistQueryDto): Promise<ArtistEntity[]> {
     return this.artistsRepository.findAll(searchArtistQueryDto.search);
   }
 

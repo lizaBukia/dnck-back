@@ -10,7 +10,7 @@ export class HistoryRepository {
     private historyRepository: Repository<History>,
   ) {}
   async createData(createDataDto: CreateDataDto): Promise<History> {
-    const history: History = await this.historyRepository.save(createDataDto);
+    const history: History = await this.historyRepository.create(createDataDto);
     return await this.historyRepository.save(history);
   }
 }

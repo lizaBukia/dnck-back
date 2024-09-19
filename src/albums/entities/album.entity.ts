@@ -1,10 +1,11 @@
+import { History } from 'src/history/entity/history.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -20,14 +21,13 @@ export class Album {
   @Column()
   name!: string;
 
-  @Column({ default: '' })
-  imgUrl!: string;
+  @ManyToOne(() => History)
+  history: History;
 
   @Column()
   releaseDate!: string;
 
   @ManyToMany(() => ArtistEntity, (artistEntity) => artistEntity.albums)
-  @JoinTable({ name: 'artist_albums' })
   artists!: ArtistEntity[];
 
   @OneToMany(() => Music, (music) => music.album)

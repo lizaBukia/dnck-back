@@ -10,6 +10,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
 import jwt from 'jsonwebtoken';
+import { History } from 'src/history/entity/history.entity';
 import { RoleEnum } from '../auth/enum/user.role';
 import { Roles } from '../auth/guard/roles.key';
 import { S3Service } from './s3.service';
@@ -23,12 +24,12 @@ export class StorageController {
   async uploadFile(
     @UploadedFile(
       new ParseFilePipeBuilder()
-        .addFileTypeValidator({ fileType: 'image' })
+        .addFileTypeValidator({ fileType: 'image/jpg' })
         .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
     )
     file: Express.Multer.File,
     @Req() req: Request,
-  ): Promise<string> {
+  ): Promise<History> {
     const [token, type] = await req.headers.authorization.split(' ');
     if (type !== 'Bearer') {
       throw new Error('Invalid Token');

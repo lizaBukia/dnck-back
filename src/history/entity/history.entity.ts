@@ -1,10 +1,11 @@
+import { Music } from 'src/musics/entities/musics.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -19,11 +20,13 @@ export class History {
   userId: number;
 
   @ManyToOne(() => User, (user) => user.history)
-  @JoinColumn({ name: 'userId' })
   user: User;
 
   @Column()
   location: string;
+
+  @OneToMany(() => Music, (music) => music.history)
+  musics: Music[];
 
   @CreateDateColumn()
   createdAt: Date;
