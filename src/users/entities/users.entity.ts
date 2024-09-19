@@ -9,8 +9,8 @@ import {
 } from 'typeorm';
 import { RoleEnum } from '../../auth/enum/user.role';
 import { History } from '../../history/entity/history.entity';
-import { Statistic } from '../../statistics/entity/statistic.entity';
 import { Playlist } from '../../playlists/entities/playlist.entity';
+import { Statistic } from '../../statistics/entity/statistic.entity';
 
 @Entity()
 export class User {
@@ -33,7 +33,7 @@ export class User {
   statistics: Statistic;
 
   @OneToMany(() => Playlist, (playlist) => playlist.user)
-  playlists: Playlist[]
+  playlists: Playlist[];
 
   @CreateDateColumn()
   createdAt: Date;

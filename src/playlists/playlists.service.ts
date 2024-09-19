@@ -11,7 +11,10 @@ import { PlaylistsRepository } from './repositories/playlists.repository';
 export class PlaylistsService {
   constructor(private readonly playlistsRepository: PlaylistsRepository) {}
 
-  async create(createPlaylistDto: CreatePlaylistDto, userId: number): Promise<Playlist> {
+  async create(
+    createPlaylistDto: CreatePlaylistDto,
+    userId: number,
+  ): Promise<Playlist> {
     return await this.playlistsRepository.create(createPlaylistDto, userId);
   }
 

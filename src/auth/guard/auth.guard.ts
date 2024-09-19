@@ -49,7 +49,7 @@ export class AuthGuard implements CanActivate {
         this.validateRoles(roles, payload.role);
       }
       request['user'] = payload;
-    } catch (err) {;
+    } catch (err) {
       throw new UnauthorizedException();
     }
     return true;

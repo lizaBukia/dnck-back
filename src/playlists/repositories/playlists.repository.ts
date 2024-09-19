@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
@@ -14,9 +14,14 @@ export class PlaylistsRepository {
     private readonly playlistRepository: Repository<Playlist>,
   ) {}
 
-  async create(createPlaylistDto: CreatePlaylistDto, userId: number): Promise<Playlist> {
-    const playlist: Playlist =
-      this.playlistRepository.create({...createPlaylistDto, userId});
+  async create(
+    createPlaylistDto: CreatePlaylistDto,
+    userId: number,
+  ): Promise<Playlist> {
+    const playlist: Playlist = this.playlistRepository.create({
+      ...createPlaylistDto,
+      userId,
+    });
     const { musicIds = [] } = createPlaylistDto;
 
     playlist.musics = this.createMusics(musicIds);

@@ -17,10 +17,15 @@ import { AuthGuard } from './guard/auth.guard';
       signOptions: { expiresIn: '60000000000000000000s' },
     }),
   ],
-  providers: [AuthService, JwtService, UsersRepository, {
-    provide: 'APP_GUARD',
-    useClass: AuthGuard
-  }],
+  providers: [
+    AuthService,
+    JwtService,
+    UsersRepository,
+    {
+      provide: 'APP_GUARD',
+      useClass: AuthGuard,
+    },
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}
