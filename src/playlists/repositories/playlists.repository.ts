@@ -50,7 +50,6 @@ export class PlaylistsRepository {
     const query: SelectQueryBuilder<Playlist> = await this.playlistRepository
       .createQueryBuilder('playlist')
       .leftJoinAndSelect('playlist.musics', 'musics')
-      .leftJoinAndSelect('playlist.history', 'history');
 
     if (search) {
       query.where('playlist.title LIKE :search', { search: `%${search}%` });
