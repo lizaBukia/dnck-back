@@ -1,5 +1,4 @@
 import { Music } from 'src/musics/entities/musics.entity';
-import { Playlist } from 'src/playlists/entities/playlist.entity';
 import {
   Column,
   CreateDateColumn,

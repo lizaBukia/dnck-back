@@ -7,6 +7,9 @@ import { LoginDto } from './dto/auth.login.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
 import { LoginInterface } from './interfaces/login.response';
+import * as dotenvs from 'dotenv'
+
+dotenvs.config();
 
 @Injectable()
 export class AuthService {
