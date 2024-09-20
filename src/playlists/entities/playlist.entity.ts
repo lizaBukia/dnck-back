@@ -1,9 +1,10 @@
-import { History } from 'src/history/entity/history.entity';
+import { User } from 'src/users/entities/users.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -20,12 +21,19 @@ export class Playlist {
   @Column()
   title: string;
 
+  @Column({ nullable: true })
+  imgUrl: string;
+
   @ManyToMany(() => Music, (music) => music.playlists)
   @JoinTable()
   musics: Music[];
 
-  @ManyToOne(() => History)
-  history: History;
+  @ManyToOne(() => User, (user) => user.playlists)
+  @JoinColumn({ name: 'userId' })
+  user!: User;
+
+  @Column()
+  userId!: number;
 
   @CreateDateColumn()
   createdAt: Date;

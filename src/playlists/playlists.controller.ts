@@ -3,18 +3,12 @@ import {
   Controller,
   Delete,
   Get,
-  HttpStatus,
   Param,
-  ParseFilePipeBuilder,
   Patch,
   Post,
   Query,
   Req,
-  UploadedFile,
-  UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { Request } from 'express';
 import { DeleteResult } from 'typeorm';
 import { RoleEnum } from '../auth/enum/user.role';
 import { Roles } from '../auth/guard/roles.key';
@@ -28,27 +22,13 @@ import { PlaylistsService } from './playlists.service';
 export class PlaylistsController {
   constructor(private readonly playlistsService: PlaylistsService) {}
 
-  @UseInterceptors(FileInterceptor('file'))
-  @Roles(RoleEnum.Admin)
+  @Roles(RoleEnum.Admin, RoleEnum.User)
   @Post()
   async create(
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({ fileType: 'image' })
-        .addMaxSizeValidator({ maxSize: 5000000 })
-        .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
-    )
-    file: Express.Multer.File,
     @Body() createPlaylistDto: CreatePlaylistDto,
-    @Req() req: Request,
+    @Req() req: { user: { id: number } },
   ): Promise<Playlist> {
-    const [type, token] = req.headers.authorization.split(' ');
-
-    if (type !== 'Bearer') {
-      throw new Error('invalid token');
-    }
-
-    return await this.playlistsService.create(createPlaylistDto, file, token);
+    return await this.playlistsService.create(createPlaylistDto, req.user?.id);
   }
 
   @Roles(RoleEnum.Admin, RoleEnum.User)
@@ -57,21 +37,31 @@ export class PlaylistsController {
     return await this.playlistsService.findAll(query);
   }
 
+  @Get('personal')
+  async getPersonalPlaylists(
+    @Req() req: { user: { id: number } },
+  ): Promise<Playlist[]> {
+    return await this.playlistsService.getPersonal(req.user.id);
+  }
+
   @Roles(RoleEnum.Admin, RoleEnum.User)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Playlist> {
     return await this.playlistsService.findOne(Number(id));
   }
 
-  @Roles(RoleEnum.Admin)
+  @Roles(RoleEnum.User, RoleEnum.Admin)
   @Patch(':id')
   async update(
     @Param('id') id: string,
     @Body() updatePlaylistDto: UpdatePlaylistDto,
+    @Req() req: { user: { id: number } },
   ): Promise<Playlist> {
-    console.log(id);
-
-    return await this.playlistsService.update(Number(id), updatePlaylistDto);
+    return await this.playlistsService.update(
+      Number(id),
+      updatePlaylistDto,
+      req.user.id,
+    );
   }
 
   @Roles(RoleEnum.Admin)

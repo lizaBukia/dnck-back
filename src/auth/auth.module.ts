@@ -6,6 +6,7 @@ import { UsersRepository } from '../users/repositories/users.repository';
 import { jwtConstants } from './auth.constants';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { AuthGuard } from './guard/auth.guard';
 
 @Module({
   imports: [
@@ -13,10 +14,18 @@ import { AuthService } from './auth.service';
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60000000000000000000s' },
+      signOptions: { expiresIn: '60d' },
     }),
   ],
-  providers: [AuthService, JwtService, UsersRepository],
+  providers: [
+    AuthService,
+    JwtService,
+    UsersRepository,
+    {
+      provide: 'APP_GUARD',
+      useClass: AuthGuard,
+    },
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}

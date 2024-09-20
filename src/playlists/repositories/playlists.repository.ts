@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { History } from 'src/history/entity/history.entity';
 import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Music } from '../../musics/entities/musics.entity';
@@ -17,22 +16,21 @@ export class PlaylistsRepository {
 
   async create(
     createPlaylistDto: CreatePlaylistDto,
-    data: History,
+    userId: number,
   ): Promise<Playlist> {
-    const playlist: Playlist =
-      this.playlistRepository.create(createPlaylistDto);
-
+    const playlist: Playlist = this.playlistRepository.create({
+      ...createPlaylistDto,
+      userId,
+    });
     const { musicIds = [] } = createPlaylistDto;
 
     playlist.musics = this.createMusics(musicIds);
-
-    playlist.history = data;
 
     await this.playlistRepository.save(playlist);
 
     return await this.playlistRepository.findOne({
       where: { id: playlist.id },
-      relations: { musics: true, history: true },
+      relations: { musics: true },
     });
   }
 
@@ -67,6 +65,10 @@ export class PlaylistsRepository {
       .leftJoinAndSelect('playlist.musics', 'musics')
       .where('playlist.id= :id', { id })
       .getOne();
+  }
+
+  async getPersonal(userId: number): Promise<Playlist[]> {
+    return await this.playlistRepository.find({ where: { userId } });
   }
 
   async update(

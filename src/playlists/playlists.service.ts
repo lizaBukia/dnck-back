@@ -1,32 +1,21 @@
-import { Injectable } from '@nestjs/common';
-import * as jwt from 'jsonwebtoken';
-import { History } from 'src/history/entity/history.entity';
-import { S3Service } from 'src/storage/s3.service';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { Music } from 'src/musics/entities/musics.entity';
 import { DeleteResult } from 'typeorm';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { SearchPLaylistQueryDto } from './dto/search-playlist-query.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { Playlist } from './entities/playlist.entity';
 import { PlaylistsRepository } from './repositories/playlists.repository';
+
 @Injectable()
 export class PlaylistsService {
-  constructor(
-    private readonly playlistsRepository: PlaylistsRepository,
-    private readonly s3Service: S3Service,
-  ) {}
+  constructor(private readonly playlistsRepository: PlaylistsRepository) {}
 
   async create(
     createPlaylistDto: CreatePlaylistDto,
-    file: Express.Multer.File,
-    token: string,
+    userId: number,
   ): Promise<Playlist> {
-    const decodedToken: string | jwt.JwtPayload = jwt.decode(token);
-
-    const userId: number = (decodedToken as jwt.JwtPayload).userId;
-
-    const data: History = await this.s3Service.uploadFile(file, userId);
-
-    return await this.playlistsRepository.create(createPlaylistDto, data);
+    return await this.playlistsRepository.create(createPlaylistDto, userId);
   }
 
   async findAll(
@@ -41,13 +30,37 @@ export class PlaylistsService {
     return await this.playlistsRepository.findOne(id);
   }
 
+  async getPersonal(userId: number): Promise<Playlist[]> {
+    return await this.playlistsRepository.getPersonal(userId);
+  }
+
   async update(
     id: number,
     updatePlaylistDto: UpdatePlaylistDto,
+    userId: number,
   ): Promise<Playlist> {
+    const playlist: Playlist = await this.playlistsRepository.findOne(id);
+    if (!playlist) {
+      throw new BadRequestException('playlist not found');
+    }
+
+    if (playlist.userId !== userId) {
+      throw new BadRequestException(
+        'You have no permission to update playlist',
+      );
+    }
+
+    if (updatePlaylistDto.musics && updatePlaylistDto.musics?.length) {
+      const musics: Music[] = [];
+      for (const music of musics) {
+        const newMusic: Music = new Music();
+        newMusic.id = music.id;
+      }
+      playlist.musics = musics;
+    }
+
     return await this.playlistsRepository.update(id, updatePlaylistDto);
   }
-
   async remove(id: number): Promise<DeleteResult> {
     return await this.playlistsRepository.remove(id);
   }
