@@ -35,7 +35,7 @@ export class MusicsController {
   async create(
     @UploadedFile(
       new ParseFilePipeBuilder()
-        .addFileTypeValidator({ fileType: 'mp4' })
+        .addFileTypeValidator({ fileType: 'audio/mpeg' })
         .addMaxSizeValidator({ maxSize: 50000 * 10000 * 1000 })
         .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
     )

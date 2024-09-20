@@ -1,10 +1,13 @@
+import { User } from 'src/users/entities/users.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -24,6 +27,13 @@ export class Playlist {
   @ManyToMany(() => Music, (music) => music.playlists)
   @JoinTable()
   musics: Music[];
+
+  @ManyToOne(() => User, (user) => user.playlists)
+  @JoinColumn({ name: 'userId' })
+  user!: User;
+
+  @Column()
+  userId!: number;
 
   @CreateDateColumn()
   createdAt: Date;

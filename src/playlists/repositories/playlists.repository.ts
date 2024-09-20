@@ -14,10 +14,14 @@ export class PlaylistsRepository {
     private readonly playlistRepository: Repository<Playlist>,
   ) {}
 
-  async create(createPlaylistDto: CreatePlaylistDto): Promise<Playlist> {
-    const playlist: Playlist =
-      this.playlistRepository.create(createPlaylistDto);
-
+  async create(
+    createPlaylistDto: CreatePlaylistDto,
+    userId: number,
+  ): Promise<Playlist> {
+    const playlist: Playlist = this.playlistRepository.create({
+      ...createPlaylistDto,
+      userId,
+    });
     const { musicIds = [] } = createPlaylistDto;
 
     playlist.musics = this.createMusics(musicIds);
@@ -60,6 +64,10 @@ export class PlaylistsRepository {
       .leftJoinAndSelect('playlist.musics', 'musics')
       .where('playlist.id= :id', { id })
       .getOne();
+  }
+
+  async getPersonal(userId: number): Promise<Playlist[]> {
+    return await this.playlistRepository.find({ where: { userId } });
   }
 
   async update(

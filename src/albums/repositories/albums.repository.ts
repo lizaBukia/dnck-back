@@ -33,8 +33,9 @@ export class AlbumsRepository {
       .createQueryBuilder('album')
       .leftJoinAndSelect('album.musics', 'musics')
       .leftJoinAndSelect('album.artists', 'artists')
-      .leftJoinAndSelect('musics.statistics', 'statistics');
-
+      .leftJoinAndSelect('musics.statistics', 'statistics')
+      .leftJoinAndSelect('musics.history', 'history')
+      .leftJoinAndSelect('albums.history', 'history2');
     if (searchAlbumQueryDto?.search) {
       query.where('album.name LIKE :search', {
         search: `%${searchAlbumQueryDto.search}%`,

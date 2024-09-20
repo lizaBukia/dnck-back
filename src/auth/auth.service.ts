@@ -1,13 +1,16 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import * as dotenvs from 'dotenv';
 import { User } from '../users/entities/users.entity';
 import { UsersRepository } from '../users/repositories/users.repository';
-import { jwtConstants } from './auth.constants';
 import { LoginDto } from './dto/auth.login.dto';
 import { SignUpDto } from './dto/signUp.dto';
+import { RoleEnum } from './enum/user.role';
 import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
 import { LoginInterface } from './interfaces/login.response';
+
+dotenvs.config();
 
 @Injectable()
 export class AuthService {
@@ -39,7 +42,7 @@ export class AuthService {
       });
       return user;
     } catch (err) {
-      throw new BadRequestException();
+      throw new BadRequestException(err);
     }
   }
 
@@ -48,19 +51,23 @@ export class AuthService {
 
     const user: User | null = await this.usersRepository.findEmail(email);
 
+    if (!user) {
+      throw new BadRequestException('Invalid email or password');
+    }
     const isPasswordCorrect: boolean =
       user && (await bcrypt.compare(password, user.password));
 
+    if (!isPasswordCorrect) {
+      throw new BadRequestException('Invalid email or password');
+    }
     if (isPasswordCorrect) {
       const payload: JwtPayloadInterface = {
-        email: user.email,
-        password: user.password,
-        role: user.role,
-        userId: user.id,
+        role: user.role === 'user' ? RoleEnum.User : RoleEnum.Admin,
+        id: user.id,
       };
       return {
         accessToken: await this.jwtService.signAsync(payload, {
-          secret: jwtConstants.secret,
+          secret: process.env.JWT_SECRET,
         }),
       };
     }

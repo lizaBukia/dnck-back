@@ -53,9 +53,7 @@ export class ArtistsRepository {
 
     const res: ArtistEntity[] = await query.getMany();
 
-    if (
-      searchQueryDto?.top
-    ) {
+    if (searchQueryDto?.top) {
       for (const artist of res) {
         for (const album of artist.albums) {
           for (const music of album.musics) {
@@ -104,7 +102,14 @@ export class ArtistsRepository {
   }
 
   findOne(id: number): Promise<ArtistEntity> {
-    return this.artistsRepository.findOne({ where: { id: id } });
+    return this.artistsRepository
+      .createQueryBuilder('artist')
+      .leftJoinAndSelect('artist.albums', 'albums')
+      .leftJoinAndSelect('albums.history', 'albumsHistory')
+      .leftJoinAndSelect('albums.musics', 'musics')
+      .leftJoinAndSelect('musics.history', 'musicsHistory')
+      .where('artist.id = :id', { id })
+      .getOne();
   }
 
   async update(

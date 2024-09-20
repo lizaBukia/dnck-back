@@ -31,8 +31,8 @@ export class MusicsRepository {
       .leftJoinAndSelect('musics.album', 'album')
       .leftJoinAndSelect('album.artists', 'artist')
       .leftJoinAndSelect('musics.history', 'history')
-      .leftJoinAndSelect('musics.statistics', 'statistics');
-
+      .leftJoinAndSelect('musics.statistics', 'statistics')
+      .leftJoinAndSelect('album.history', 'history2');
     if (search?.search) {
       query.where('musics.name LIKE :search', { search: `%${search}%` });
     }
