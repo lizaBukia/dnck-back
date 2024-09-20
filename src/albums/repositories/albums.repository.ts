@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as dayjs from 'dayjs';
 import { History } from 'src/history/entity/history.entity';
 import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import {
@@ -32,22 +33,7 @@ export class AlbumsRepository {
       .createQueryBuilder('album')
       .leftJoinAndSelect('album.musics', 'musics')
       .leftJoinAndSelect('album.artists', 'artists')
-      .leftJoin(
-        (subQuery) => {
-          return subQuery
-            .select('musics.albumId', 'albumId')
-            .addSelect('COUNT(statistics.musicId)', 'totalListenings')
-            .from('music', 'musics')
-            .leftJoin('musics.statistics', 'statistics')
-            .groupBy('musics.albumId');
-        },
-        'albumListenings',
-        'albumListenings.albumId = album.id',
-      )
-      .addSelect(
-        'COALESCE(albumListenings.totalListenings, 0)',
-        'totalListenings',
-      );
+      .leftJoinAndSelect('musics.statistics', 'statistics');
 
     if (searchAlbumQueryDto?.search) {
       query.where('album.name LIKE :search', {
@@ -55,12 +41,46 @@ export class AlbumsRepository {
       });
     }
 
-    query.orderBy('totalListenings', 'DESC');
-
     if (searchAlbumQueryDto?.limit) {
       query.limit(searchAlbumQueryDto.limit);
     }
-    return await query.getRawMany();
+
+    const res: Album[] = await query.getMany();
+
+    if (searchAlbumQueryDto?.top) {
+      for (const album of res) {
+        for (const music of album.musics) {
+          music.statistics.filter((statistic) => {
+            (dayjs(statistic.createdAt).isAfter(
+              searchAlbumQueryDto.startDate,
+            ) ||
+              dayjs(statistic.createdAt).isSame(
+                searchAlbumQueryDto.startDate,
+              )) &&
+              (dayjs(statistic.createdAt).isBefore(
+                searchAlbumQueryDto.endDate,
+              ) ||
+                dayjs(statistic.createdAt).isSame(searchAlbumQueryDto.endDate));
+          });
+        }
+
+        const sortedAlbums: Album[] = res.sort((a, b) => {
+          const totalStatisticsA: number = a.musics.reduce(
+            (sum, music) => sum + music.statistics.length,
+            0,
+          );
+          const totalStatisticsB: number = b.musics.reduce(
+            (sum, music) => sum + music.statistics.length,
+            0,
+          );
+
+          return totalStatisticsB - totalStatisticsA;
+        });
+
+        return sortedAlbums;
+      }
+    }
+    return res;
   }
 
   async findOne(id: number): Promise<Album> {

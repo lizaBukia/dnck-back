@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as dayjs from 'dayjs';
 import { History } from 'src/history/entity/history.entity';
 import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
@@ -30,20 +31,34 @@ export class MusicsRepository {
       .leftJoinAndSelect('musics.album', 'album')
       .leftJoinAndSelect('album.artists', 'artist')
       .leftJoinAndSelect('musics.history', 'history')
-      .leftJoin('musics.statistics', 'statistics');
+      .leftJoinAndSelect('musics.statistics', 'statistics');
 
-    if (search.search) {
+    if (search?.search) {
       query.where('musics.name LIKE :search', { search: `%${search}%` });
     }
 
-    query
-      .groupBy('musics.id, album.id, artist.id, history.id')
-      .orderBy('COUNT(statistics.musicId)', 'DESC');
-    if (search.limit) {
+    if (search?.limit) {
       query.limit(search.limit);
     }
 
-    return await query.getMany();
+    const res: Music[] = await query.getMany();
+
+    if (search?.startDate && search?.endDate && search?.top) {
+      for (const music of res) {
+        music.statistics.filter((statistic) => {
+          return (
+            (dayjs(statistic.createdAt).isAfter(search.startDate) ||
+              dayjs(statistic.createdAt).isSame(search.startDate)) &&
+            (dayjs(statistic.createdAt).isBefore(search.endDate) ||
+              dayjs(statistic.createdAt).isSame(search.endDate))
+          );
+        });
+      }
+
+      res.sort((a, b) => b.statistics.length - a.statistics.length);
+    }
+
+    return res;
   }
 
   async findOne(id: number): Promise<Music> {

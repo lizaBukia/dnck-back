@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as dayjs from 'dayjs';
 import { Album } from 'src/albums/entities/album.entity';
 import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
@@ -38,22 +39,7 @@ export class ArtistsRepository {
       .leftJoinAndSelect('artist.albums', 'album')
       .leftJoinAndSelect('album.musics', 'musics')
       .leftJoinAndSelect('album.artists', 'artists')
-      .leftJoin(
-        (subQuery) => {
-          return subQuery
-            .select('musics.albumId', 'albumId')
-            .addSelect('COUNT(statistics.musicId)', 'totalListenings')
-            .from('music', 'musics')
-            .leftJoin('musics.statistics', 'statistics')
-            .groupBy('musics.albumId');
-        },
-        'albumListenings',
-        'albumListenings.albumId = album.id',
-      )
-      .addSelect(
-        'COALESCE(albumListenings.totalListenings, 0)',
-        'totalListenings',
-      );
+      .leftJoinAndSelect('musics.statistics', 'statistics');
 
     if (searchQueryDto?.search) {
       query.where(
@@ -61,13 +47,62 @@ export class ArtistsRepository {
         { search: `%${searchQueryDto.search}%` },
       );
     }
-
-    query.orderBy('totalListenings', 'DESC');
-
     if (searchQueryDto?.limit) {
       query.limit(searchQueryDto.limit);
     }
-    return await query.getMany(); 
+
+    const res: ArtistEntity[] = await query.getMany();
+
+    if (
+      searchQueryDto?.startDate &&
+      searchQueryDto?.endDate &&
+      searchQueryDto?.top
+    ) {
+      for (const artist of res) {
+        for (const album of artist.albums) {
+          for (const music of album.musics) {
+            music.statistics.filter((statistic) => {
+              return (
+                (dayjs(statistic.createdAt).isAfter(searchQueryDto.startDate) ||
+                  dayjs(statistic.createdAt).isSame(
+                    searchQueryDto.startDate,
+                  )) &&
+                (dayjs(statistic.createdAt).isBefore(searchQueryDto.endDate) ||
+                  dayjs(statistic.createdAt).isSame(searchQueryDto.endDate))
+              );
+            });
+          }
+        }
+      }
+
+      const sortedArtists: ArtistEntity[] = res.sort((a, b) => {
+        const totalStatisticsA: number = a.albums.reduce((sum, album) => {
+          return (
+            sum +
+            album.musics.reduce(
+              (musicSum, music) => musicSum + music.statistics.length,
+              0,
+            )
+          );
+        }, 0);
+
+        const totalStatisticsB: number = b.albums.reduce((sum, album) => {
+          return (
+            sum +
+            album.musics.reduce(
+              (musicSum, music) => musicSum + music.statistics.length,
+              0,
+            )
+          );
+        }, 0);
+
+        return totalStatisticsB - totalStatisticsA;
+      });
+
+      return sortedArtists;
+    }
+
+    return res;
   }
 
   findOne(id: number): Promise<ArtistEntity> {
@@ -84,5 +119,24 @@ export class ArtistsRepository {
 
   remove(id: number): Promise<DeleteResult> {
     return this.artistsRepository.softDelete(id);
+  }
+
+  private _getTopArtists(): void {
+    // .leftJoin(
+    //         (subQuery) => {
+    //           return subQuery
+    //             .select('musics.albumId', 'albumId')
+    //             .addSelect('COUNT(statistics.musicId)', 'totalListenings')
+    //             .from('music', 'musics')
+    //             .leftJoin('musics.statistics', 'statistics')
+    //             .groupBy('musics.albumId');
+    //         },
+    //         'albumListenings',
+    //         'albumListenings.albumId = album.id',
+    //       )
+    //       .addSelect(
+    //         'COALESCE(albumListenings.totalListenings, 0)',
+    //         'totalListenings',
+    //       );
   }
 }
