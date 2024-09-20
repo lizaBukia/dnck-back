@@ -49,7 +49,7 @@ export class PlaylistsRepository {
   async findAll(search?: string): Promise<Playlist[]> {
     const query: SelectQueryBuilder<Playlist> = await this.playlistRepository
       .createQueryBuilder('playlist')
-      .leftJoinAndSelect('playlist.musics', 'musics')
+      .leftJoinAndSelect('playlist.musics', 'musics');
 
     if (search) {
       query.where('playlist.title LIKE :search', { search: `%${search}%` });
