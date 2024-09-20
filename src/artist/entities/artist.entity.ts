@@ -1,3 +1,4 @@
+import { History } from 'src/history/entity/history.entity';
 import {
   Column,
   CreateDateColumn,
@@ -10,7 +11,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Album } from '../../albums/entities/album.entity';
-import { History } from 'src/history/entity/history.entity';
 
 @Entity()
 export class ArtistEntity {
@@ -30,7 +30,7 @@ export class ArtistEntity {
   albums: Album[];
 
   @ManyToOne(() => History)
-  history:History
+  history: History;
 
   @CreateDateColumn()
   createdAt: Date;

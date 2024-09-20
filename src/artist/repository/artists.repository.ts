@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Album } from 'src/albums/entities/album.entity';
+import { History } from 'src/history/entity/history.entity';
 import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateArtistDto } from '../dto/create-artist.dto';
 import { UpdateArtistDto } from '../dto/update-artist.dto';
 import { ArtistEntity } from '../entities/artist.entity';
-import { History } from 'src/history/entity/history.entity';
 
 @Injectable()
 export class ArtistsRepository {
@@ -14,13 +14,16 @@ export class ArtistsRepository {
     private artistsRepository: Repository<ArtistEntity>,
   ) {}
 
-  async create(createArtistDto: CreateArtistDto,data:History): Promise<ArtistEntity> {
+  async create(
+    createArtistDto: CreateArtistDto,
+    data: History,
+  ): Promise<ArtistEntity> {
     const newArtist: ArtistEntity = new ArtistEntity();
     newArtist.biography = createArtistDto.biography;
     newArtist.firstName = createArtistDto.firstName;
     newArtist.lastName = createArtistDto.lastName;
-    newArtist.albums = []
-    newArtist.history = data
+    newArtist.albums = [];
+    newArtist.history = data;
     const araayOfAlbums: Array<Album> = [];
     for (const albumId of createArtistDto.albumId) {
       const album: Album = new Album();
@@ -38,7 +41,7 @@ export class ArtistsRepository {
       .createQueryBuilder('artist')
       .leftJoinAndSelect('artist.albums', 'album')
       .leftJoinAndSelect('album.musics', 'musics')
-      .leftJoinAndSelect('artist.history', 'history')
+      .leftJoinAndSelect('artist.history', 'history');
     if (search) {
       query.where(
         "CONCAT(artist.firstName, ' ', artist.lastName) LIKE :search",
