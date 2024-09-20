@@ -51,6 +51,8 @@ export class AlbumsController {
   @Roles(RoleEnum.User, RoleEnum.Admin)
   @Get()
   async findAll(@Query() query: SearchAlbumQueryDto): Promise<Album[]> {
+    console.log('ok');
+
     return await this.albumService.findAll(query);
   }
   @Roles(RoleEnum.Admin, RoleEnum.User)
@@ -58,14 +60,18 @@ export class AlbumsController {
   async findOne(@Param('id') id: string): Promise<Album> {
     return await this.albumService.findOne(Number(id));
   }
+
   @Roles(RoleEnum.Admin)
+  @UseInterceptors(FileInterceptor('file'))
   @Put(':id')
   async update(
     @Param('id') id: string,
     @Body() updateAlbumDto: UpdateAlbumDto,
+    @UploadedFile('file') file: File,
   ): Promise<UpdateResult> {
-    return await this.albumService.update(Number(id), updateAlbumDto);
+    return await this.albumService.update(Number(id), updateAlbumDto, file);
   }
+
   @Roles(RoleEnum.Admin)
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<UpdateResult> {

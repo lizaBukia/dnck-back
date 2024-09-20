@@ -49,7 +49,14 @@ export class ArtistsRepository {
   }
 
   findOne(id: number): Promise<ArtistEntity> {
-    return this.artistsRepository.findOne({ where: { id: id } });
+    return this.artistsRepository
+      .createQueryBuilder('artist')
+      .leftJoinAndSelect('artist.albums', 'albums')
+      .leftJoinAndSelect('albums.history', 'albumsHistory')
+      .leftJoinAndSelect('albums.musics', 'musics')
+      .leftJoinAndSelect('musics.history', 'musicsHistory')
+      .where('artist.id = :id', { id })
+      .getOne();
   }
 
   async update(

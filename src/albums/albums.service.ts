@@ -40,6 +40,7 @@ export class AlbumsService {
   async update(
     id: number,
     updateAlbumDto: UpdateAlbumDto,
+    _file: File,
   ): Promise<UpdateResult> {
     return await this.albumsRepository.update(id, updateAlbumDto);
   }
