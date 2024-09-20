@@ -54,8 +54,6 @@ export class ArtistsRepository {
     const res: ArtistEntity[] = await query.getMany();
 
     if (
-      searchQueryDto?.startDate &&
-      searchQueryDto?.endDate &&
       searchQueryDto?.top
     ) {
       for (const artist of res) {

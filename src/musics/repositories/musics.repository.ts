@@ -43,7 +43,7 @@ export class MusicsRepository {
 
     const res: Music[] = await query.getMany();
 
-    if (search?.startDate && search?.endDate && search?.top) {
+    if (search?.top) {
       for (const music of res) {
         music.statistics.filter((statistic) => {
           return (
