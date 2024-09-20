@@ -8,6 +8,7 @@ import { LoginDto } from './dto/auth.login.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
 import { LoginInterface } from './interfaces/login.response';
+import { RoleEnum } from './enum/user.role';
 
 dotenvs.config();
 
@@ -16,7 +17,8 @@ export class AuthService {
   constructor(
     private usersRepository: UsersRepository,
     private jwtService: JwtService,
-  ) {}
+  ) {
+  }
 
   async register(signUpDto: SignUpDto): Promise<User> {
     const { email, password, confirmPassword }: SignUpDto = signUpDto;
@@ -61,7 +63,7 @@ export class AuthService {
     }
     if (isPasswordCorrect) {
       const payload: JwtPayloadInterface = {
-        role: user.role,
+        role: user.role === 'user' ? RoleEnum.User : RoleEnum.Admin,
         id: user.id,
       };
 

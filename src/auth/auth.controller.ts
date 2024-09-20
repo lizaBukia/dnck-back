@@ -15,6 +15,7 @@ export class AuthController {
   login(@Body() loginDto: LoginDto): Promise<LoginInterface> {
     return this.authsService.login(loginDto);
   }
+
   @Public()
   @Post('register')
   register(@Body() signUpDto: SignUpDto): Promise<User> {
