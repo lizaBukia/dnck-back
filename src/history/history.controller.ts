@@ -7,8 +7,6 @@ import { HistoryService } from './history.service';
 export class HistoryController {
   constructor(private historyService: HistoryService) {}
 
-
-
   async createData(createDataDto: CreateDataDto): Promise<History> {
     return await this.historyService.createData(createDataDto);
   }

@@ -1,13 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import * as dotenvs from 'dotenv';
 import { User } from '../users/entities/users.entity';
 import { UsersRepository } from '../users/repositories/users.repository';
 import { LoginDto } from './dto/auth.login.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
 import { LoginInterface } from './interfaces/login.response';
-import * as dotenvs from 'dotenv'
 
 dotenvs.config();
 
@@ -51,13 +51,13 @@ export class AuthService {
     const user: User | null = await this.usersRepository.findEmail(email);
 
     if (!user) {
-      throw new BadRequestException('email is not incorrect');
+      throw new BadRequestException('Invalid email or password');
     }
     const isPasswordCorrect: boolean =
       user && (await bcrypt.compare(password, user.password));
 
     if (!isPasswordCorrect) {
-      throw new BadRequestException('password is not correct');
+      throw new BadRequestException('Invalid email or password');
     }
     if (isPasswordCorrect) {
       const payload: JwtPayloadInterface = {

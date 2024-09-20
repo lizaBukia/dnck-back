@@ -40,6 +40,9 @@ export class PlaylistsService {
     userId: number,
   ): Promise<Playlist> {
     const playlist: Playlist = await this.playlistsRepository.findOne(id);
+    if (!playlist) {
+      throw new BadRequestException('playlist not found');
+    }
 
     if (playlist.userId !== userId) {
       throw new BadRequestException(
@@ -47,7 +50,7 @@ export class PlaylistsService {
       );
     }
 
-    if (playlist?.musics?.length) {
+    if (updatePlaylistDto.musics && updatePlaylistDto.musics?.length) {
       const musics: Music[] = [];
       for (const music of musics) {
         const newMusic: Music = new Music();
@@ -58,7 +61,6 @@ export class PlaylistsService {
 
     return await this.playlistsRepository.update(id, updatePlaylistDto);
   }
-
   async remove(id: number): Promise<DeleteResult> {
     return await this.playlistsRepository.remove(id);
   }
