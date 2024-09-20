@@ -10,7 +10,7 @@ import { RoleEnum } from './enum/user.role';
 import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
 import { LoginInterface } from './interfaces/login.response';
 
-dotenvs.config();
+dotenvs.config({path: '.env'});
 
 @Injectable()
 export class AuthService {

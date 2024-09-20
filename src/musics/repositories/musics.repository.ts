@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as dayjs from 'dayjs';
 import { History } from 'src/history/entity/history.entity';
 import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
@@ -25,42 +24,35 @@ export class MusicsRepository {
     return await this.musicsRepository.save(newMusic);
   }
 
-  async findAll(search?: SearchQueryDto): Promise<Music[]> {
+  
+async findAll(search?: SearchQueryDto): Promise<Music[]> {
+  if (search.topDate && !search.search){
     const query: SelectQueryBuilder<Music> = this.musicsRepository
       .createQueryBuilder('musics')
       .leftJoinAndSelect('musics.album', 'album')
       .leftJoinAndSelect('album.artists', 'artist')
       .leftJoinAndSelect('musics.history', 'history')
-      .leftJoinAndSelect('musics.statistics', 'statistics')
-      .leftJoinAndSelect('album.history', 'history2');
-    if (search?.search) {
-      query.where('musics.name LIKE :search', { search: `%${search}%` });
-    }
-
-    if (search?.limit) {
+      .leftJoin('musics.statistics', 'statistics', 'statistics.createdAt >= :topDate', { topDate: search.topDate });
+  
+    query
+      .groupBy('musics.id, album.id, artist.id, history.id')
+      .orderBy('COUNT(statistics.musicId)', 'DESC');
+    
+    if (search.limit) {
       query.limit(search.limit);
     }
-
-    const res: Music[] = await query.getMany();
-
-    if (search?.top) {
-      for (const music of res) {
-        music.statistics.filter((statistic) => {
-          return (
-            (dayjs(statistic.createdAt).isAfter(search.startDate) ||
-              dayjs(statistic.createdAt).isSame(search.startDate)) &&
-            (dayjs(statistic.createdAt).isBefore(search.endDate) ||
-              dayjs(statistic.createdAt).isSame(search.endDate))
-          );
-        });
-      }
-
-      res.sort((a, b) => b.statistics.length - a.statistics.length);
-    }
-
-    return res;
+    return await query.getMany();
   }
-
+  const query: SelectQueryBuilder<Music> = this.musicsRepository
+    .createQueryBuilder('musics')
+    .leftJoinAndSelect('musics.album', 'album')
+    .leftJoinAndSelect('album.artists', 'artist')
+    .leftJoinAndSelect('musics.history', 'history')
+  if (search.search){
+      query.where('musics.name LIKE :search', { search: `%${search.search}%` })
+  }
+  return await query.getMany();
+}
   async findOne(id: number): Promise<Music> {
     return await this.musicsRepository.findOne({
       where: { id },

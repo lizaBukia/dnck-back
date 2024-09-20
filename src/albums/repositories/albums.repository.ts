@@ -33,55 +33,36 @@ export class AlbumsRepository {
       .createQueryBuilder('album')
       .leftJoinAndSelect('album.musics', 'musics')
       .leftJoinAndSelect('album.artists', 'artists')
-      .leftJoinAndSelect('musics.statistics', 'statistics')
-      .leftJoinAndSelect('musics.history', 'history')
-      .leftJoinAndSelect('albums.history', 'history2');
+    if (searchAlbumQueryDto?.topDate && !searchAlbumQueryDto?.search) {
+      query.leftJoin(
+        (subQuery) => {
+          return subQuery
+            .select('musics.albumId', 'albumId')
+            .addSelect('COUNT(statistics.musicId)', 'totalListenings')
+            .from('music', 'musics')
+            .leftJoin('musics.statistics', 'statistics')
+            .where('statistics.createdAt >= :topDate', {topDate: searchAlbumQueryDto.topDate})
+            .groupBy('musics.albumId');
+        },
+        'albumListenings',
+        'albumListenings.albumId = album.id',
+      )
+      .addSelect(
+        'COALESCE(albumListenings.totalListenings, 0)',
+        'totalListenings',
+      )
+      query.orderBy('totalListenings', 'DESC');
+    }
+
     if (searchAlbumQueryDto?.search) {
       query.where('album.name LIKE :search', {
         search: `%${searchAlbumQueryDto.search}%`,
       });
     }
-
     if (searchAlbumQueryDto?.limit) {
       query.limit(searchAlbumQueryDto.limit);
     }
-
-    const res: Album[] = await query.getMany();
-
-    if (searchAlbumQueryDto?.top) {
-      for (const album of res) {
-        for (const music of album.musics) {
-          music.statistics.filter((statistic) => {
-            (dayjs(statistic.createdAt).isAfter(
-              searchAlbumQueryDto.startDate,
-            ) ||
-              dayjs(statistic.createdAt).isSame(
-                searchAlbumQueryDto.startDate,
-              )) &&
-              (dayjs(statistic.createdAt).isBefore(
-                searchAlbumQueryDto.endDate,
-              ) ||
-                dayjs(statistic.createdAt).isSame(searchAlbumQueryDto.endDate));
-          });
-        }
-
-        const sortedAlbums: Album[] = res.sort((a, b) => {
-          const totalStatisticsA: number = a.musics.reduce(
-            (sum, music) => sum + music.statistics.length,
-            0,
-          );
-          const totalStatisticsB: number = b.musics.reduce(
-            (sum, music) => sum + music.statistics.length,
-            0,
-          );
-
-          return totalStatisticsB - totalStatisticsA;
-        });
-
-        return sortedAlbums;
-      }
-    }
-    return res;
+    return await query.getMany();
   }
 
   async findOne(id: number): Promise<Album> {

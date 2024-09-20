@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as dayjs from 'dayjs';
 import { Album } from 'src/albums/entities/album.entity';
 import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
@@ -38,67 +37,40 @@ export class ArtistsRepository {
       .createQueryBuilder('artist')
       .leftJoinAndSelect('artist.albums', 'album')
       .leftJoinAndSelect('album.musics', 'musics')
-      .leftJoinAndSelect('album.artists', 'artists')
-      .leftJoinAndSelect('musics.statistics', 'statistics');
-
+      .leftJoinAndSelect('album.artists', 'artists');
+    if (searchQueryDto?.topDate && !searchQueryDto?.search) {
+      query
+        .leftJoin(
+          (subQuery) => {
+            return subQuery
+              .select('musics.albumId', 'albumId')
+              .addSelect('COUNT(statistics.musicId)', 'totalListenings')
+              .from('music', 'musics')
+              .leftJoin('musics.statistics', 'statistics')
+              .groupBy('musics.albumId')
+              .where('statistics.createdAt >= :topDate', { topDate: searchQueryDto.topDate });
+          },
+          'albumListenings',
+          'albumListenings.albumId = album.id',
+        )
+        .addSelect(
+          'COALESCE(albumListenings.totalListenings, 0)',
+          'totalListenings',
+        );
+        query.orderBy('totalListenings', 'DESC');
+    }
     if (searchQueryDto?.search) {
       query.where(
         "CONCAT(artist.firstName, ' ', artist.lastName) LIKE :search",
         { search: `%${searchQueryDto.search}%` },
       );
     }
+
+
     if (searchQueryDto?.limit) {
       query.limit(searchQueryDto.limit);
     }
-
-    const res: ArtistEntity[] = await query.getMany();
-
-    if (searchQueryDto?.top) {
-      for (const artist of res) {
-        for (const album of artist.albums) {
-          for (const music of album.musics) {
-            music.statistics.filter((statistic) => {
-              return (
-                (dayjs(statistic.createdAt).isAfter(searchQueryDto.startDate) ||
-                  dayjs(statistic.createdAt).isSame(
-                    searchQueryDto.startDate,
-                  )) &&
-                (dayjs(statistic.createdAt).isBefore(searchQueryDto.endDate) ||
-                  dayjs(statistic.createdAt).isSame(searchQueryDto.endDate))
-              );
-            });
-          }
-        }
-      }
-
-      const sortedArtists: ArtistEntity[] = res.sort((a, b) => {
-        const totalStatisticsA: number = a.albums.reduce((sum, album) => {
-          return (
-            sum +
-            album.musics.reduce(
-              (musicSum, music) => musicSum + music.statistics.length,
-              0,
-            )
-          );
-        }, 0);
-
-        const totalStatisticsB: number = b.albums.reduce((sum, album) => {
-          return (
-            sum +
-            album.musics.reduce(
-              (musicSum, music) => musicSum + music.statistics.length,
-              0,
-            )
-          );
-        }, 0);
-
-        return totalStatisticsB - totalStatisticsA;
-      });
-
-      return sortedArtists;
-    }
-
-    return res;
+    return await query.getMany();
   }
 
   findOne(id: number): Promise<ArtistEntity> {

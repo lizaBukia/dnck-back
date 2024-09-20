@@ -11,13 +11,5 @@ export class SearchQueryDto {
 
   @IsOptional()
   @IsString()
-  startDate?: string;
-
-  @IsOptional()
-  @IsString()
-  endDate?: string;
-
-  @IsOptional()
-  @IsString()
-  top?: boolean;
+  topDate?: Date;
 }
