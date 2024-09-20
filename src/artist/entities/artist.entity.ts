@@ -5,10 +5,12 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Album } from '../../albums/entities/album.entity';
+import { History } from 'src/history/entity/history.entity';
 
 @Entity()
 export class ArtistEntity {
@@ -26,6 +28,9 @@ export class ArtistEntity {
   @ManyToMany(() => Album, (album) => album.artists, { eager: true })
   @JoinTable({ name: 'artists_albums' })
   albums: Album[];
+
+  @ManyToOne(() => History)
+  history:History
 
   @CreateDateColumn()
   createdAt: Date;
