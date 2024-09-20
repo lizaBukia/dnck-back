@@ -48,7 +48,9 @@ export class ArtistsRepository {
               .from('music', 'musics')
               .leftJoin('musics.statistics', 'statistics')
               .groupBy('musics.albumId')
-              .where('statistics.createdAt >= :topDate', { topDate: searchQueryDto.topDate });
+              .where('statistics.createdAt >= :topDate', {
+                topDate: searchQueryDto.topDate,
+              });
           },
           'albumListenings',
           'albumListenings.albumId = album.id',
@@ -57,7 +59,7 @@ export class ArtistsRepository {
           'COALESCE(albumListenings.totalListenings, 0)',
           'totalListenings',
         );
-        query.orderBy('totalListenings', 'DESC');
+      query.orderBy('totalListenings', 'DESC');
     }
     if (searchQueryDto?.search) {
       query.where(
@@ -65,7 +67,6 @@ export class ArtistsRepository {
         { search: `%${searchQueryDto.search}%` },
       );
     }
-
 
     if (searchQueryDto?.limit) {
       query.limit(searchQueryDto.limit);

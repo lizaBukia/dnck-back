@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as dayjs from 'dayjs';
 import { History } from 'src/history/entity/history.entity';
 import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import {
@@ -32,25 +31,28 @@ export class AlbumsRepository {
     const query: SelectQueryBuilder<Album> = this.albumRepository
       .createQueryBuilder('album')
       .leftJoinAndSelect('album.musics', 'musics')
-      .leftJoinAndSelect('album.artists', 'artists')
+      .leftJoinAndSelect('album.artists', 'artists');
     if (searchAlbumQueryDto?.topDate && !searchAlbumQueryDto?.search) {
-      query.leftJoin(
-        (subQuery) => {
-          return subQuery
-            .select('musics.albumId', 'albumId')
-            .addSelect('COUNT(statistics.musicId)', 'totalListenings')
-            .from('music', 'musics')
-            .leftJoin('musics.statistics', 'statistics')
-            .where('statistics.createdAt >= :topDate', {topDate: searchAlbumQueryDto.topDate})
-            .groupBy('musics.albumId');
-        },
-        'albumListenings',
-        'albumListenings.albumId = album.id',
-      )
-      .addSelect(
-        'COALESCE(albumListenings.totalListenings, 0)',
-        'totalListenings',
-      )
+      query
+        .leftJoin(
+          (subQuery) => {
+            return subQuery
+              .select('musics.albumId', 'albumId')
+              .addSelect('COUNT(statistics.musicId)', 'totalListenings')
+              .from('music', 'musics')
+              .leftJoin('musics.statistics', 'statistics')
+              .where('statistics.createdAt >= :topDate', {
+                topDate: searchAlbumQueryDto.topDate,
+              })
+              .groupBy('musics.albumId');
+          },
+          'albumListenings',
+          'albumListenings.albumId = album.id',
+        )
+        .addSelect(
+          'COALESCE(albumListenings.totalListenings, 0)',
+          'totalListenings',
+        );
       query.orderBy('totalListenings', 'DESC');
     }
 
