@@ -68,7 +68,9 @@ export class PlaylistsService {
       throw new BadRequestException();
     }
     if (playlist.userId !== userId) {
-      throw new BadRequestException('You have no permission to remove playlist');
+      throw new BadRequestException(
+        'You have no permission to remove playlist',
+      );
     }
     return await this.playlistsRepository.remove(id);
   }
