@@ -37,6 +37,7 @@ export class PlaylistsController {
     return await this.playlistsService.findAll(query);
   }
 
+  @Roles(RoleEnum.User, RoleEnum.Admin)
   @Get('personal')
   async getPersonalPlaylists(
     @Req() req: { user: { id: number } },
