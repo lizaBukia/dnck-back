@@ -53,8 +53,8 @@ export class AlbumsRepository {
     _file: Express.Multer.File,
   ): Promise<UpdateResult> {
     if (_file) {
-      const file:History = await this.historyRepository.findOne(id);
-      const newLocation:string = await this.s3Service.uploadMusic(_file);
+      const file: History = await this.historyRepository.findOne(id);
+      const newLocation: string = await this.s3Service.uploadMusic(_file);
       file.location = newLocation;
       await this.historyRepository.save(file);
     }

@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Req,
@@ -11,6 +12,7 @@ import {
 import { DeleteResult } from 'typeorm';
 import { RoleEnum } from '../auth/enum/user.role';
 import { Roles } from '../auth/guard/roles.key';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import { User } from './entities/users.entity';
@@ -58,5 +60,17 @@ export class UsersController {
     @Req() req: { user: { id: number } },
   ): Promise<DeleteResult> {
     return await this.usersService.remove(req.user.id);
+  }
+  @Roles(RoleEnum.Admin)
+  @Patch('password/:id')
+  async changePassword(
+    @Param('id') id: string,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ): Promise<User> {
+    console.log(changePasswordDto, 'chenga');
+    return await this.usersService.changePassword(
+      Number(id),
+      changePasswordDto,
+    );
   }
 }
