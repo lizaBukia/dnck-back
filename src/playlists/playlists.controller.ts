@@ -37,6 +37,7 @@ export class PlaylistsController {
     return await this.playlistsService.findAll(query);
   }
 
+  @Roles(RoleEnum.User, RoleEnum.Admin)
   @Get('personal')
   async getPersonalPlaylists(
     @Req() req: { user: { id: number } },
@@ -64,9 +65,12 @@ export class PlaylistsController {
     );
   }
 
-  @Roles(RoleEnum.Admin)
+  @Roles(RoleEnum.Admin, RoleEnum.User)
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<DeleteResult> {
-    return await this.playlistsService.remove(Number(id));
+  async remove(
+    @Param('id') id: string,
+    @Req() req: { user: { id: number } },
+  ): Promise<DeleteResult> {
+    return await this.playlistsService.remove(Number(id), req.user.id);
   }
 }
