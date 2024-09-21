@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ArtistEntity } from 'src/artist/entities/artist.entity';
 import { History } from 'src/history/entity/history.entity';
 import { HistoryRepository } from 'src/history/repository/history.repository';
 import { S3Service } from 'src/storage/s3.service';
@@ -11,7 +12,6 @@ import {
 } from 'typeorm';
 import { CreateAlbumDto } from '../dto/create-album.dto';
 import { Album } from '../entities/album.entity';
-import { ArtistEntity } from 'src/artist/entities/artist.entity';
 @Injectable()
 export class AlbumsRepository {
   constructor(
@@ -22,17 +22,16 @@ export class AlbumsRepository {
   ) {}
 
   async create(data: CreateAlbumDto, historyData: History): Promise<Album> {
-    const artist:ArtistEntity = new ArtistEntity()
-    artist.id = data.artistId
+    const artist: ArtistEntity = new ArtistEntity();
+    artist.id = data.artistId;
     const newAlbum: Album = new Album();
     newAlbum.history = historyData;
     newAlbum.name = data.name;
     newAlbum.releaseDate = data.releaseDate;
-    newAlbum.artists = [artist]
-    await this.albumRepository.save(newAlbum)
-    console.log(newAlbum)
-    return newAlbum
-
+    newAlbum.artists = [artist];
+    await this.albumRepository.save(newAlbum);
+    console.log(newAlbum);
+    return newAlbum;
   }
 
   async findAll(search?: string): Promise<Album[]> {
