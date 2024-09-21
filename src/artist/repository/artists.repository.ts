@@ -59,7 +59,7 @@ export class ArtistsRepository {
     }
     if (searchQueryDto?.search) {
       query.where(
-        "CONCAT(artist.firstName, ' ', artist.lastName) LIKE :search",
+        "CONCAT(artist.firstName, ' ', artist.lastName) LIKE :search OR album.name LIKE :search OR musics.name LIKE :search",
         { search: `%${searchQueryDto.search}%` },
       );
     }
