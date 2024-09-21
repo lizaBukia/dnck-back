@@ -25,7 +25,6 @@ export class MusicsRepository {
   }
 
   async findAll(search?: SearchQueryDto): Promise<Music[]> {
-    
     if (search.topDate && !search.search) {
       const query: SelectQueryBuilder<Music> = this.musicsRepository
         .createQueryBuilder('musics')
@@ -53,7 +52,7 @@ export class MusicsRepository {
       .leftJoinAndSelect('musics.album', 'album')
       .leftJoinAndSelect('album.artists', 'artist')
       .leftJoinAndSelect('musics.history', 'history')
-      .leftJoinAndSelect('album.history','albumHistory')
+      .leftJoinAndSelect('album.history', 'albumHistory');
     if (search.search) {
       query.where('musics.name LIKE :search', { search: `%${search.search}%` });
     }

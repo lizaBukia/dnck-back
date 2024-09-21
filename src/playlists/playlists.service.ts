@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
-import { Music } from '../musics/entities/musics.entity';
 import { SearchQueryDto } from '../search/dto/create-search.dto';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
