@@ -23,15 +23,7 @@ export class ArtistsRepository {
     newArtist.biography = createArtistDto.biography;
     newArtist.firstName = createArtistDto.firstName;
     newArtist.lastName = createArtistDto.lastName;
-    newArtist.albums = [];
     newArtist.history = data;
-    const araayOfAlbums: Array<Album> = [];
-    for (const albumId of createArtistDto.albumId) {
-      const album: Album = new Album();
-      album.id = albumId;
-      araayOfAlbums.push(album);
-    }
-    newArtist.albums = araayOfAlbums;
     await this.artistsRepository.create(createArtistDto);
     await this.artistsRepository.save(newArtist);
     return newArtist;
