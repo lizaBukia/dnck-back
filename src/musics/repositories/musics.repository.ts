@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { History } from 'src/history/entity/history.entity';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateMusicDto } from '../dto/create-music.dto';
 import { UpdateMusicDto } from '../dto/update-music.dto';
@@ -23,19 +24,39 @@ export class MusicsRepository {
     return await this.musicsRepository.save(newMusic);
   }
 
-  async findAll(search?: string): Promise<Music[]> {
+  async findAll(search?: SearchQueryDto): Promise<Music[]> {
+    if (search.topDate && !search.search) {
+      const query: SelectQueryBuilder<Music> = this.musicsRepository
+        .createQueryBuilder('musics')
+        .leftJoinAndSelect('musics.album', 'album')
+        .leftJoinAndSelect('album.artists', 'artist')
+        .leftJoinAndSelect('musics.history', 'history')
+        .leftJoin(
+          'musics.statistics',
+          'statistics',
+          'statistics.createdAt >= :topDate',
+          { topDate: search.topDate },
+        );
+
+      query
+        .groupBy('musics.id, album.id, artist.id, history.id')
+        .orderBy('COUNT(statistics.musicId)', 'DESC');
+
+      if (search.limit) {
+        query.limit(search.limit);
+      }
+      return await query.getMany();
+    }
     const query: SelectQueryBuilder<Music> = this.musicsRepository
       .createQueryBuilder('musics')
       .leftJoinAndSelect('musics.album', 'album')
       .leftJoinAndSelect('album.artists', 'artist')
-      .leftJoinAndSelect('musics.history', 'history')
-      .leftJoinAndSelect('album.history', 'albumhistory');
-    if (search) {
-      query.where('musics.name LIKE :search', { search: `%${search}%` });
+      .leftJoinAndSelect('musics.history', 'history');
+    if (search.search) {
+      query.where('musics.name LIKE :search', { search: `%${search.search}%` });
     }
     return await query.getMany();
   }
-
   async findOne(id: number): Promise<Music> {
     return await this.musicsRepository.findOne({
       where: { id },

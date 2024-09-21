@@ -1,7 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
+import { Music } from '../musics/entities/musics.entity';
+import { SearchQueryDto } from '../search/dto/create-search.dto';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
-import { SearchPLaylistQueryDto } from './dto/search-playlist-query.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { Playlist } from './entities/playlist.entity';
 import { PlaylistsRepository } from './repositories/playlists.repository';
@@ -17,9 +18,7 @@ export class PlaylistsService {
     return await this.playlistsRepository.create(createPlaylistDto, userId);
   }
 
-  async findAll(
-    searchPLaylistQueryDto: SearchPLaylistQueryDto,
-  ): Promise<Playlist[]> {
+  async findAll(searchPLaylistQueryDto: SearchQueryDto): Promise<Playlist[]> {
     return await this.playlistsRepository.findAll(
       searchPLaylistQueryDto.search,
     );

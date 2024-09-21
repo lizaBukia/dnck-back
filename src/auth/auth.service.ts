@@ -65,7 +65,6 @@ export class AuthService {
         role: user.role === 'user' ? RoleEnum.User : RoleEnum.Admin,
         id: user.id,
       };
-
       return {
         accessToken: await this.jwtService.signAsync(payload, {
           secret: process.env.JWT_SECRET,

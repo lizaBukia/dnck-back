@@ -14,6 +14,7 @@ import { Music } from './musics/entities/musics.entity';
 import { MusicsModule } from './musics/musics.module';
 import { Playlist } from './playlists/entities/playlist.entity';
 import { PlaylistsModule } from './playlists/playlists.module';
+import { SearchModule } from './search/search.module';
 import { Statistic } from './statistics/entity/statistic.entity';
 import { StatisticsModule } from './statistics/statistics.module';
 import { StorageModule } from './storage/storage.module';
@@ -28,6 +29,7 @@ import { UsersModule } from './users/users.module';
     ArtistsModule,
     AlbumsModule,
     MusicsModule,
+    SearchModule,
     PlaylistsModule,
     AuthModule,
     StatisticsModule,

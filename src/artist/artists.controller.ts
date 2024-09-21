@@ -3,32 +3,53 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
+  ParseFilePipeBuilder,
   Post,
   Query,
+  Req,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Request } from 'express';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { DeleteResult } from 'typeorm';
 import { RoleEnum } from '../auth/enum/user.role';
 import { Roles } from '../auth/guard/roles.key';
 import { ArtistssService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
-import { SearchArtistQueryDto } from './dto/search-artist-query.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { ArtistEntity } from './entities/artist.entity';
 
 @Controller('artists')
 export class ArtistsController {
   constructor(private artistsService: ArtistssService) {}
+  @UseInterceptors(FileInterceptor('file'))
   @Roles(RoleEnum.Admin)
   @Post()
-  create(@Body() createArtistDto: CreateArtistDto): Promise<ArtistEntity> {
-    console.log(createArtistDto);
+  create(
+    @Body() createArtistDto: CreateArtistDto,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({ fileType: 'image' })
+        .addMaxSizeValidator({ maxSize: 50000 * 10000 })
+        .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
+    )
+    file: Express.Multer.File,
+    @Req() req: Request,
+  ): Promise<ArtistEntity> {
+    const [type, token] = req.headers.authorization.split(' ');
 
-    return this.artistsService.create(createArtistDto);
+    if (type !== 'Bearer') {
+      throw new Error('invalid token');
+    }
+    return this.artistsService.create(createArtistDto, file, token);
   }
   @Roles(RoleEnum.User, RoleEnum.Admin)
   @Get()
-  findAll(@Query() query: SearchArtistQueryDto): Promise<ArtistEntity[]> {
+  findAll(@Query() query: SearchQueryDto): Promise<ArtistEntity[]> {
     return this.artistsService.findAll(query);
   }
   @Roles(RoleEnum.User, RoleEnum.Admin)
