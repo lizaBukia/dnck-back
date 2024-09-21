@@ -57,6 +57,7 @@ export class MusicsRepository {
     }
     return await query.getMany();
   }
+
   async findOne(id: number): Promise<Music> {
     return await this.musicsRepository.findOne({
       where: { id },
