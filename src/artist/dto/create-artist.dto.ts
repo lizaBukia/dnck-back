@@ -1,4 +1,4 @@
-import { IsArray, IsNumber, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 export class CreateArtistDto {
   @IsString()
   firstName!: string;
@@ -8,8 +8,4 @@ export class CreateArtistDto {
 
   @IsString()
   biography!: string;
-
-  @IsArray()
-  @IsNumber({}, { each: true })
-  albumId: number[];
 }
