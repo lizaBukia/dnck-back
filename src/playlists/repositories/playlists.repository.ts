@@ -67,7 +67,11 @@ export class PlaylistsRepository {
   }
 
   async getPersonal(userId: number): Promise<Playlist[]> {
-    return await this.playlistRepository.find({ where: { userId } });
+    return await this.playlistRepository
+      .createQueryBuilder('playlist')
+      .leftJoinAndSelect('playlist.musics', 'musics')
+      .where('playlist.userId = :userId', { userId })
+      .getMany();
   }
 
   async update(
@@ -75,10 +79,6 @@ export class PlaylistsRepository {
     updatePlaylistDto: UpdatePlaylistDto,
   ): Promise<Playlist> {
     const { musicIds: newMusicIds, ...rest } = updatePlaylistDto;
-    const playlist: Playlist = await this.playlistRepository.findOneOrFail({
-      where: { id },
-      relations: ['musics'],
-    });
 
     await this.playlistRepository
       .createQueryBuilder()
@@ -88,11 +88,7 @@ export class PlaylistsRepository {
       .execute();
 
     if (newMusicIds?.length) {
-      await this.updatePlaylistMusics(
-        id,
-        newMusicIds,
-        playlist.musics.map((music) => music.id),
-      );
+      await this.updatePlaylistMusics(id, newMusicIds);
     }
     return await this.playlistRepository.findOne({
       where: { id },
@@ -104,15 +100,11 @@ export class PlaylistsRepository {
     return await this.playlistRepository.softDelete(id);
   }
 
-  async updatePlaylistMusics(
-    id: number,
-    newMusicIds: number[],
-    oldMusicIds: number[],
-  ): Promise<void> {
+  async updatePlaylistMusics(id: number, newMusicIds: number[]): Promise<void> {
     await this.playlistRepository
       .createQueryBuilder()
       .relation(Playlist, 'musics')
       .of(id)
-      .addAndRemove(newMusicIds, oldMusicIds);
+      .add(newMusicIds);
   }
 }
