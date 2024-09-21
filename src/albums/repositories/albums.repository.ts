@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { CreateAlbumDto } from '../dto/create-album.dto';
 import { Album } from '../entities/album.entity';
+import { ArtistEntity } from 'src/artist/entities/artist.entity';
 @Injectable()
 export class AlbumsRepository {
   constructor(
@@ -21,12 +22,17 @@ export class AlbumsRepository {
   ) {}
 
   async create(data: CreateAlbumDto, historyData: History): Promise<Album> {
+    const artist:ArtistEntity = new ArtistEntity()
+    artist.id = data.artistId
     const newAlbum: Album = new Album();
     newAlbum.history = historyData;
     newAlbum.name = data.name;
     newAlbum.releaseDate = data.releaseDate;
+    newAlbum.artists = [artist]
+    await this.albumRepository.save(newAlbum)
+    console.log(newAlbum)
+    return newAlbum
 
-    return await this.albumRepository.save(newAlbum);
   }
 
   async findAll(search?: string): Promise<Album[]> {
