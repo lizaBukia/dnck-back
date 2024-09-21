@@ -25,7 +25,7 @@ export class MusicsService {
   ): Promise<Music> {
     const decodedToken: string | jwt.JwtPayload = jwt.decode(token);
 
-    const userId: number = (decodedToken as jwt.JwtPayload).userId;
+    const userId: number = (decodedToken as jwt.JwtPayload).id;
 
     const data: History = await this.s3Service.uploadFile(file, userId);
 

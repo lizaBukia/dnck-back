@@ -13,4 +13,10 @@ export class HistoryRepository {
     const history: History = await this.historyRepository.create(createDataDto);
     return await this.historyRepository.save(history);
   }
+  async findOne(id: number): Promise<History> {
+    return await this.historyRepository.findOne({ where: { id } });
+  }
+  async save(createDataDto: CreateDataDto): Promise<History> {
+    return await this.historyRepository.save(createDataDto);
+  }
 }

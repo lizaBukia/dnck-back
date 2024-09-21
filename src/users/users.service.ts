@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import { User } from './entities/users.entity';
@@ -27,5 +28,11 @@ export class UsersService {
 
   async remove(id: number): Promise<DeleteResult> {
     return await this.usersRepository.remove(id);
+  }
+  async changePassword(
+    id: number,
+    changePasswordDto: ChangePasswordDto,
+  ): Promise<User> {
+    return await this.usersRepository.changePassword(id, changePasswordDto);
   }
 }

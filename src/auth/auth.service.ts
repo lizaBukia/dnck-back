@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import * as dotenvs from 'dotenv';
+import * as dotenv from 'dotenv';
 import { User } from '../users/entities/users.entity';
 import { UsersRepository } from '../users/repositories/users.repository';
 import { LoginDto } from './dto/auth.login.dto';
@@ -9,8 +9,8 @@ import { SignUpDto } from './dto/signUp.dto';
 import { RoleEnum } from './enum/user.role';
 import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
 import { LoginInterface } from './interfaces/login.response';
-
-dotenvs.config({ path: '.env' });
+dotenv.config({ path: '.env' });
+// Other imports and code
 
 @Injectable()
 export class AuthService {

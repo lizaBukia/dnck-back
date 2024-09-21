@@ -20,7 +20,7 @@ export class PlaylistsService {
 
   async findAll(searchPLaylistQueryDto: SearchQueryDto): Promise<Playlist[]> {
     return await this.playlistsRepository.findAll(
-      searchPLaylistQueryDto.search,
+      searchPLaylistQueryDto.search,  
     );
   }
 
@@ -60,7 +60,16 @@ export class PlaylistsService {
     return await this.playlistsRepository.update(id, updatePlaylistDto);
   }
 
-  async remove(id: number): Promise<DeleteResult> {
+  async remove(id: number, userId: number): Promise<DeleteResult> {
+    const playlist: Playlist = await this.playlistsRepository.findOne(id);
+    if (!playlist) {
+      throw new BadRequestException();
+    }
+    if (playlist.userId !== userId) {
+      throw new BadRequestException(
+        'You have no permission to remove playlist',
+      );
+    }
     return await this.playlistsRepository.remove(id);
   }
 }

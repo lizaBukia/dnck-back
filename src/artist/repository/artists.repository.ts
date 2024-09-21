@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Album } from 'src/albums/entities/album.entity';
 import { SearchQueryDto } from 'src/search/dto/create-search.dto';
+import { History } from 'src/history/entity/history.entity';
 import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateArtistDto } from '../dto/create-artist.dto';
 import { UpdateArtistDto } from '../dto/update-artist.dto';
@@ -14,12 +15,16 @@ export class ArtistsRepository {
     private artistsRepository: Repository<ArtistEntity>,
   ) {}
 
-  async create(createArtistDto: CreateArtistDto): Promise<ArtistEntity> {
+  async create(
+    createArtistDto: CreateArtistDto,
+    data: History,
+  ): Promise<ArtistEntity> {
     const newArtist: ArtistEntity = new ArtistEntity();
     newArtist.biography = createArtistDto.biography;
     newArtist.firstName = createArtistDto.firstName;
     newArtist.lastName = createArtistDto.lastName;
-
+    newArtist.albums = [];
+    newArtist.history = data;
     const araayOfAlbums: Array<Album> = [];
     for (const albumId of createArtistDto.albumId) {
       const album: Album = new Album();
@@ -81,6 +86,7 @@ export class ArtistsRepository {
       .leftJoinAndSelect('albums.history', 'albumsHistory')
       .leftJoinAndSelect('albums.musics', 'musics')
       .leftJoinAndSelect('musics.history', 'musicsHistory')
+      .leftJoinAndSelect('artist.history', 'history')
       .where('artist.id = :id', { id })
       .getOne();
   }
@@ -95,24 +101,5 @@ export class ArtistsRepository {
 
   remove(id: number): Promise<DeleteResult> {
     return this.artistsRepository.softDelete(id);
-  }
-
-  private _getTopArtists(): void {
-    // .leftJoin(
-    //         (subQuery) => {
-    //           return subQuery
-    //             .select('musics.albumId', 'albumId')
-    //             .addSelect('COUNT(statistics.musicId)', 'totalListenings')
-    //             .from('music', 'musics')
-    //             .leftJoin('musics.statistics', 'statistics')
-    //             .groupBy('musics.albumId');
-    //         },
-    //         'albumListenings',
-    //         'albumListenings.albumId = album.id',
-    //       )
-    //       .addSelect(
-    //         'COALESCE(albumListenings.totalListenings, 0)',
-    //         'totalListenings',
-    //       );
   }
 }

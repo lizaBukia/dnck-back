@@ -64,7 +64,7 @@ export class AlbumsController {
   async update(
     @Param('id') id: string,
     @Body() updateAlbumDto: UpdateAlbumDto,
-    @UploadedFile('file') file: File,
+    @UploadedFile('file') file: Express.Multer.File,
   ): Promise<UpdateResult> {
     return await this.albumService.update(Number(id), updateAlbumDto, file);
   }
