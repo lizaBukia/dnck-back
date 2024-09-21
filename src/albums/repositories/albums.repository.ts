@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { History } from 'src/history/entity/history.entity';
 import { HistoryRepository } from 'src/history/repository/history.repository';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { S3Service } from 'src/storage/s3.service';
 import {
   DeepPartial,
@@ -25,21 +26,47 @@ export class AlbumsRepository {
     newAlbum.history = historyData;
     newAlbum.name = data.name;
     newAlbum.releaseDate = data.releaseDate;
-
+    newAlbum.artistId = data.artistId;
     return await this.albumRepository.save(newAlbum);
   }
 
-  async findAll(search?: string): Promise<Album[]> {
+  async findAll(searchAlbumQueryDto?: SearchQueryDto): Promise<Album[]> {
     const query: SelectQueryBuilder<Album> = this.albumRepository
       .createQueryBuilder('album')
       .leftJoinAndSelect('album.musics', 'musics')
-      .leftJoinAndSelect('album.artists', 'artists')
-      .leftJoinAndSelect('album.history', 'history');
-
-    if (search) {
-      query.where('album.name like :search', { search: `%${search}%` });
+      .leftJoinAndSelect('album.artists', 'artists');
+    if (searchAlbumQueryDto?.topDate && !searchAlbumQueryDto?.search) {
+      query
+        .leftJoin(
+          (subQuery) => {
+            return subQuery
+              .select('musics.albumId', 'albumId')
+              .addSelect('COUNT(statistics.musicId)', 'totalListenings')
+              .from('music', 'musics')
+              .leftJoin('musics.statistics', 'statistics')
+              .where('statistics.createdAt >= :topDate', {
+                topDate: searchAlbumQueryDto.topDate,
+              })
+              .groupBy('musics.albumId');
+          },
+          'albumListenings',
+          'albumListenings.albumId = album.id',
+        )
+        .addSelect(
+          'COALESCE(albumListenings.totalListenings, 0)',
+          'totalListenings',
+        );
+      query.orderBy('totalListenings', 'DESC');
     }
 
+    if (searchAlbumQueryDto?.search) {
+      query.where('album.name LIKE :search', {
+        search: `%${searchAlbumQueryDto.search}%`,
+      });
+    }
+    if (searchAlbumQueryDto?.limit) {
+      query.limit(searchAlbumQueryDto.limit);
+    }
     return await query.getMany();
   }
 

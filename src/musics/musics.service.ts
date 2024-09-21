@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { History } from 'src/history/entity/history.entity';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { S3Service } from 'src/storage/s3.service';
 import { DeleteResult } from 'typeorm';
 import { StatisticsRepository } from '../statistics/repositorys/statisticks.repository';
@@ -31,8 +32,8 @@ export class MusicsService {
     return await this.musicsRepository.create(createMusicDto, data);
   }
 
-  async findAll(): Promise<Music[]> {
-    return await this.musicsRepository.findAll();
+  async findAll(query: SearchQueryDto): Promise<Music[]> {
+    return await this.musicsRepository.findAll(query);
   }
 
   async findOne(id: number, userId: number): Promise<Music> {
