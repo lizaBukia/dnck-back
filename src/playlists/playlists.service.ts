@@ -20,7 +20,7 @@ export class PlaylistsService {
 
   async findAll(searchPLaylistQueryDto: SearchQueryDto): Promise<Playlist[]> {
     return await this.playlistsRepository.findAll(
-      searchPLaylistQueryDto.search,  
+      searchPLaylistQueryDto.search,
     );
   }
 

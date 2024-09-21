@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import * as jwt from 'jsonwebtoken';
 import { History } from 'src/history/entity/history.entity';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { S3Service } from 'src/storage/s3.service';
 import { DeleteResult } from 'typeorm';
 import { CreateArtistDto } from './dto/create-artist.dto';

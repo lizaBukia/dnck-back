@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { History } from 'src/history/entity/history.entity';
-import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { HistoryRepository } from 'src/history/repository/history.repository';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { S3Service } from 'src/storage/s3.service';
 import {
   DeepPartial,
