@@ -48,15 +48,6 @@ export class PlaylistsService {
       );
     }
 
-    if (updatePlaylistDto.musics && updatePlaylistDto.musics?.length) {
-      const musics: Music[] = [];
-      for (const music of musics) {
-        const newMusic: Music = new Music();
-        newMusic.id = music.id;
-      }
-      playlist.musics = musics;
-    }
-
     return await this.playlistsRepository.update(id, updatePlaylistDto);
   }
 
