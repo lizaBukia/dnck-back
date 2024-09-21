@@ -27,9 +27,6 @@ export class Album {
   @Column()
   releaseDate!: string;
 
-  @Column()
-  artistId: number;
-
   @ManyToMany(() => ArtistEntity, (artistEntity) => artistEntity.albums)
   artists!: ArtistEntity[];
 
