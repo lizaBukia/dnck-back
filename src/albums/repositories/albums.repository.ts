@@ -40,7 +40,7 @@ export class AlbumsRepository {
       .createQueryBuilder('album')
       .leftJoinAndSelect('album.musics', 'musics')
       .leftJoinAndSelect('album.artists', 'artists')
-      .leftJoinAndSelect('album.history','history')
+      .leftJoinAndSelect('album.history', 'history');
     if (searchAlbumQueryDto?.topDate && !searchAlbumQueryDto?.search) {
       query
         .leftJoin(
