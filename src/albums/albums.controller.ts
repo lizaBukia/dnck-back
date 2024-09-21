@@ -15,12 +15,12 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { UpdateResult } from 'typeorm';
 import { RoleEnum } from '../auth/enum/user.role';
 import { Roles } from '../auth/guard/roles.key';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
-import { SearchAlbumQueryDto } from './dto/search-album-query.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
 
@@ -36,7 +36,7 @@ export class AlbumsController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({ fileType: 'image' })
-        .addMaxSizeValidator({ maxSize: 50000 })
+        .addMaxSizeValidator({ maxSize: 500000 })
         .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
     )
     file: Express.Multer.File,
@@ -50,9 +50,7 @@ export class AlbumsController {
   }
   @Roles(RoleEnum.User, RoleEnum.Admin)
   @Get()
-  async findAll(@Query() query: SearchAlbumQueryDto): Promise<Album[]> {
-    console.log('ok');
-
+  async findAll(@Query() query: SearchQueryDto): Promise<Album[]> {
     return await this.albumService.findAll(query);
   }
   @Roles(RoleEnum.Admin, RoleEnum.User)
@@ -60,7 +58,6 @@ export class AlbumsController {
   async findOne(@Param('id') id: string): Promise<Album> {
     return await this.albumService.findOne(Number(id));
   }
-
   @Roles(RoleEnum.Admin)
   @UseInterceptors(FileInterceptor('file'))
   @Put(':id')
@@ -71,7 +68,6 @@ export class AlbumsController {
   ): Promise<UpdateResult> {
     return await this.albumService.update(Number(id), updateAlbumDto, file);
   }
-
   @Roles(RoleEnum.Admin)
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<UpdateResult> {

@@ -27,7 +27,7 @@ export class Music {
   playlists: Playlist[];
 
   @OneToMany(() => Statistic, (statistic) => statistic.musics)
-  statistics: Statistic;
+  statistics: Statistic[];
 
   @Column()
   albumId!: number;

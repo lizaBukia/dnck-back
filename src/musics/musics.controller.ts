@@ -8,6 +8,7 @@ import {
   ParseFilePipeBuilder,
   Post,
   Put,
+  Query,
   Req,
   UploadedFile,
   UseInterceptors,
@@ -15,6 +16,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
 import * as jwt from 'jsonwebtoken';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { DeleteResult } from 'typeorm';
 import { RoleEnum } from '../auth/enum/user.role';
 import { Public } from '../auth/guard/publick.key';
@@ -51,8 +53,8 @@ export class MusicsController {
 
   @Roles(RoleEnum.Admin, RoleEnum.User)
   @Get()
-  async findAll(): Promise<Music[]> {
-    return await this.musicsService.findAll();
+  async findAll(@Query() query: SearchQueryDto): Promise<Music[]> {
+    return await this.musicsService.findAll(query);
   }
 
   @Roles(RoleEnum.Admin, RoleEnum.User)

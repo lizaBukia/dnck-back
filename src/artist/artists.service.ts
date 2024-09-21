@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { History } from 'src/history/entity/history.entity';
+import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { S3Service } from 'src/storage/s3.service';
 import { DeleteResult } from 'typeorm';
 import { CreateArtistDto } from './dto/create-artist.dto';
-import { SearchArtistQueryDto } from './dto/search-artist-query.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { ArtistEntity } from './entities/artist.entity';
 import { ArtistsRepository } from './repository/artists.repository';
@@ -30,8 +30,8 @@ export class ArtistssService {
     return await this.artistsRepository.create(createArtistDto, data);
   }
 
-  findAll(searchArtistQueryDto: SearchArtistQueryDto): Promise<ArtistEntity[]> {
-    return this.artistsRepository.findAll(searchArtistQueryDto.search);
+  findAll(searchArtistQueryDto: SearchQueryDto): Promise<ArtistEntity[]> {
+    return this.artistsRepository.findAll(searchArtistQueryDto);
   }
 
   findOne(id: number): Promise<ArtistEntity> {
