@@ -31,6 +31,7 @@ export class MusicsRepository {
         .leftJoinAndSelect('musics.album', 'album')
         .leftJoinAndSelect('album.artists', 'artist')
         .leftJoinAndSelect('musics.history', 'history')
+        .leftJoinAndSelect('album.history', 'albumHistory')
         .leftJoin(
           'musics.statistics',
           'statistics',
@@ -54,7 +55,10 @@ export class MusicsRepository {
       .leftJoinAndSelect('musics.history', 'history')
       .leftJoinAndSelect('album.history', 'albumHistory');
     if (search.search) {
-      query.where('musics.name LIKE :search', { search: `%${search.search}%` });
+      query.where(
+        '(musics.name LIKE :search OR album.name LIKE :search OR CONCAT(artist.firstName, " ", artist.lastName) LIKE :search)',
+        { search: `%${search.search}%` },
+      );
     }
     return await query.getMany();
   }

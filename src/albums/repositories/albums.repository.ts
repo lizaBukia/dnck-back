@@ -66,9 +66,12 @@ export class AlbumsRepository {
     }
 
     if (searchAlbumQueryDto?.search) {
-      query.where('album.name LIKE :search', {
-        search: `%${searchAlbumQueryDto.search}%`,
-      });
+      query.where(
+        'album.name LIKE :search OR musics.name LIKE :search OR CONCAT(artists.firstName, " ", artists.lastName) LIKE :search',
+        {
+          search: `%${searchAlbumQueryDto.search}%`,
+        },
+      );
     }
     if (searchAlbumQueryDto?.limit) {
       query.limit(searchAlbumQueryDto.limit);
