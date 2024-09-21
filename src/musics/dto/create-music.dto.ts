@@ -1,9 +1,9 @@
-import { IsNumber, IsNumberString, IsString } from 'class-validator';
+import { IsNumberString, IsString } from 'class-validator';
 
 export class CreateMusicDto {
   @IsString()
   name!: string;
 
-  @IsNumberString() 
+  @IsNumberString()
   albumId!: number;
 }

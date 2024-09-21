@@ -39,7 +39,8 @@ export class AlbumsRepository {
     const query: SelectQueryBuilder<Album> = this.albumRepository
       .createQueryBuilder('album')
       .leftJoinAndSelect('album.musics', 'musics')
-      .leftJoinAndSelect('album.artists', 'artists');
+      .leftJoinAndSelect('album.artists', 'artists')
+      .leftJoinAndSelect('album.history','history')
     if (searchAlbumQueryDto?.topDate && !searchAlbumQueryDto?.search) {
       query
         .leftJoin(
