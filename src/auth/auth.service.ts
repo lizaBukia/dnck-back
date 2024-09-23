@@ -9,7 +9,9 @@ import { SignUpDto } from './dto/signUp.dto';
 import { RoleEnum } from './enum/user.role';
 import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
 import { LoginInterface } from './interfaces/login.response';
+
 dotenv.config({ path: '.env' });
+
 // Other imports and code
 
 @Injectable()
@@ -54,6 +56,11 @@ export class AuthService {
     if (!user) {
       throw new BadRequestException('Invalid email or password');
     }
+
+    if (user.deletedAt) {
+      throw new BadRequestException('user is blocked');
+    }
+
     const isPasswordCorrect: boolean =
       user && (await bcrypt.compare(password, user.password));
 

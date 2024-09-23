@@ -35,11 +35,11 @@ export class UsersRepository {
   }
 
   async remove(id: number): Promise<DeleteResult> {
-    return await this.usersRepository.delete(id);
+    return await this.usersRepository.softDelete(id);
   }
 
   async findEmail(email: string): Promise<User> {
-    return await this.usersRepository.findOne({ where: { email } });
+    return await this.usersRepository.findOne({ where: { email }, withDeleted: true});
   }
 
   async changePassword(
