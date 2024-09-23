@@ -39,7 +39,10 @@ export class UsersRepository {
   }
 
   async findEmail(email: string): Promise<User> {
-    return await this.usersRepository.findOne({ where: { email }, withDeleted: true});
+    return await this.usersRepository.findOne({
+      where: { email },
+      withDeleted: true,
+    });
   }
 
   async changePassword(
