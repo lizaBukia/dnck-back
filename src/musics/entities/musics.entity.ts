@@ -30,6 +30,9 @@ export class Music {
   statistics: Statistic[];
 
   @Column()
+  description:string
+
+  @Column()
   albumId!: number;
 
   @ManyToOne(() => Album, (album) => album.musics)

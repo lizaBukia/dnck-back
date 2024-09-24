@@ -6,4 +6,7 @@ export class CreateMusicDto {
 
   @IsNumberString()
   albumId!: number;
+
+  @IsString()
+  description:string
 }
