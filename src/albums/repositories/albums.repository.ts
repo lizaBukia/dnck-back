@@ -83,7 +83,7 @@ export class AlbumsRepository {
     return await this.albumRepository
       .createQueryBuilder('albums')
       .leftJoinAndSelect('albums.musics', 'musics')
-      .where('musics.id = :id', { id })
+      .where('albums.id = :id', { id })
       .getOneOrFail();
   }
 
