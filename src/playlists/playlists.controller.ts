@@ -58,8 +58,8 @@ export class PlaylistsController {
     @Body() updatePlaylistDto: UpdatePlaylistDto,
     @Req() req: { user: { id: number } },
   ): Promise<Playlist> {
-    console.log(id,updatePlaylistDto);
-    
+    console.log(id, updatePlaylistDto);
+
     return await this.playlistsService.update(
       Number(id),
       updatePlaylistDto,
