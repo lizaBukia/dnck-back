@@ -80,11 +80,7 @@ export class AlbumsRepository {
   }
 
   async findOne(id: number): Promise<Album> {
-    return await this.albumRepository
-      .createQueryBuilder('albums')
-      .leftJoinAndSelect('albums.musics', 'musics')
-      .where('albums.id = :id', { id })
-      .getOneOrFail();
+    return await this.albumRepository.findOneOrFail({ where: { id } });
   }
 
   async update(
