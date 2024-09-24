@@ -8,5 +8,5 @@ export class CreateMusicDto {
   albumId!: number;
 
   @IsString()
-  description:string
+  description: string;
 }

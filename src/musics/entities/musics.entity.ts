@@ -30,7 +30,7 @@ export class Music {
   statistics: Statistic[];
 
   @Column()
-  description:string
+  description: string;
 
   @Column()
   albumId!: number;

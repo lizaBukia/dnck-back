@@ -80,7 +80,12 @@ export class AlbumsRepository {
   }
 
   async findOne(id: number): Promise<Album> {
-    return await this.albumRepository.findOneOrFail({ where: { id } });
+    return await this.albumRepository.findOneOrFail({
+      where: { id },
+      relations: {
+        musics: true,
+      },
+    });
   }
 
   async update(
