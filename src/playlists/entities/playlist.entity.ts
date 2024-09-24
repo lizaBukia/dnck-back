@@ -21,9 +21,6 @@ export class Playlist {
   @Column()
   title: string;
 
-  @Column({ nullable: true })
-  imgUrl: string;
-
   @ManyToMany(() => Music, (music) => music.playlists)
   @JoinTable()
   musics: Music[];
