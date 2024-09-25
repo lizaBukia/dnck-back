@@ -59,20 +59,21 @@ export class ArtistsController {
     return this.artistsService.findOne(Number(id));
   }
   @UseInterceptors(FileInterceptor('file'))
-  @Roles(RoleEnum.Admin)
+  @Roles(RoleEnum.Admin, RoleEnum.User)
   @Put(':id')
   async update(
     @Param('id') id: string,
     @Body() updateArtistDto: UpdateArtistDto,
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({ fileType: 'image' })
-        .addMaxSizeValidator({ maxSize: 50000 * 10000 })
-        .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
-    )
+    @UploadedFile('file')
     file: Express.Multer.File,
+    @Req() req: { user: { id: number } },
   ): Promise<ArtistEntity> {
-    return await this.artistsService.update(Number(id), updateArtistDto, file);
+    return await this.artistsService.update(
+      Number(id),
+      updateArtistDto,
+      file,
+      req.user.id,
+    );
   }
   @Roles(RoleEnum.Admin)
   @Delete(':id')

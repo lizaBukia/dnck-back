@@ -89,19 +89,17 @@ export class ArtistsRepository {
   async update(
     id: number,
     updateArtistDto: UpdateArtistDto,
-    location: string,
+    history?: History | null,
   ): Promise<ArtistEntity> {
+    const body: UpdateArtistDto = updateArtistDto;
+    if (history) {
+      Object.assign(body, {
+        history,
+      });
+    }
+
     await this.artistsRepository.update(id, updateArtistDto);
     const artist: ArtistEntity = await this.findOne(id);
-    if (location) {
-      const file: History = await this.historyRepositroy.findOne(
-        artist.history.id,
-      );
-      file.location = location;
-      await this.historyRepositroy.save(file);
-      artist.history.location = location;
-      return artist;
-    }
     return artist;
   }
 
