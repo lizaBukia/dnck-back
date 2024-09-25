@@ -70,13 +70,9 @@ export class ArtistsController {
         .addMaxSizeValidator({ maxSize: 50000 * 10000 })
         .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
     )
-    file: Express.Multer.File
+    file: Express.Multer.File,
   ): Promise<ArtistEntity> {
-    return await this.artistsService.update(
-      Number(id),
-      updateArtistDto,
-      file,
-    );
+    return await this.artistsService.update(Number(id), updateArtistDto, file);
   }
   @Roles(RoleEnum.Admin)
   @Delete(':id')

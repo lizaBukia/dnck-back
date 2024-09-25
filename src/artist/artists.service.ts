@@ -43,7 +43,6 @@ export class ArtistssService {
     updateArtistDto: UpdateArtistDto,
     _file: Express.Multer.File,
   ): Promise<ArtistEntity> {
-
     const location: string = await this.s3Service.uploadMusic(_file);
 
     return await this.artistsRepository.update(id, updateArtistDto, location);
