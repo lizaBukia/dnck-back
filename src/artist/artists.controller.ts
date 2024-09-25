@@ -59,7 +59,7 @@ export class ArtistsController {
     return this.artistsService.findOne(Number(id));
   }
   @UseInterceptors(FileInterceptor('file'))
-  @Roles(RoleEnum.Admin, RoleEnum.User)
+  @Roles(RoleEnum.Admin)
   @Put(':id')
   async update(
     @Param('id') id: string,

@@ -62,6 +62,9 @@ export class PlaylistsRepository {
     return await this.playlistRepository
       .createQueryBuilder('playlist')
       .leftJoinAndSelect('playlist.musics', 'musics')
+      .leftJoinAndSelect('musics.history', 'history')
+      .leftJoinAndSelect('musics.album', 'album')
+      .leftJoinAndSelect('album.history', 'history2')
       .where('playlist.id= :id', { id })
       .getOne();
   }
