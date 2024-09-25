@@ -38,7 +38,10 @@ export class ArtistssService {
     return this.artistsRepository.findOne(id);
   }
 
-  async update(id: number, updateArtistDto: UpdateArtistDto): Promise<ArtistEntity> {
+  async update(
+    id: number,
+    updateArtistDto: UpdateArtistDto,
+  ): Promise<ArtistEntity> {
     return await this.artistsRepository.update(id, updateArtistDto);
   }
 

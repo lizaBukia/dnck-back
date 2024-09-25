@@ -89,7 +89,7 @@ export class ArtistsRepository {
     updateArtistDto: UpdateArtistDto,
   ): Promise<ArtistEntity> {
     console.log(updateArtistDto);
-    
+
     await this.artistsRepository.update(id, updateArtistDto);
     return await this.findOne(id);
   }
