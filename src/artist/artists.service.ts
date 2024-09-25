@@ -38,8 +38,8 @@ export class ArtistssService {
     return this.artistsRepository.findOne(id);
   }
 
-  update(id: number, updateArtistDto: UpdateArtistDto): Promise<ArtistEntity> {
-    return this.artistsRepository.update(id, updateArtistDto);
+  async update(id: number, updateArtistDto: UpdateArtistDto): Promise<ArtistEntity> {
+    return await this.artistsRepository.update(id, updateArtistDto);
   }
 
   remove(id: number): Promise<DeleteResult> {

@@ -60,11 +60,11 @@ export class ArtistsController {
   }
   @Roles(RoleEnum.Admin)
   @Put(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateArtistDto: UpdateArtistDto,
   ): Promise<ArtistEntity> {
-    return this.artistsService.update(Number(id), updateArtistDto);
+    return await this.artistsService.update(Number(id), updateArtistDto);
   }
   @Roles(RoleEnum.Admin)
   @Delete(':id')
