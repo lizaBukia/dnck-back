@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { History } from 'src/history/entity/history.entity';
+import { HistoryRepository } from 'src/history/repository/history.repository';
 import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateArtistDto } from '../dto/create-artist.dto';
@@ -12,6 +13,7 @@ export class ArtistsRepository {
   constructor(
     @InjectRepository(ArtistEntity)
     private artistsRepository: Repository<ArtistEntity>,
+    private historyRepositroy: HistoryRepository,
   ) {}
 
   async create(
@@ -87,11 +89,20 @@ export class ArtistsRepository {
   async update(
     id: number,
     updateArtistDto: UpdateArtistDto,
+    location: string,
   ): Promise<ArtistEntity> {
-    console.log(updateArtistDto);
-
     await this.artistsRepository.update(id, updateArtistDto);
-    return await this.findOne(id);
+    const artist: ArtistEntity = await this.findOne(id);
+    if (location) {
+      const file: History = await this.historyRepositroy.findOne(
+        artist.history.id,
+      );
+      file.location = location;
+      await this.historyRepositroy.save(file);
+      artist.history.location = location;
+      return artist;
+    }
+    return artist;
   }
 
   remove(id: number): Promise<DeleteResult> {

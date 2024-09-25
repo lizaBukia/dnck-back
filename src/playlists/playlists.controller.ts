@@ -50,7 +50,6 @@ export class PlaylistsController {
   async findOne(@Param('id') id: string): Promise<Playlist> {
     return await this.playlistsService.findOne(Number(id));
   }
-
   @Roles(RoleEnum.User, RoleEnum.Admin)
   @Patch(':id')
   async update(

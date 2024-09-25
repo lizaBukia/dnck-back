@@ -41,8 +41,12 @@ export class ArtistssService {
   async update(
     id: number,
     updateArtistDto: UpdateArtistDto,
+    _file: Express.Multer.File,
   ): Promise<ArtistEntity> {
-    return await this.artistsRepository.update(id, updateArtistDto);
+
+    const location: string = await this.s3Service.uploadMusic(_file);
+
+    return await this.artistsRepository.update(id, updateArtistDto, location);
   }
 
   remove(id: number): Promise<DeleteResult> {
