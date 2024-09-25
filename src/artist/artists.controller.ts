@@ -7,6 +7,7 @@ import {
   Param,
   ParseFilePipeBuilder,
   Post,
+  Put,
   Query,
   Req,
   UploadedFile,
@@ -58,7 +59,7 @@ export class ArtistsController {
     return this.artistsService.findOne(Number(id));
   }
   @Roles(RoleEnum.Admin)
-  @Post(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateArtistDto: UpdateArtistDto,
