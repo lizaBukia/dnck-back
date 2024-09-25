@@ -12,7 +12,6 @@ import { LoginInterface } from './interfaces/login.response';
 
 dotenv.config({ path: '.env' });
 
-
 @Injectable()
 export class AuthService {
   constructor(

@@ -50,18 +50,12 @@ export class UsersRepository {
     changePasswordDto: ChangePasswordDto,
   ): Promise<User> {
     const user: User = await this.findOne(id);
-
-    const salt: string = await bcrypt.genSalt();
-
-    console.log(changePasswordDto.password);
-
+    const salt: string = await bcrypt.genSalt(10);
     const hashedPassword: string = await bcrypt.hash(
       changePasswordDto.password,
       salt,
     );
-
     user.password = hashedPassword;
-
     return await this.usersRepository.save(user);
   }
 }
