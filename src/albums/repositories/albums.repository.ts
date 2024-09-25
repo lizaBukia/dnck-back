@@ -13,6 +13,7 @@ import {
 } from 'typeorm';
 import { CreateAlbumDto } from '../dto/create-album.dto';
 import { Album } from '../entities/album.entity';
+
 @Injectable()
 export class AlbumsRepository {
   constructor(
@@ -40,7 +41,9 @@ export class AlbumsRepository {
       .createQueryBuilder('album')
       .leftJoinAndSelect('album.musics', 'musics')
       .leftJoinAndSelect('album.artists', 'artists')
-      .leftJoinAndSelect('album.history', 'history');
+      .leftJoinAndSelect('album.history', 'history')
+      .leftJoinAndSelect('musics.history', 'musicHistory')
+      .leftJoinAndSelect('artists.history', 'history2');
     if (searchAlbumQueryDto?.topDate && !searchAlbumQueryDto?.search) {
       query
         .leftJoin(
