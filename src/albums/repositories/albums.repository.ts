@@ -83,12 +83,15 @@ export class AlbumsRepository {
   }
 
   async findOne(id: number): Promise<Album> {
-    return await this.albumRepository.findOneOrFail({
-      where: { id },
-      relations: {
-        musics: true,
-      },
-    });
+    return await this.albumRepository
+      .createQueryBuilder('album')
+      .leftJoinAndSelect('album.musics', 'musics')
+      .leftJoinAndSelect('album.artists', 'artists')
+      .leftJoinAndSelect('album.history', 'history')
+      .leftJoinAndSelect('musics.history', 'musicHistory')
+      .leftJoinAndSelect('artists.history', 'history2')
+      .where('album.id = :id', {id})
+      .getOneOrFail()
   }
 
   async update(
