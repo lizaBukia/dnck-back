@@ -47,9 +47,12 @@ export class PlaylistsRepository {
   }
 
   async findAll(search?: string): Promise<Playlist[]> {
-    const query: SelectQueryBuilder<Playlist> = await this.playlistRepository
+    const query: SelectQueryBuilder<Playlist> = this.playlistRepository
       .createQueryBuilder('playlist')
-      .leftJoinAndSelect('playlist.musics', 'musics');
+      .leftJoinAndSelect('playlist.musics', 'musics')
+      .leftJoinAndSelect('musics.album', 'album')
+      .leftJoinAndSelect('album.history', 'albumHistory')
+      .leftJoinAndSelect('musics.history', 'musicHistory');
 
     if (search) {
       query.where('playlist.title LIKE :search', { search: `%${search}%` });
@@ -65,6 +68,7 @@ export class PlaylistsRepository {
       .leftJoinAndSelect('musics.history', 'history')
       .leftJoinAndSelect('musics.album', 'album')
       .leftJoinAndSelect('album.history', 'history2')
+
       .where('playlist.id= :id', { id })
       .getOne();
   }

@@ -49,12 +49,9 @@ export class PlaylistsController {
   @Get(':id')
   async findOne(
     @Param('id') id: string,
-    @Req() req: { user: { id: number; role: string } },
   ): Promise<Playlist> {
     return await this.playlistsService.findOne(
-      Number(id),
-      req.user.id,
-      req.user.role === RoleEnum.Admin,
+      Number(id)
     );
   }
 
