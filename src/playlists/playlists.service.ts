@@ -23,9 +23,13 @@ export class PlaylistsService {
     );
   }
 
-  async findOne(id: number, userId: number): Promise<Playlist> {
+  async findOne(
+    id: number,
+    userId: number,
+    isAdmin: boolean,
+  ): Promise<Playlist> {
     const playlist: Playlist = await this.playlistsRepository.findOne(id);
-    if (playlist.userId !== userId) {
+    if (!isAdmin && playlist.userId !== userId) {
       throw new BadRequestException('You have no permission to get playlist');
     }
     return playlist;
@@ -39,13 +43,14 @@ export class PlaylistsService {
     id: number,
     updatePlaylistDto: UpdatePlaylistDto,
     userId: number,
+    isAdmin: boolean,
   ): Promise<Playlist> {
     const playlist: Playlist = await this.playlistsRepository.findOne(id);
     if (!playlist) {
       throw new BadRequestException('playlist not found');
     }
 
-    if (playlist.userId !== userId) {
+    if (!isAdmin && playlist.userId !== userId) {
       throw new BadRequestException(
         'You have no permission to update playlist',
       );

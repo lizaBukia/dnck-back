@@ -1,4 +1,4 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { RoleEnum } from '../auth/enum/user.role';
 import { Roles } from '../auth/guard/roles.key';
 import { CreateStatisticDto } from './dto/create-statistc.dto';
@@ -8,11 +8,19 @@ import { StatisticsService } from './statistics.service';
 @Controller('statistics')
 export class StatisticsController {
   constructor(private statistcsService: StatisticsService) {}
-  addlisendMusic(
+
+  @Roles(RoleEnum.Admin, RoleEnum.User)
+  @Post()
+  async addlisendMusic(
     @Body() createStatisticDto: CreateStatisticDto,
+    @Req() req: { user: { id } },
   ): Promise<Statistic> {
-    return this.statistcsService.createStatistic(createStatisticDto);
+    return await this.statistcsService.createStatistic(
+      createStatisticDto,
+      req.user.id,
+    );
   }
+
   @Roles(RoleEnum.Admin, RoleEnum.User)
   @Get()
   async findAll(): Promise<Statistic[]> {

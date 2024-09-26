@@ -49,9 +49,13 @@ export class PlaylistsController {
   @Get(':id')
   async findOne(
     @Param('id') id: string,
-    @Req() req: { user: { id: number } },
+    @Req() req: { user: { id: number; role: string } },
   ): Promise<Playlist> {
-    return await this.playlistsService.findOne(Number(id), req.user.id);
+    return await this.playlistsService.findOne(
+      Number(id),
+      req.user.id,
+      req.user.role === RoleEnum.Admin,
+    );
   }
 
   @Roles(RoleEnum.User, RoleEnum.Admin)
@@ -59,14 +63,13 @@ export class PlaylistsController {
   async update(
     @Param('id') id: string,
     @Body() updatePlaylistDto: UpdatePlaylistDto,
-    @Req() req: { user: { id: number } },
+    @Req() req: { user: { id: number; role: string } },
   ): Promise<Playlist> {
-    console.log(id, updatePlaylistDto);
-
     return await this.playlistsService.update(
       Number(id),
       updatePlaylistDto,
       req.user.id,
+      req.user.role === RoleEnum.Admin,
     );
   }
 

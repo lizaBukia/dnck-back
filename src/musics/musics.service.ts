@@ -36,9 +36,7 @@ export class MusicsService {
     return await this.musicsRepository.findAll(query);
   }
 
-  async findOne(id: number, userId: number): Promise<Music> {
-    await this.statisticsRepository.createStatistic({ musicId: id, userId });
-
+  async findOne(id: number): Promise<Music> {
     const musics: Music = await this.musicsRepository.findOne(id);
 
     return musics;

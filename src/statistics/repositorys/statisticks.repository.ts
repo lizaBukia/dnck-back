@@ -12,10 +12,11 @@ export class StatisticsRepository {
 
   async createStatistic(
     createStatistickDto: CreateStatisticDto,
+    userId: number,
   ): Promise<Statistic> {
     const newStatistic: Statistic = new Statistic();
     newStatistic.musicId = createStatistickDto.musicId;
-    newStatistic.userId = createStatistickDto.userId;
+    newStatistic.userId = userId;
     return await this.statisticRepository.save(createStatistickDto);
   }
   async findAll(): Promise<Statistic[]> {

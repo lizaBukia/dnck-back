@@ -15,7 +15,6 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
-import * as jwt from 'jsonwebtoken';
 import { SearchQueryDto } from 'src/search/dto/create-search.dto';
 import { DeleteResult } from 'typeorm';
 import { RoleEnum } from '../auth/enum/user.role';
@@ -60,17 +59,8 @@ export class MusicsController {
   @Roles(RoleEnum.Admin, RoleEnum.User)
   @Public()
   @Get(':id')
-  async findOne(@Param('id') id: string, @Req() req: Request): Promise<Music> {
-    const [type, token] = req.headers.authorization.split(' ');
-
-    if (type !== 'Bearer') {
-      throw new Error('invalid token');
-    }
-    const decodedToken: string | jwt.JwtPayload = jwt.decode(token);
-
-    const userId: number = (decodedToken as jwt.JwtPayload).id;
-
-    return await this.musicsService.findOne(Number(id), userId);
+  async findOne(@Param('id') id: string): Promise<Music> {
+    return await this.musicsService.findOne(Number(id));
   }
 
   @Roles(RoleEnum.Admin)
