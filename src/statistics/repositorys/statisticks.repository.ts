@@ -17,7 +17,7 @@ export class StatisticsRepository {
     const newStatistic: Statistic = new Statistic();
     newStatistic.musicId = createStatistickDto.musicId;
     newStatistic.userId = userId;
-    return await this.statisticRepository.save(createStatistickDto);
+    return await this.statisticRepository.save(newStatistic);
   }
   async findAll(): Promise<Statistic[]> {
     const statistic: Statistic[] = await this.statisticRepository.find({

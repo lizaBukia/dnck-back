@@ -1,6 +1,6 @@
-import { IsNumber } from 'class-validator';
+import { IsNumberString } from 'class-validator';
 
 export class CreateStatisticDto {
-  @IsNumber()
+  @IsNumberString()
   musicId: number;
 }
