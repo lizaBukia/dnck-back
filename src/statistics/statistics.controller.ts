@@ -13,7 +13,7 @@ export class StatisticsController {
   @Post()
   async addlisendMusic(
     @Body() createStatisticDto: CreateStatisticDto,
-    @Req() req: { user: { id: number } },
+    @Req() req: { user: { id } },
   ): Promise<Statistic> {
     return await this.statistcsService.createStatistic(
       createStatisticDto,
