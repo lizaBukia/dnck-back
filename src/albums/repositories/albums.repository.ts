@@ -90,8 +90,8 @@ export class AlbumsRepository {
       .leftJoinAndSelect('album.history', 'history')
       .leftJoinAndSelect('musics.history', 'musicHistory')
       .leftJoinAndSelect('artists.history', 'history2')
-      .where('album.id = :id', {id})
-      .getOneOrFail()
+      .where('album.id = :id', { id })
+      .getOneOrFail();
   }
 
   async update(
