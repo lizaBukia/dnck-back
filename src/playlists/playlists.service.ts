@@ -23,10 +23,8 @@ export class PlaylistsService {
     );
   }
 
-  async findOne(
-    id: number,
-  ): Promise<Playlist> {
-    return  await this.playlistsRepository.findOne(id);
+  async findOne(id: number): Promise<Playlist> {
+    return await this.playlistsRepository.findOne(id);
   }
 
   async getPersonal(userId: number): Promise<Playlist[]> {

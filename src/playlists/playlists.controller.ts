@@ -47,12 +47,8 @@ export class PlaylistsController {
 
   @Roles(RoleEnum.Admin, RoleEnum.User)
   @Get(':id')
-  async findOne(
-    @Param('id') id: string,
-  ): Promise<Playlist> {
-    return await this.playlistsService.findOne(
-      Number(id)
-    );
+  async findOne(@Param('id') id: string): Promise<Playlist> {
+    return await this.playlistsService.findOne(Number(id));
   }
 
   @Roles(RoleEnum.User, RoleEnum.Admin)
