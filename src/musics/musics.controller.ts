@@ -76,7 +76,7 @@ export class MusicsController {
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<DeleteResult> {
     console.log(id);
-    
+
     return await this.musicsService.remove(Number(id));
   }
 }
