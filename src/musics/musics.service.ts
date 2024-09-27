@@ -47,8 +47,6 @@ export class MusicsService {
   }
 
   async remove(id: number): Promise<DeleteResult> {
-    console.log(id, 'service');
-
     return await this.musicsRepository.remove(id);
   }
 }
