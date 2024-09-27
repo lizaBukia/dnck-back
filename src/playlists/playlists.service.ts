@@ -23,16 +23,8 @@ export class PlaylistsService {
     );
   }
 
-  async findOne(
-    id: number,
-    userId: number,
-    isAdmin: boolean,
-  ): Promise<Playlist> {
-    const playlist: Playlist = await this.playlistsRepository.findOne(id);
-    if (!isAdmin && playlist.userId !== userId) {
-      throw new BadRequestException('You have no permission to get playlist');
-    }
-    return playlist;
+  async findOne(id: number): Promise<Playlist> {
+    return await this.playlistsRepository.findOne(id);
   }
 
   async getPersonal(userId: number): Promise<Playlist[]> {

@@ -47,15 +47,8 @@ export class PlaylistsController {
 
   @Roles(RoleEnum.Admin, RoleEnum.User)
   @Get(':id')
-  async findOne(
-    @Param('id') id: string,
-    @Req() req: { user: { id: number; role: string } },
-  ): Promise<Playlist> {
-    return await this.playlistsService.findOne(
-      Number(id),
-      req.user.id,
-      req.user.role === RoleEnum.Admin,
-    );
+  async findOne(@Param('id') id: string): Promise<Playlist> {
+    return await this.playlistsService.findOne(Number(id));
   }
 
   @Roles(RoleEnum.User, RoleEnum.Admin)
