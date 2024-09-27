@@ -83,6 +83,6 @@ export class MusicsRepository {
   async remove(id: number): Promise<DeleteResult> {
     console.log(id, 'repo');
 
-    return await this.musicsRepository.delete(id);
+    return await this.musicsRepository.softDelete(id);
   }
 }
