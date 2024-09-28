@@ -31,7 +31,6 @@ export class AuthGuard implements CanActivate {
       ROLES_KEY,
       [context.getHandler(), context.getClass()],
     );
-    console.log(roles);
     const isRouteGuardedWithRoles: boolean = !!roles?.length;
 
     if (isPublic) {
@@ -40,19 +39,16 @@ export class AuthGuard implements CanActivate {
 
     const request: Request = context.switchToHttp().getRequest();
     const token: string = this.extractTokenFromHeader(request);
-    console.log(token);
     try {
       const payload: JwtPayloadInterface =
         await this.jwtService.verifyAsync<JwtPayloadInterface>(token, {
           secret: process.env.JWT_SECRET,
         });
-      console.log(payload);
       if (isRouteGuardedWithRoles) {
         this.validateRoles(roles, payload.role);
       }
       request['user'] = payload;
     } catch (err) {
-      console.log(err);
       throw new UnauthorizedException();
     }
     return true;
