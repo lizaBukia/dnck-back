@@ -12,7 +12,7 @@ import { JwtPayloadInterface } from '../interfaces/jwt-payload.interface';
 import { IS_PUBLIC_KEY } from './publick.key';
 import { ROLES_KEY } from './roles.key';
 
-dotenv.config();
+dotenv.config({ path: '.env' });
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -44,11 +44,13 @@ export class AuthGuard implements CanActivate {
         await this.jwtService.verifyAsync<JwtPayloadInterface>(token, {
           secret: process.env.JWT_SECRET,
         });
+      console.log(payload);
       if (isRouteGuardedWithRoles) {
         this.validateRoles(roles, payload.role);
       }
       request['user'] = payload;
     } catch (err) {
+      console.log(err);
       throw new UnauthorizedException();
     }
     return true;
