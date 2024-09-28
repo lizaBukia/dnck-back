@@ -53,7 +53,7 @@ export class AuthGuard implements CanActivate {
       request['user'] = payload;
     } catch (err) {
       console.log(err, 'jwt mast be provided');
-      return err
+      return err;
     }
     return true;
   }
