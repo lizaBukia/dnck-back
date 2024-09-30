@@ -58,8 +58,8 @@ export class UsersRepository {
     console.log(hashedPassword);
     console.log(user);
     user.password = hashedPassword;
-    console.log(user,'hashedUSer');
-    
+    console.log(user, 'hashedUSer');
+
     return await this.usersRepository.save(user);
   }
   async unblockUser(id: number): Promise<User> {
