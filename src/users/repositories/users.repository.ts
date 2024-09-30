@@ -55,6 +55,8 @@ export class UsersRepository {
       changePasswordDto.password,
       salt,
     );
+    console.log(hashedPassword);
+    console.log(user);
     user.password = hashedPassword;
     return await this.usersRepository.save(user);
   }
