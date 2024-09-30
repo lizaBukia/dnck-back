@@ -67,7 +67,6 @@ export class UsersController {
     @Param('id') id: string,
     @Body() changePasswordDto: ChangePasswordDto,
   ): Promise<User> {
-    console.log(changePasswordDto);
     return await this.usersService.changePassword(
       Number(id),
       changePasswordDto,

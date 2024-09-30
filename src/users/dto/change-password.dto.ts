@@ -1,6 +1,6 @@
-import { IsNumberString } from 'class-validator';
+import { IsNumberString, IsString } from 'class-validator';
 
 export class ChangePasswordDto {
-  @IsNumberString()
+  @IsString()
   password: string;
 }
