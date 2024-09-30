@@ -35,4 +35,7 @@ export class UsersService {
   ): Promise<User> {
     return await this.usersRepository.changePassword(id, changePasswordDto);
   }
+  async unblockUser(id: number): Promise<User> {
+    return await this.usersRepository.unblockUser(id);
+  }
 }

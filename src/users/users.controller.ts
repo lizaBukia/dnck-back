@@ -72,4 +72,9 @@ export class UsersController {
       changePasswordDto,
     );
   }
+  @Roles(RoleEnum.Admin)
+  @Patch('unblock/:id')
+  async UnblockUser(@Param('id') id: string): Promise<User> {
+    return await this.usersService.unblockUser(Number(id));
+  }
 }

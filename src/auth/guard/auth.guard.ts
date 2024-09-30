@@ -39,20 +39,16 @@ export class AuthGuard implements CanActivate {
 
     const request: Request = context.switchToHttp().getRequest();
     const token: string = this.extractTokenFromHeader(request);
-    console.log(token, 'tokennn');
     try {
       const payload: JwtPayloadInterface =
         await this.jwtService.verifyAsync<JwtPayloadInterface>(token, {
           secret: process.env.JWT_SECRET,
         });
-      console.log(payload, 'payloadaaad');
       if (isRouteGuardedWithRoles) {
         this.validateRoles(roles, payload.role);
       }
-      console.log(isRouteGuardedWithRoles);
       request['user'] = payload;
     } catch (err) {
-      console.log(err);
       throw new UnauthorizedException();
     }
     return true;
@@ -67,7 +63,6 @@ export class AuthGuard implements CanActivate {
     const doesUserHasRequiredRoles: boolean = routeRoles.some((role: string) =>
       role.includes(userRole),
     );
-    console.log(doesUserHasRequiredRoles, 'aqqq');
     if (!doesUserHasRequiredRoles) {
       throw new UnauthorizedException();
     }

@@ -58,4 +58,12 @@ export class UsersRepository {
     user.password = hashedPassword;
     return await this.usersRepository.save(user);
   }
+  async unblockUser(id: number): Promise<User> {
+    const user:User = await this.usersRepository.findOne({
+      where: { id: id },
+      withDeleted: true,
+    });
+    user.deletedAt = null;
+    return await this.usersRepository.save(user);
+  }
 }
