@@ -22,7 +22,7 @@ export class UsersRepository {
   }
 
   async findAll(): Promise<User[]> {
-    return await this.usersRepository.find({withDeleted:true});
+    return await this.usersRepository.find({ withDeleted: true });
   }
 
   async findOne(id: number): Promise<User> {
