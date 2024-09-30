@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { DeleteResult, Repository } from 'typeorm';
@@ -50,12 +50,16 @@ export class UsersRepository {
     changePasswordDto: ChangePasswordDto,
   ): Promise<User> {
     const user: User = await this.findOne(id);
+    if (!user){
+      throw new BadRequestException('User not found')
+    }
     const salt: string = await bcrypt.genSalt(10);
     const hashedPassword: string = await bcrypt.hash(
       changePasswordDto.password,
       salt,
     );
     user.password = hashedPassword;
+
 
     return await this.usersRepository.save(user);
   }
