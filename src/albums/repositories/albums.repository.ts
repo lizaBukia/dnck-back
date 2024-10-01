@@ -87,7 +87,7 @@ export class AlbumsRepository {
       .createQueryBuilder('album')
       .leftJoinAndSelect('album.musics', 'musics')
       .leftJoinAndSelect('musics.album', 'album2')
-      .leftJoinAndSelect('album2.history', 'history2')
+      .leftJoinAndSelect('album2.history', 'history3')
       .leftJoinAndSelect('album.artists', 'artists')
       .leftJoinAndSelect('album.history', 'history')
       .leftJoinAndSelect('musics.history', 'musicHistory')
