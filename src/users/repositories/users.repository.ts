@@ -50,8 +50,8 @@ export class UsersRepository {
     changePasswordDto: ChangePasswordDto,
   ): Promise<User> {
     const user: User = await this.findOne(id);
-    if (!user){
-      throw new BadRequestException('User not found')
+    if (!user) {
+      throw new BadRequestException('User not found');
     }
     const salt: string = await bcrypt.genSalt(10);
     const hashedPassword: string = await bcrypt.hash(
@@ -59,7 +59,6 @@ export class UsersRepository {
       salt,
     );
     user.password = hashedPassword;
-
 
     return await this.usersRepository.save(user);
   }
